@@ -26,6 +26,22 @@ public class CardClass : MonoBehaviour
 
     protected bool canAttack;
 
+	protected bool canTargetFriendly;
+
+	protected int ownerId;
+
+	public int OwnerId
+	{
+		get { return ownerId; }
+        set { ownerId = value; }
+	}
+
+	public bool CanTargetFriendly
+	{
+		get { return canTargetFriendly; }
+		set { canTargetFriendly = value; }
+	}
+
     public bool CanAttack
     {
         set { canAttack = value; }
@@ -73,7 +89,7 @@ public class CardClass : MonoBehaviour
 
         }
 
-        gem.gameObject.SetActive(true);
+        //gem.gameObject.SetActive(true);
 
     }
 

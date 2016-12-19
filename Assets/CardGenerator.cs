@@ -15,7 +15,11 @@ public class CardGenerator : MonoBehaviour
 	[SerializeField]GameObject cardTextObj;
 	[SerializeField]GameObject cardNameTextObj;
 	[SerializeField]GameObject cardRaceTextObj;
-	[SerializeField]GameObject cardRaceObj;
+	[SerializeField]GameObject cardRaceObj;	
+	[SerializeField]GameObject portraitObj;	
+	[SerializeField]GameObject dragonObj;
+	[SerializeField]GameObject gemObj;
+	[SerializeField]GameObject gemHolderObj;
 	GameObject card;
 	
 	void Start () {

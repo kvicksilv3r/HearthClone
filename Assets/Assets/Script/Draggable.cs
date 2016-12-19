@@ -10,7 +10,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	Vector3 originalScale;
 	public GameObject cardBackground;
 	public GameObject placeHolder = null;
-	public bool playedCard = false;
+	public LayoutElement le;
+    public bool playedCard = false;
 	public static bool dragging;
 	public LayerMask lMask;
 
@@ -29,7 +30,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		dragging = true;
 
-		this.transform.GetChild(0).localScale = originalScale;
+		//this.transform.GetChild(0).localScale = originalScale;
 		this.transform.GetChild(0).position = this.transform.position;
 
 		if (playedCard != true)
@@ -38,7 +39,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 			placeHolder.transform.SetParent(this.transform.parent);
 			placeHolder.transform.position = transform.position;
 
-			LayoutElement le = placeHolder.AddComponent<LayoutElement>();
+			le = placeHolder.AddComponent<LayoutElement>();
 
 			le.preferredWidth = this.transform.GetComponent<LayoutElement>().preferredWidth;
 			le.preferredHeight = this.transform.GetComponent<LayoutElement>().preferredHeight;
@@ -98,7 +99,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		dragging = false;
 
-		transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+		this.transform.GetChild(0).localScale = originalScale;
+
+		transform.position = new Vector3(transform.position.x, transform.position.y, -1);
 		this.transform.SetParent(parentToReturnTo);
 
 		if (placeHolder != null)
@@ -130,8 +133,11 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		this.transform.GetChild(0).position = this.transform.position;
-		this.transform.GetChild(0).localScale = originalScale;
+		if (!dragging)
+		{
+			this.transform.GetChild(0).position = this.transform.position;
+			this.transform.GetChild(0).localScale = originalScale;
+		}
 		//showCardInfoPanel.SetActive(false);
 		//showCardInfoUI.SetActive(false);
 	}

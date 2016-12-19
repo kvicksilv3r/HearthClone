@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: a20d27cb9e7a82c4188bbca19c97ec63
+timeCreated: 1481638355
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: OPTIBelwe-Medium
+  fontNames:
+  - OPTIBelwe-Medium
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

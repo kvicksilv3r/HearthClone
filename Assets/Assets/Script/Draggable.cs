@@ -5,126 +5,134 @@ using UnityEngine.EventSystems;
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
-    public Transform parentToReturnTo = null;
-    public Transform placeHolderParent = null;
-    Vector3 originalScale;
-    public GameObject cardBackground;
-    public GameObject placeHolder = null;
-    public bool playedCard = false;
-    public static bool dragging;
+	public Transform parentToReturnTo = null;
+	public Transform placeHolderParent = null;
+	Vector3 originalScale;
+	public GameObject cardBackground;
+	public GameObject placeHolder = null;
+	public bool playedCard = false;
+	public static bool dragging;
+	public LayerMask lMask;
 
-    void Start()
-    {
-        originalScale = this.transform.GetChild(0).localScale;
-        dragging = false;
-        //    panelXpos = this.transform.GetChild(1).position.x;
-        //    panelYpos = this.transform.GetChild(1).position.y;
-        //    showCardInfoUI = (GameObject)Instantiate(gameObject, new Vector3(panelXpos,panelYpos), Quaternion.identity);
-        //    showCardInfoUI.transform.parent = this.transform.GetChild(1);
-        //    showCardInfoUI.transform.localScale += new Vector3(0.5F, 0, 0);
-    }
+	void Start()
+	{
+		originalScale = this.transform.GetChild(0).localScale;
+		dragging = false;
+		//    panelXpos = this.transform.GetChild(1).position.x;
+		//    panelYpos = this.transform.GetChild(1).position.y;
+		//    showCardInfoUI = (GameObject)Instantiate(gameObject, new Vector3(panelXpos,panelYpos), Quaternion.identity);
+		//    showCardInfoUI.transform.parent = this.transform.GetChild(1);
+		//    showCardInfoUI.transform.localScale += new Vector3(0.5F, 0, 0);
+	}
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        dragging = true;
+	public void OnBeginDrag(PointerEventData eventData)
+	{
+		dragging = true;
 
-        this.transform.GetChild(0).localScale = originalScale;
+		this.transform.GetChild(0).localScale = originalScale;
+		this.transform.GetChild(0).position = this.transform.position;
 
-        if (playedCard != true)
-        {
-            placeHolder = new GameObject();
-            placeHolder.transform.SetParent(this.transform.parent);
-            placeHolder.transform.position = transform.position;
+		if (playedCard != true)
+		{
+			placeHolder = new GameObject();
+			placeHolder.transform.SetParent(this.transform.parent);
+			placeHolder.transform.position = transform.position;
 
-            LayoutElement le = placeHolder.AddComponent<LayoutElement>();
+			LayoutElement le = placeHolder.AddComponent<LayoutElement>();
 
-            le.preferredWidth = this.transform.GetComponent<LayoutElement>().preferredWidth;
-            le.preferredHeight = this.transform.GetComponent<LayoutElement>().preferredHeight;
-            le.flexibleWidth = 0;
-            le.flexibleHeight = 0;
+			le.preferredWidth = this.transform.GetComponent<LayoutElement>().preferredWidth;
+			le.preferredHeight = this.transform.GetComponent<LayoutElement>().preferredHeight;
+			le.flexibleWidth = 0;
+			le.flexibleHeight = 0;
 
-            placeHolder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
+			placeHolder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
 
-            parentToReturnTo = this.transform.parent;
+			parentToReturnTo = this.transform.parent;
 
-            placeHolderParent = parentToReturnTo;
+			placeHolderParent = parentToReturnTo;
 
-            this.transform.SetParent(this.transform.parent.parent);
+			this.transform.SetParent(this.transform.parent.parent);
 
-            GetComponent<CanvasGroup>().blocksRaycasts = false;
-        }
-    }
+			GetComponent<CanvasGroup>().blocksRaycasts = false;
+		}
+	}
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (playedCard != true)
-        {
-            this.transform.position = eventData.position;
-            transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
+	public void OnDrag(PointerEventData eventData)
+	{
+		if (!playedCard)
+		{
+			RaycastHit hit;
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (placeHolder.transform.parent != placeHolderParent && DropZone.playfieldfCardCount < DropZone.maxCardsOnField)
-            {
-                placeHolder.transform.SetParent(placeHolderParent);
-            }
+			Physics.Raycast(ray, out hit, 1000, lMask);
 
-            int newSiblingindex = placeHolderParent.childCount;
+			transform.position = hit.point + new Vector3(0, 0, -0.001f);
+			//this.transform.position = eventData.position;
+			//transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
 
-            for (int i = 0; i < placeHolderParent.childCount; i++)
-            {
-                if (this.transform.position.x < placeHolderParent.transform.GetChild(i).position.x)
-                {
-                    newSiblingindex = i;
+			if (placeHolder.transform.parent != placeHolderParent && DropZone.playfieldfCardCount < DropZone.maxCardsOnField)
+			{
+				placeHolder.transform.SetParent(placeHolderParent);
+			}
 
-                    if (placeHolder.transform.GetSiblingIndex() < newSiblingindex)
-                    {
-                        newSiblingindex--;
-                    }
-                    break;
-                }
-            }
-            placeHolder.transform.SetSiblingIndex(newSiblingindex);
-        }
-    }
+			int newSiblingindex = placeHolderParent.childCount;
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        dragging = false;
+			for (int i = 0; i < placeHolderParent.childCount; i++)
+			{
+				if (this.transform.position.x < placeHolderParent.transform.GetChild(i).position.x)
+				{
+					newSiblingindex = i;
 
-        transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, 0);
-        this.transform.SetParent(parentToReturnTo);
+					if (placeHolder.transform.GetSiblingIndex() < newSiblingindex)
+					{
+						newSiblingindex--;
+					}
+					break;
+				}
+			}
+			placeHolder.transform.SetSiblingIndex(newSiblingindex);
+		}
+	}
 
-        if (placeHolder != null)
-        {
-            this.transform.SetSiblingIndex(placeHolder.transform.GetSiblingIndex());
-        }
+	public void OnEndDrag(PointerEventData eventData)
+	{
+		dragging = false;
 
-        if (playedCard == true)
-        {
-            cardBackground.SetActive(false);
-        }
+		transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+		this.transform.SetParent(parentToReturnTo);
 
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
+		if (placeHolder != null)
+		{
+			this.transform.SetSiblingIndex(placeHolder.transform.GetSiblingIndex());
+		}
 
-        Destroy(placeHolder);
-    }
+		if (playedCard == true)
+		{
+			cardBackground.SetActive(false);
+		}
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (!playedCard && !dragging)
-        {
-            this.transform.GetChild(0).position = transform.position + new Vector3(0, 125f, -20);
-            this.transform.GetChild(0).localScale = originalScale * 1.5f;
-        }
-        
-        //showCardInfoPanel.SetActive(true);
-        //showCardInfoUI.SetActive(true);
-    }
+		GetComponent<CanvasGroup>().blocksRaycasts = true;
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        this.transform.GetChild(0).position = this.transform.position;
-        this.transform.GetChild(0).localScale = originalScale;
-        //showCardInfoPanel.SetActive(false);
-        //showCardInfoUI.SetActive(false);
-    }
+		Destroy(placeHolder);
+	}
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		if (!playedCard && !dragging)
+		{
+			this.transform.GetChild(0).position = transform.position + new Vector3(0, 10f, -20);
+			this.transform.GetChild(0).localScale = originalScale * 1.5f;
+		}
+
+		//showCardInfoPanel.SetActive(true);
+		//showCardInfoUI.SetActive(true);
+	}
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		this.transform.GetChild(0).position = this.transform.position;
+		this.transform.GetChild(0).localScale = originalScale;
+		//showCardInfoPanel.SetActive(false);
+		//showCardInfoUI.SetActive(false);
+	}
 }

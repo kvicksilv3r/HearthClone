@@ -19,7 +19,8 @@ public class CardGenerator : MonoBehaviour
 	[SerializeField]GameObject portraitObj;	
 	[SerializeField]GameObject dragonObj;
 	[SerializeField]GameObject gemObj;
-	[SerializeField]GameObject gemHolderObj;
+	[SerializeField]GameObject gemHolderObj;	
+	[SerializeField]GameObject cardFaceObj;
 	GameObject card;
 	
 	void Start () {
@@ -45,6 +46,14 @@ public class CardGenerator : MonoBehaviour
 		cardTextObj.GetComponent<Text>().text = "<b>Battlecry</b>: Destroy your hero and replace it with Lord Jaraxxus.";
 		cardRaceTextObj.GetComponent<Text>().text = "Demon";
 		cardNameTextObj.GetComponent<Text>().text = "Lord Jaraxxus";
-    }
+
+		dragonObj.SetActive(true);
+		gemHolderObj.SetActive(true);
+		gemObj.SetActive(true);
+
+		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_minion_warlock.png", typeof(Texture2D));
+
+
+	}
 	
 }

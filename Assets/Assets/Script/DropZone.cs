@@ -45,9 +45,8 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			d.parentToReturnTo = this.transform;
 
 			if (!d.playedCard)
-			{
-				d.transform.position = new Vector3(0, 0, 0);
-				d.playedCard = true;
+			{				
+				d.PlayCard();
 			}
 			playfieldfCardCount++;
 		}

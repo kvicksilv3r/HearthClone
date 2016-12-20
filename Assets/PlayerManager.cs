@@ -13,32 +13,35 @@ public class PlayerManager : MonoBehaviour
         playerTextHP.text = playerHP.ToString();
 	}
 	
-	void Update ()
+	void UpdateHP ()
     {
-		
-	}
+        playerTextHP.text = playerHP.ToString();
+    }
 
     public void PlayerAbility()
     {
-        //if(priest)
-        //{
-        //  PriestAbility();
-        //}
+        if (Hero.priest)
+        {
+            PriestAbility();
+        }
 
-        //if(Warlock)
-        //{
-        //  WarlockAbility();
-        //}
+        if (Hero.warlock)
+        {
+            WarlockAbility();
+        }
     }
 
     void WarlockAbility()
     {
         playerHP -= 2;
+        UpdateHP();
         //DrawCard();
     }
     
     void PriestAbility()
     {
         //point to object and heal object with 2
+        GetComponent<BattleTargeting>().OnMouseDrag();
+        GetComponent<BattleTargeting>().OnMouseUp();
     }
 }

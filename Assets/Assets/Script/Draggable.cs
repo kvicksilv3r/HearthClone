@@ -8,7 +8,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	public Transform parentToReturnTo = null;
 	public Transform placeHolderParent = null;
 	Vector3 originalScale;
-	public GameObject cardBackground;
+    Vector3 originalPosition;
+    public GameObject cardBackground;
 	public GameObject placeHolder = null;
 	public LayoutElement le;
     public bool playedCard = false;
@@ -19,7 +20,10 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	void Start()
 	{
 		originalScale = this.transform.GetChild(0).localScale;
-		dragging = false;
+        originalPosition = this.transform.GetChild(0).position;
+
+
+        dragging = false;
 
 		transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
 		//    panelXpos = this.transform.GetChild(1).position.x;
@@ -65,12 +69,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		if (!playedCard)
 		{
-			RaycastHit hit;
+            this.transform.GetChild(0).localScale = originalScale * 1.5f;
+
+            RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 			Physics.Raycast(ray, out hit, 1000, lMask);
 
-			transform.position = hit.point + new Vector3(0, 0, -0.001f);
+			transform.position = hit.point + new Vector3(0, 0, -0.1f);
 			//this.transform.position = eventData.position;
 			//transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
 
@@ -102,9 +108,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		dragging = false;
 
-		this.transform.GetChild(0).localScale = originalScale;
+        this.transform.GetChild(0).localScale = originalScale;
 
-		transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+        transform.position = new Vector3(transform.position.x, transform.position.y, -1);
 		this.transform.SetParent(parentToReturnTo);
 
 		if (placeHolder != null)
@@ -136,7 +142,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		if (!dragging)
+		//if (!dragging)
 		{
 			this.transform.GetChild(0).position = this.transform.position;
 			this.transform.GetChild(0).localScale = originalScale;

@@ -14,11 +14,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public bool playedCard = false;
 	public static bool dragging;
 	public LayerMask lMask;
+	public GameObject onBoardDragger;
 
 	void Start()
 	{
 		originalScale = this.transform.GetChild(0).localScale;
 		dragging = false;
+
+		transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
 		//    panelXpos = this.transform.GetChild(1).position.x;
 		//    panelYpos = this.transform.GetChild(1).position.y;
 		//    showCardInfoUI = (GameObject)Instantiate(gameObject, new Vector3(panelXpos,panelYpos), Quaternion.identity);
@@ -140,5 +143,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		}
 		//showCardInfoPanel.SetActive(false);
 		//showCardInfoUI.SetActive(false);
+	}
+
+	public void PlayCard()
+	{
+		transform.position = new Vector3(0, 0, 0);
+		playedCard = true;
+		onBoardDragger.SetActive(true);
+		transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
 	}
 }

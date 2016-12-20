@@ -8,27 +8,42 @@ public class CardGenerator : MonoBehaviour
 {
 	public string cardPictureName;
 	string pictureAssetName;
-	[SerializeField]GameObject portrait;
-	[SerializeField]GameObject healthTextObj;
-	[SerializeField]GameObject damageTextObj;
-	[SerializeField]GameObject manaTextObj;
-	[SerializeField]GameObject cardTextObj;
-	[SerializeField]GameObject cardNameTextObj;
-	[SerializeField]GameObject cardRaceTextObj;
-	[SerializeField]GameObject cardRaceObj;	
-	[SerializeField]GameObject portraitObj;	
-	[SerializeField]GameObject dragonObj;
-	[SerializeField]GameObject gemObj;
-	[SerializeField]GameObject gemHolderObj;	
-	[SerializeField]GameObject cardFaceObj;
+	[SerializeField]
+	GameObject portrait;
+	[SerializeField]
+	GameObject healthTextObj;
+	[SerializeField]
+	GameObject damageTextObj;
+	[SerializeField]
+	GameObject manaTextObj;
+	[SerializeField]
+	GameObject cardTextObj;
+	[SerializeField]
+	GameObject cardNameTextObj;
+	[SerializeField]
+	GameObject cardRaceTextObj;
+	[SerializeField]
+	GameObject cardRaceObj;
+	[SerializeField]
+	GameObject portraitObj;
+	[SerializeField]
+	GameObject dragonObj;
+	[SerializeField]
+	GameObject gemObj;
+	[SerializeField]
+	GameObject gemHolderObj;
+	[SerializeField]
+	GameObject cardFaceObj;
 	GameObject card;
-	
-	void Start () {
+
+	void Start()
+	{
 
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			GenerateCard();
@@ -52,8 +67,7 @@ public class CardGenerator : MonoBehaviour
 		gemObj.SetActive(true);
 
 		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_minion_warlock.png", typeof(Texture2D));
-
-
+		transform.GetComponent<CardClass>().CardName = cardNameTextObj.GetComponent<Text>().text;
 	}
-	
+
 }

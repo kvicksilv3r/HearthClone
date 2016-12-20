@@ -9,8 +9,8 @@ public class CardClass : MonoBehaviour
 
     [SerializeField]
     protected int rarity;
-
-    [SerializeField]
+	
+	[SerializeField]
     protected GameObject[] gems;
 
     [SerializeField]
@@ -24,10 +24,13 @@ public class CardClass : MonoBehaviour
 
     public Abilities[] ability;
 
-    protected bool canAttack;
+	[SerializeField]
+	protected bool canAttack;
 
+	[SerializeField]
 	protected bool canTargetFriendly;
 
+	[SerializeField]
 	protected int ownerId;
 
 	public int OwnerId

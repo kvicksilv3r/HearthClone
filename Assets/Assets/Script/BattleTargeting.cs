@@ -6,7 +6,7 @@ public class BattleTargeting : MonoBehaviour
 {
 
 	public GameObject lastTarget;
-	RaycastHit hit;
+	public RaycastHit hit;
 	RaycastHit hit2;
 	Ray ray;
 	Ray ray2;
@@ -43,10 +43,15 @@ public class BattleTargeting : MonoBehaviour
 			{
 				if (hit.transform != transform.parent.parent)
 				{
-					if (transform.parent.parent.GetComponent<CardClass>().OwnerId != hit.transform.GetComponent<CardClass>().OwnerId)
+					//if (transform.parent.parent.GetComponent<CardClass>().OwnerId != hit.transform.GetComponent<CardClass>().OwnerId)
 					{
 						lastTarget = hit.transform.gameObject;
 						print("Target hit was: " + lastTarget.GetComponent<CardClass>().CardName);
+
+                        //if(Draggable.spellCard && lastTarget == hit.transform.gameObject)
+                        //{
+                        //    Destroy();
+                        //}
 					}
 				}
 			}

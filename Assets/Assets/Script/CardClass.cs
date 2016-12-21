@@ -9,8 +9,11 @@ public class CardClass : MonoBehaviour
 
     [SerializeField]
     protected int rarity;
-	
-	[SerializeField]
+
+    [SerializeField]
+    protected string cardType;
+
+    [SerializeField]
     protected GameObject[] gems;
 
     [SerializeField]
@@ -39,7 +42,13 @@ public class CardClass : MonoBehaviour
         set { ownerId = value; }
 	}
 
-	public bool CanTargetFriendly
+    public string CardType
+    {
+        get { return cardType; }
+        set { cardType = value; }
+    }
+
+    public bool CanTargetFriendly
 	{
 		get { return canTargetFriendly; }
 		set { canTargetFriendly = value; }

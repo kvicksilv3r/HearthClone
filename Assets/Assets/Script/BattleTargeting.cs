@@ -43,24 +43,24 @@ public class BattleTargeting : MonoBehaviour
 			{
 				if (hit.transform != transform.parent.parent)
 				{
-					//if (transform.parent.parent.GetComponent<CardClass>().OwnerId != hit.transform.GetComponent<CardClass>().OwnerId)
+					if (transform.parent.parent.GetComponent<CardClass>().OwnerId != hit.transform.GetComponent<CardClass>().OwnerId)
 					{
 						lastTarget = hit.transform.gameObject;
 						print("Target hit was: " + lastTarget.GetComponent<CardClass>().CardName);
+
+                        if (transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell")
+                        {
+                            Destroy(transform.parent.parent.parent.gameObject);
+                        }
+                        else
+                        {
+                            //Attacker is a creature
+                        }
                     }
 				}
 			}
 		}
 
 		transform.position = transform.parent.position;
-
-        if (transform.parent.gameObject.GetComponent<CardClass>().CardType.ToLower() == "spell" && lastTarget == hit.transform.gameObject)
-        {
-            Destroy(transform.parent.parent.gameObject);
-        }
-        else
-        {
-            //Attacker is a creature
-        }
     }
 }

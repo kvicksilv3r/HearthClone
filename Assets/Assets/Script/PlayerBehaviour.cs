@@ -56,7 +56,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 weapon.durability -= 1;
                 currentCreatureEnemy.TakeDamage(strength);
-                TakeDamage(currentCreatureEnemy.strength);
+                TakeDamage(currentCreatureEnemy.Strength);
                 weapon.CheckDurability(weapon.durability);
                 canAttack = false;
             }

@@ -17,6 +17,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public static bool spellCard;
 	public LayerMask lMask;
 	public GameObject onBoardDragger;
+    public static GameObject cardToBeDestoryed;
 
 	void Start()
 	{
@@ -31,6 +32,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             onBoardDragger.SetActive(true);
             transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
             spellCard = true;
+            cardBackground = this.gameObject;
         }
         else
         {

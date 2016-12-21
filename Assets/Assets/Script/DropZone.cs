@@ -47,8 +47,8 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			if (!d.playedCard)
 			{				
 				d.PlayCard();
+                maxCardsOnField++;
 			}
-			playfieldfCardCount++;
 		}
 	}
 }

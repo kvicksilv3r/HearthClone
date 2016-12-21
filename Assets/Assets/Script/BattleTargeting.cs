@@ -25,7 +25,7 @@ public class BattleTargeting : MonoBehaviour
 	{
 	}
 
-	void OnMouseDrag()
+	public void OnMouseDrag()
 	{
 		ray.origin = transform.position;
 		Physics.Raycast(ray, out hit, 1000, lMask);
@@ -35,7 +35,7 @@ public class BattleTargeting : MonoBehaviour
 		Debug.DrawRay(transform.position, Vector3.forward * 1000, Color.red);
 	}
 
-	void OnMouseUp()
+	public void OnMouseUp()
 	{
 		if (hit.transform)
 		{

@@ -34,7 +34,6 @@ public class CardGenerator : MonoBehaviour
 	GameObject gemHolderObj;
 	[SerializeField]
 	GameObject cardFaceObj;
-	GameObject card;
 
 	void Start()
 	{
@@ -46,11 +45,11 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			GenerateCard();
+			GenerateCard(10);
 		}
 	}
 
-	void GenerateCard()
+	public void GenerateCard(int cardId)
 	{
 		pictureAssetName = "Assets/Cards/Textures/" + cardPictureName + ".jpg";
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));

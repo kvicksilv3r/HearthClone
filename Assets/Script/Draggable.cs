@@ -17,12 +17,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public static bool spellCard;
 	public LayerMask lMask;
 	public GameObject onBoardDragger;
+	GameManager gameManager;
 
 	void Start()
 	{
 		originalScale = this.transform.GetChild(0).localScale;
         originalPosition = this.transform.GetChild(0).position;
 
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         dragging = false;
 

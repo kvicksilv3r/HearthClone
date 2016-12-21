@@ -47,16 +47,20 @@ public class BattleTargeting : MonoBehaviour
 					{
 						lastTarget = hit.transform.gameObject;
 						print("Target hit was: " + lastTarget.GetComponent<CardClass>().CardName);
-
-                        if (Draggable.spellCard && lastTarget == hit.transform.gameObject)
-                        {
-                            Destroy(Draggable.cardToBeDestoryed);
-                        }
                     }
 				}
 			}
 		}
 
 		transform.position = transform.parent.position;
-	}
+
+        if (transform.parent.gameObject.GetComponent<CardClass>().CardType.ToLower() == "spell" && lastTarget == hit.transform.gameObject)
+        {
+            Destroy(transform.parent.parent.gameObject);
+        }
+        else
+        {
+            //Attacker is a creature
+        }
+    }
 }

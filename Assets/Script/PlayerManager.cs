@@ -6,12 +6,15 @@ public class PlayerManager : MonoBehaviour
     public Text playerTextHP;
     int playerHP;
     public int playerMaxHP = 30;
+    GameManager gameManager;
 
 	void Start ()
     {
         playerHP = playerMaxHP;
         playerTextHP.text = playerHP.ToString();
-	}
+
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
 	
 	void UpdateHP ()
     {
@@ -20,12 +23,12 @@ public class PlayerManager : MonoBehaviour
 
     public void PlayerAbility()
     {
-        if (Hero.priest)
+        if (Hero.priest && gameManager.PlayerTurn == 0)
         {
             PriestAbility();
         }
 
-        if (Hero.warlock)
+        if (Hero.warlock && gameManager.PlayerTurn == 0)
         {
             WarlockAbility();
         }

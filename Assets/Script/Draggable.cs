@@ -49,36 +49,40 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
         if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
         {
-            dragging = true;
-
-            //this.transform.GetChild(0).localScale = originalScale;
-            this.transform.GetChild(0).position = this.transform.position;
-
-        //if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
-        //{
-
-            if (playedCard != true)
+            if (gameManager.PlayerTurn == 0)
             {
-                placeHolder = new GameObject();
-                placeHolder.transform.SetParent(this.transform.parent);
-                placeHolder.transform.position = transform.position;
 
-                le = placeHolder.AddComponent<LayoutElement>();
+                dragging = true;
 
-                le.preferredWidth = this.transform.GetComponent<LayoutElement>().preferredWidth;
-                le.preferredHeight = this.transform.GetComponent<LayoutElement>().preferredHeight;
-                le.flexibleWidth = 0;
-                le.flexibleHeight = 0;
+                //this.transform.GetChild(0).localScale = originalScale;
+                this.transform.GetChild(0).position = this.transform.position;
 
-                placeHolder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
+                //if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
+                //{
 
-                parentToReturnTo = this.transform.parent;
+                if (playedCard != true)
+                {
+                    placeHolder = new GameObject();
+                    placeHolder.transform.SetParent(this.transform.parent);
+                    placeHolder.transform.position = transform.position;
 
-                placeHolderParent = parentToReturnTo;
+                    le = placeHolder.AddComponent<LayoutElement>();
 
-                this.transform.SetParent(this.transform.parent.parent);
+                    le.preferredWidth = this.transform.GetComponent<LayoutElement>().preferredWidth;
+                    le.preferredHeight = this.transform.GetComponent<LayoutElement>().preferredHeight;
+                    le.flexibleWidth = 0;
+                    le.flexibleHeight = 0;
 
-                GetComponent<CanvasGroup>().blocksRaycasts = false;
+                    placeHolder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
+
+                    parentToReturnTo = this.transform.parent;
+
+                    placeHolderParent = parentToReturnTo;
+
+                    this.transform.SetParent(this.transform.parent.parent);
+
+                    GetComponent<CanvasGroup>().blocksRaycasts = false;
+                }
             }
         }
 	}
@@ -87,42 +91,45 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
         if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
         {
-            if (!playedCard)
-        {
-            this.transform.GetChild(0).localScale = originalScale * 1.5f;
-
-           // if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
-         //   {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                Physics.Raycast(ray, out hit, 1000, lMask);
-
-                transform.position = hit.point + new Vector3(0, 0, -0.1f);
-                //this.transform.position = eventData.position;
-                //transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
-
-                if (placeHolder.transform.parent != placeHolderParent && DropZone.playfieldfCardCount < DropZone.maxCardsOnField)
+            if (gameManager.PlayerTurn == 0)
+            {
+                if (!playedCard)
                 {
-                    placeHolder.transform.SetParent(placeHolderParent);
-                }
+                    this.transform.GetChild(0).localScale = originalScale * 1.5f;
 
-                int newSiblingindex = placeHolderParent.childCount;
+                    // if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
+                    //   {
+                    RaycastHit hit;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                for (int i = 0; i < placeHolderParent.childCount; i++)
-                {
-                    if (this.transform.position.x < placeHolderParent.transform.GetChild(i).position.x)
+                    Physics.Raycast(ray, out hit, 1000, lMask);
+
+                    transform.position = hit.point + new Vector3(0, 0, -0.1f);
+                    //this.transform.position = eventData.position;
+                    //transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
+
+                    if (placeHolder.transform.parent != placeHolderParent && DropZone.playfieldfCardCount < DropZone.maxCardsOnField)
                     {
-                        newSiblingindex = i;
-
-                        if (placeHolder.transform.GetSiblingIndex() < newSiblingindex)
-                        {
-                            newSiblingindex--;
-                        }
-                        break;
+                        placeHolder.transform.SetParent(placeHolderParent);
                     }
+
+                    int newSiblingindex = placeHolderParent.childCount;
+
+                    for (int i = 0; i < placeHolderParent.childCount; i++)
+                    {
+                        if (this.transform.position.x < placeHolderParent.transform.GetChild(i).position.x)
+                        {
+                            newSiblingindex = i;
+
+                            if (placeHolder.transform.GetSiblingIndex() < newSiblingindex)
+                            {
+                                newSiblingindex--;
+                            }
+                            break;
+                        }
+                    }
+                    placeHolder.transform.SetSiblingIndex(newSiblingindex);
                 }
-                placeHolder.transform.SetSiblingIndex(newSiblingindex);
             }
         }
 	}
@@ -131,29 +138,32 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
         {
-            dragging = false;
-
-            this.transform.GetChild(0).localScale = originalScale;
-
-            transform.position = new Vector3(transform.position.x, transform.position.y, -1);
-
-       // if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
-        //{
-            this.transform.SetParent(parentToReturnTo);
-
-            if (placeHolder != null)
+            if (gameManager.PlayerTurn == 0)
             {
-                this.transform.SetSiblingIndex(placeHolder.transform.GetSiblingIndex());
+                dragging = false;
+
+                this.transform.GetChild(0).localScale = originalScale;
+
+                transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+
+                // if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
+                //{
+                this.transform.SetParent(parentToReturnTo);
+
+                if (placeHolder != null)
+                {
+                    this.transform.SetSiblingIndex(placeHolder.transform.GetSiblingIndex());
+                }
+
+                if (playedCard == true)
+                {
+                    cardBackground.SetActive(false);
+                }
+
+                GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                Destroy(placeHolder);
             }
-
-            if (playedCard == true)
-            {
-                cardBackground.SetActive(false);
-            }
-
-            GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-            Destroy(placeHolder);
         }
     }
 

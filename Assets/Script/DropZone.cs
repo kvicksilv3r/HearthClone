@@ -5,8 +5,14 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 {
 	public static int playfieldfCardCount;
 	public static int maxCardsOnField = 7;
+    GameManager gameManager;
 
-	public void OnPointerEnter(PointerEventData eventData)
+    void Start()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
 	{
 		if (eventData.pointerDrag == null)
 		{
@@ -40,7 +46,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	{
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
 
-		if (d != null && playfieldfCardCount < maxCardsOnField)
+		if (d != null && playfieldfCardCount < maxCardsOnField && gameManager.PlayerTurn != 1)
 		{
 			d.parentToReturnTo = this.transform;
 

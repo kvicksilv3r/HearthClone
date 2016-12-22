@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class GameManager : MonoBehaviour
 	protected float muliganTime = 15;
 	protected bool isPlaying = false;
 
+	protected Text[] manaTexts = new Text[2];
+	protected Text[] healthTexts = new Text[2];
+
 	#region LightVars
 	protected Light dirLight;
 	[SerializeField]
@@ -33,6 +37,8 @@ public class GameManager : MonoBehaviour
 	{
 		//playerDeck[0] = GetComponent<StringStorage>().PlayerDeck;
 		//playerDeck[1] = GetComponent<StringStorage>().EnemyDeck;
+		players[0] = new Player();
+		players[1] = new Player();
 		whosTurn = Random.Range(0, 1);
 		roundTime = maxTime;
 		currentRoundstoTimeChange = roundsBetweenTimeChange;
@@ -68,7 +74,6 @@ public class GameManager : MonoBehaviour
 
 	public void NextRound(bool timeOut)
 	{
-		roundTime = maxTime;
 		if (burningRope && !timeOut)
 		{
 			StopRope();
@@ -83,6 +88,30 @@ public class GameManager : MonoBehaviour
 		}
 
 		whosTurn = Mathf.Abs(whosTurn + 1 - 2);
+
+		StartRound();
+	}
+
+	void StartRound()
+	{
+		if(players[whosTurn].maxMana < 10)
+			players[whosTurn].maxMana++;
+
+		players[whosTurn].currentMana = players[whosTurn].maxMana;
+		players[whosTurn].usedPower = false;
+		roundTime = maxTime;
+	}
+
+	void UpdateMana(int playerId)
+	{
+		manaTexts[0].text = players[0].currentMana.ToString();
+		manaTexts[1].text = players[1].currentMana.ToString();
+	}
+
+	void UpdateHealth(int playerId)
+	{
+		healthTexts[0].text = players[0].health.ToString();
+		healthTexts[1].text = players[1].health.ToString();
 	}
 
 	void DrawCard(int playerId)

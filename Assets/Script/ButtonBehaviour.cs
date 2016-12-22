@@ -9,8 +9,16 @@ public class ButtonBehaviour : MonoBehaviour {
 
     [SerializeField]
     protected GameObject settingsMenu;
+
     [SerializeField]
     protected GameObject safeCheck;
+
+    [SerializeField]
+    protected GameObject errorMessage;
+
+    [SerializeField]
+    protected GameObject optionsMenu;
+
 
     // Use this for initialization
     void Start () {
@@ -35,6 +43,21 @@ public class ButtonBehaviour : MonoBehaviour {
     public void LoadSafeCheck()
     {
         safeCheck.gameObject.SetActive(!safeCheck.gameObject.active);
+    }
+
+    public void LoadErrorMessage()
+    {
+        errorMessage.gameObject.SetActive(!errorMessage.gameObject.active);
+    }
+
+    public void ExitAppli()
+    {
+        Application.Quit();
+    }
+    
+    public void LoadOptions()
+    {
+        optionsMenu.gameObject.SetActive(!optionsMenu.gameObject.active);
     }
 
 }

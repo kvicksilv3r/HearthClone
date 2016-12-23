@@ -34,10 +34,15 @@ public class CardGenerator : MonoBehaviour
 	GameObject gemHolderObj;
 	[SerializeField]
 	GameObject cardFaceObj;
+	[SerializeField]
+	GameObject dmgPos;
+	[SerializeField]
+	GameObject hpPos;
+	ParseFromJSON json;
 
 	void Start()
 	{
-
+		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
 	}
 
 	// Update is called once per frame
@@ -45,28 +50,42 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			GenerateCard(10);
+			GenerateCard(Random.Range(1,5));
 		}
 	}
 
 	public void GenerateCard(int cardId)
 	{
-		pictureAssetName = "Assets/Cards/Textures/" + cardPictureName + ".jpg";
+		CARDS c = json.loadFile(cardId);
+
+		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".jpg";
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
 
-		healthTextObj.GetComponent<Text>().text = "15";
-		manaTextObj.GetComponent<Text>().text = "10";
-		damageTextObj.GetComponent<Text>().text = "5";
-		cardTextObj.GetComponent<Text>().text = "<b>Battlecry</b>: Destroy your hero and replace it with Lord Jaraxxus.";
-		cardRaceTextObj.GetComponent<Text>().text = "Demon";
-		cardNameTextObj.GetComponent<Text>().text = "Lord Jaraxxus";
+		healthTextObj.GetComponent<Text>().text = c.health.ToString();
+		manaTextObj.GetComponent<Text>().text = c.mana.ToString();
+		damageTextObj.GetComponent<Text>().text = c.damage.ToString();
+		cardTextObj.GetComponent<Text>().text = c.description;
+		cardRaceTextObj.GetComponent<Text>().text = c.race;
+		cardNameTextObj.GetComponent<Text>().text = c.card_name;
 
-		dragonObj.SetActive(true);
+		if (c.rarity.ToLower() == "legendary")
+		{
+			dragonObj.SetActive(true);
+		}
+
 		gemHolderObj.SetActive(true);
 		gemObj.SetActive(true);
 
-		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_minion_warlock.png", typeof(Texture2D));
+		gemObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Gems/gem_"+c.rarity+".png", typeof(Texture2D));
+
+		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_minion_"+c.class_name+".png", typeof(Texture2D));
 		transform.GetComponent<CardClass>().CardName = cardNameTextObj.GetComponent<Text>().text;
+	}
+
+	public void PlayedCard()
+	{
+		healthTextObj.transform.position = hpPos.transform.position;
+		damageTextObj.transform.position = dmgPos.transform.position;
 	}
 
 }

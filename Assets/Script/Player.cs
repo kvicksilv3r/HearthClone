@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Player {
 
 	public int health = 30;
 	public int maxMana = 0;

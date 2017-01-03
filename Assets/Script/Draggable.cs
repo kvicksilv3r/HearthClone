@@ -199,6 +199,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             onBoardDragger.SetActive(true);
             transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
 			transform.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
+
 		}
     }
 }

@@ -10,10 +10,13 @@ public class Creature : CardClass
 	protected int health, strength, maxAttacks, currentAttacks;
 	[SerializeField]
 	private float waitTime;
+
+	protected bool hasTaunt;
 	//[SerializeField] private GameObject target;
 
 	public string enemyCreatureTag = "EnemyCreature";
 	public string enemyPlayerTag = "EnemyPlayer";
+
 
 	public int Health
 	{
@@ -52,6 +55,18 @@ public class Creature : CardClass
 			//Can not attack.
 		}
 
+	}
+
+	public bool HasTaunt
+	{
+		get { return hasTaunt; }
+		set { hasTaunt = value; }
+	}
+
+	public int MaxAttacks
+	{
+		get { return maxAttacks; }
+		set { maxAttacks = value; }
 	}
 
 	public void TakeDamage(int damage)

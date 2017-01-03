@@ -38,7 +38,10 @@ public class CardGenerator : MonoBehaviour
 	GameObject dmgPos;
 	[SerializeField]
 	GameObject hpPos;
+	[SerializeField]
+	GameObject tauntObj;
 	ParseFromJSON json;
+	CARDS c;
 
 	void Start()
 	{
@@ -50,13 +53,13 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			GenerateCard(Random.Range(1,5));
+			GenerateCard(Random.Range(1, 5));
 		}
 	}
 
 	public void GenerateCard(int cardId)
 	{
-		CARDS c = json.loadFile(cardId);
+		c = json.loadFile(cardId);
 
 		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".jpg";
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
@@ -73,19 +76,44 @@ public class CardGenerator : MonoBehaviour
 			dragonObj.SetActive(true);
 		}
 
+		if(c.abilities_cr.GetLength(0) > 0){
+			foreach(int i in c.abilities_cr)
+			{
+				if(i == 1)
+				{
+					GetComponent<Creature>().HasTaunt = true;
+				}
+				else if(i == 2)
+				{
+					GetComponent<Creature>().CanAttack = true;
+				}
+				else if(i == 3)
+				{
+					GetComponent<Creature>().MaxAttacks = 2;
+				}
+			}
+		}
+
 		gemHolderObj.SetActive(true);
 		gemObj.SetActive(true);
 
-		gemObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Gems/gem_"+c.rarity+".png", typeof(Texture2D));
+		gemObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Gems/gem_" + c.rarity + ".png", typeof(Texture2D));
 
-		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_minion_"+c.class_name+".png", typeof(Texture2D));
+		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_minion_" + c.class_name + ".png", typeof(Texture2D));
 		transform.GetComponent<CardClass>().CardName = cardNameTextObj.GetComponent<Text>().text;
 	}
 
 	public void PlayedCard()
 	{
-		healthTextObj.transform.position = hpPos.transform.position;
-		damageTextObj.transform.position = dmgPos.transform.position;
+		hpPos.SetActive(true);
+		dmgPos.SetActive(true);
+
+		if (GetComponent<Creature>().HasTaunt) {
+			tauntObj.SetActive(true);
+		}
+
+		healthTextObj.transform.position = hpPos.transform.position - new Vector3(0, 0, 0.2f);
+		damageTextObj.transform.position = dmgPos.transform.position - new Vector3(0, 0, 0.2f);
 	}
 
 }

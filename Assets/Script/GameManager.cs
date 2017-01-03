@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 	protected bool ropeBurning = false;
 	[SerializeField]
 	protected GameObject burningRope;
+	protected ManaManager manaManager;
 	protected int timeIndex = 0; //0 = dawn, 1 = day, 2 = night
 	protected int roundsBetweenTimeChange = 2;
 	protected int currentRoundstoTimeChange;
@@ -43,6 +44,8 @@ public class GameManager : MonoBehaviour
 		roundTime = maxTime;
 		currentRoundstoTimeChange = roundsBetweenTimeChange;
 		dirLight = GameObject.Find("Directional Light").GetComponent<Light>();
+		manaManager = GameObject.Find("ManaManager").GetComponent<ManaManager>();
+		
 	}
 
 	void Update()
@@ -94,21 +97,24 @@ public class GameManager : MonoBehaviour
 
 	void StartRound()
 	{
-		if(players[whosTurn].maxMana < 10)
+		if (players[whosTurn].maxMana < 10)
+		{
 			players[whosTurn].maxMana++;
+			manaManager.AddMana(whosTurn, players[whosTurn].maxMana);
+		}
 
 		players[whosTurn].currentMana = players[whosTurn].maxMana;
 		players[whosTurn].usedPower = false;
 		roundTime = maxTime;
 	}
 
-	void UpdateMana(int playerId)
+	void UpdateMana()
 	{
 		manaTexts[0].text = players[0].currentMana.ToString();
 		manaTexts[1].text = players[1].currentMana.ToString();
 	}
 
-	void UpdateHealth(int playerId)
+	void UpdateHealth()
 	{
 		healthTexts[0].text = players[0].health.ToString();
 		healthTexts[1].text = players[1].health.ToString();
@@ -131,6 +137,11 @@ public class GameManager : MonoBehaviour
 		burningRope.GetComponent<RopeHiderScript>().Deactivate();
 	}
 
+	public Player Players(int playerIndex)
+	{
+		return players[playerIndex];
+	}
+
 	public int PlayerTurn
 	{
 		get
@@ -147,6 +158,7 @@ public class GameManager : MonoBehaviour
 	void EndMuligan()
 	{
 		isPlaying = true;
+		StartRound();
 	}
 
 	void TimeChange()

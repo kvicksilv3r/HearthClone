@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-	public float roundTime;
+	public float roundTime; //Counts down the current time
 	[SerializeField]
-	protected float maxTime;
+	protected float maxTime; // How long will a round be?
 	protected int whosTurn = 0;
 	protected bool ropeBurning = false;
 	[SerializeField]
@@ -15,15 +15,19 @@ public class GameManager : MonoBehaviour
 	protected ManaManager manaManager;
 	protected int timeIndex = 0; //0 = dawn, 1 = day, 2 = night
 	protected int roundsBetweenTimeChange = 2;
-	protected int currentRoundstoTimeChange;
-	protected int[][] playerDeck = new int[2][]; //??
+	protected int currentRoundstoTimeChange; //Current rounds between timechange
+	protected int[][] playerDeck = new int[2][]; //Guess we should keep the decks here
 	protected Creature[,] craturesOnBoaerd = new Creature[2, 7]; //Keeps track of the creatures on the board
 	protected Player[] players = new Player[2];
 
+	protected bool coinUsed = false;
+	protected int coinPlayer;
+
 	protected float muliganTime = 15;
 	protected bool isPlaying = false;
-
+	
 	protected Text[] manaTexts = new Text[2];
+	[SerializeField]
 	protected Text[] healthTexts = new Text[2];
 
 	#region LightVars
@@ -45,11 +49,29 @@ public class GameManager : MonoBehaviour
 		currentRoundstoTimeChange = roundsBetweenTimeChange;
 		dirLight = GameObject.Find("Directional Light").GetComponent<Light>();
 		manaManager = GameObject.Find("ManaManager").GetComponent<ManaManager>();
-		
+
+		manaTexts[0] = GameObject.Find("PlayerManaText").GetComponent<Text>();
+		manaTexts[1] = GameObject.Find("AiManaText").GetComponent<Text>();
+
 	}
 
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.M))
+		{
+			AddMana();
+		}
+
+		if (Input.GetKeyDown(KeyCode.D))
+		{
+			RemoveMana(0);
+		}
+
+		if (Input.GetKeyDown(KeyCode.N))
+		{
+			ExpendMana(1);
+		}
+
 		if (isPlaying)
 		{
 			roundTime -= Time.deltaTime;
@@ -83,6 +105,12 @@ public class GameManager : MonoBehaviour
 			ropeBurning = false;
 		}
 
+		if (coinUsed)
+		{
+			RemoveMana(coinPlayer);
+			coinUsed = false;
+		}
+
 		currentRoundstoTimeChange--;
 
 		if (currentRoundstoTimeChange <= 0)
@@ -90,28 +118,51 @@ public class GameManager : MonoBehaviour
 			TimeChange();
 		}
 
+		//This flips a value between 0 and 1. Why? Because.
 		whosTurn = Mathf.Abs(whosTurn + 1 - 2);
 
 		StartRound();
 	}
 
+	void ExpendMana(int manaSpent)
+	{
+		manaManager.ExpendMana(manaSpent, players[whosTurn].currentMana, whosTurn);
+		players[whosTurn].currentMana -= manaSpent;
+		UpdateMana();
+	}
+
 	void StartRound()
 	{
-		if (players[whosTurn].maxMana < 10)
-		{
-			players[whosTurn].maxMana++;
-			manaManager.AddMana(whosTurn, players[whosTurn].maxMana);
-		}
+		AddMana();
 
 		players[whosTurn].currentMana = players[whosTurn].maxMana;
 		players[whosTurn].usedPower = false;
 		roundTime = maxTime;
 	}
 
+	void AddMana()
+	{
+		if (players[whosTurn].maxMana < 10)
+		{
+			players[whosTurn].maxMana++;
+			players[whosTurn].currentMana++;
+			manaManager.AddMana(whosTurn, players[whosTurn].maxMana);
+			UpdateMana();
+		}
+	}
+
+	void RemoveMana(int playerIndex)
+	{
+		manaManager.RemoveMana(playerIndex);
+		players[playerIndex].maxMana--;
+		players[playerIndex].currentMana--;
+		UpdateMana();
+	}
+
 	void UpdateMana()
 	{
-		manaTexts[0].text = players[0].currentMana.ToString();
-		manaTexts[1].text = players[1].currentMana.ToString();
+		manaTexts[0].text = players[0].currentMana.ToString() + "/" + players[0].maxMana;
+		manaTexts[1].text = players[1].currentMana.ToString() + "/" + players[1].maxMana;
 	}
 
 	void UpdateHealth()
@@ -122,7 +173,13 @@ public class GameManager : MonoBehaviour
 
 	void DrawCard(int playerId)
 	{
-		
+
+	}
+
+	public void PlayedCoin(int playerIndex)
+	{
+		coinPlayer = playerIndex;
+		coinUsed = true;
 	}
 
 	void StartRope()
@@ -137,9 +194,9 @@ public class GameManager : MonoBehaviour
 		burningRope.GetComponent<RopeHiderScript>().Deactivate();
 	}
 
-	public Player Players(int playerIndex)
+	public Player[] Players(int playerIndex)
 	{
-		return players[playerIndex];
+		return players;
 	}
 
 	public int PlayerTurn

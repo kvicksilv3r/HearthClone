@@ -12,9 +12,6 @@ public class ManaManager : MonoBehaviour
 	public GameObject enemyManaPos;
 	protected GameManager gameManager;
 
-	int test = 1;
-	int testmana = 10;
-
 	// Use this for initialization
 	void Start()
 	{
@@ -26,22 +23,8 @@ public class ManaManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.M))
-		{
-			AddMana(0, test);
-			test++;
-		}
 
-		if (Input.GetKeyDown(KeyCode.N))
-		{
-			ExpendMana(1);
-			testmana--;
-		}
 
-		if (Input.GetKeyDown(KeyCode.D))
-		{
-			RemoveMana(0);
-		}
 	}
 
 	public void AddMana(int playerIndex, int manaCount)
@@ -63,17 +46,17 @@ public class ManaManager : MonoBehaviour
 		{
 			if (manaCrystals[playerIndex, 9 - i] != null)
 			{
-				Destroy(manaCrystals[playerIndex, 9-i]);
+				Destroy(manaCrystals[playerIndex, 9 - i]);
 				break;
 			}
 		}
 	}
 
-	public void ExpendMana(int manaExpended)
+	public void ExpendMana(int manaExpended, int currentMana, int playerIndex)
 	{
-		for (int i = 0; i < manaExpended; i++)
+		for (int i = 0; i <= manaExpended; i++)
 		{
-			manaCrystals[gameManager.PlayerTurn, gameManager.Players(gameManager.PlayerTurn).currentMana - i - 1].GetComponent<ManaCrystal>().FlipMana();
+			manaCrystals[playerIndex, currentMana - i].GetComponent<ManaCrystal>().EmptyMana();
 		}
 	}
 }

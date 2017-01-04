@@ -8,13 +8,12 @@ public class ManaCrystal : MonoBehaviour
 
 	string fullCrystal;
 	string emptyCrystal;
-	bool filled = true;
 
 	// Use this for initialization
 	void Start()
 	{
 		fullCrystal = "mana_gem.png";
-		emptyCrystal = "mana_gem_empty.png";		
+		emptyCrystal = "mana_gem_empty.png";
 	}
 
 	// Update is called once per frame
@@ -23,26 +22,14 @@ public class ManaCrystal : MonoBehaviour
 
 	}
 
-	public void FlipMana()
+	public void EmptyMana()
 	{
-		if (filled)
-		{
-			GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/"+emptyCrystal, typeof(Texture2D));
-			filled = !filled;
-		}
-
-		else
-		{
-			GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/"+fullCrystal, typeof(Texture2D));
-			filled = !filled;
-		}
+		GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/" + emptyCrystal, typeof(Texture2D));
 	}
 
 	public void Reset()
 	{
 		GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(fullCrystal, typeof(Texture2D));
-		filled = true;
-
 	}
 
 

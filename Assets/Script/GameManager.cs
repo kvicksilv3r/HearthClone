@@ -137,7 +137,12 @@ public class GameManager : MonoBehaviour
 		players[whosTurn].currentMana = players[whosTurn].maxMana;
 		players[whosTurn].usedPower = false;
 		roundTime = maxTime;
-	}
+
+        if (whosTurn == 1)
+        {
+            GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
+        }
+    }
 
 	void AddMana()
 	{

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ManaManager : MonoBehaviour
 {
 
-	public GameObject[,] manaCrystals = new GameObject[2, 10];
+	public GameObject[,] manaCrystals = new GameObject[2, 11];
 	public GameObject[] manaPositions = new GameObject[2];
 	public GameObject manaCrystal;
 	public GameObject playerManaPos;
@@ -20,21 +20,15 @@ public class ManaManager : MonoBehaviour
 		manaPositions[1] = enemyManaPos;
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-
-
-	}
-
 	public void AddMana(int playerIndex, int manaCount)
 	{
 		manaCrystals[playerIndex, manaCount - 1] = Instantiate(manaCrystal, manaPositions[playerIndex].transform.position + new Vector3(2.4f * manaCount - 1, 0, 0), Quaternion.Euler(-90, 0, 0), this.transform) as GameObject;
+		UpdateMana(playerIndex);
 	}
 
 	public void ResetMana(int playerIndex)
 	{
-		for (int i = 0; i < manaCrystals.GetLength(playerIndex); i++)
+		for (int i = 0; i < gameManager.Players()[playerIndex].maxMana; i++)
 		{
 			manaCrystals[playerIndex, i].GetComponent<ManaCrystal>().Reset();
 		}
@@ -42,21 +36,24 @@ public class ManaManager : MonoBehaviour
 
 	public void RemoveMana(int playerIndex)
 	{
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 11; i++)
 		{
-			if (manaCrystals[playerIndex, 9 - i] != null)
+			if (manaCrystals[playerIndex, 10 - i] != null)
 			{
-				Destroy(manaCrystals[playerIndex, 9 - i]);
+				Destroy(manaCrystals[playerIndex, 10 - i]);
 				break;
 			}
 		}
 	}
 
-	public void ExpendMana(int manaExpended, int currentMana, int playerIndex)
+	public void UpdateMana(int playerIndex)
 	{
-		for (int i = 0; i <= manaExpended; i++)
+		ResetMana(playerIndex);
+		int manaDif = gameManager.Players()[playerIndex].maxMana - gameManager.Players()[playerIndex].currentMana;
+
+        for (int i = 0; i < manaDif; i++)
 		{
-			manaCrystals[playerIndex, currentMana - i].GetComponent<ManaCrystal>().EmptyMana();
+			manaCrystals[playerIndex, gameManager.Players()[playerIndex].maxMana - i - 1].GetComponent<ManaCrystal>().EmptyMana();
 		}
 	}
 }

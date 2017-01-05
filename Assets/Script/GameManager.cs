@@ -126,7 +126,6 @@ public class GameManager : MonoBehaviour
 
 	void ExpendMana(int manaSpent)
 	{
-		manaManager.ExpendMana(manaSpent, players[whosTurn].currentMana, whosTurn);
 		players[whosTurn].currentMana -= manaSpent;
 		UpdateMana();
 	}
@@ -163,6 +162,7 @@ public class GameManager : MonoBehaviour
 	{
 		manaTexts[0].text = players[0].currentMana.ToString() + "/" + players[0].maxMana;
 		manaTexts[1].text = players[1].currentMana.ToString() + "/" + players[1].maxMana;
+		manaManager.UpdateMana(whosTurn);
 	}
 
 	void UpdateHealth()
@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
 		burningRope.GetComponent<RopeHiderScript>().Deactivate();
 	}
 
-	public Player[] Players(int playerIndex)
+	public Player[] Players()
 	{
 		return players;
 	}

@@ -16,14 +16,15 @@ public class GameManager : MonoBehaviour
 	protected int timeIndex = 0; //0 = dawn, 1 = day, 2 = night
 	protected int roundsBetweenTimeChange = 2;
 	protected int currentRoundstoTimeChange; //Current rounds between timechange
-	protected int[][] playerDeck = new int[2][]; //Guess we should keep the decks here
+	protected List<int>[] decks = new List<int>[2]; //Guess we should keep the decks here
 	protected Creature[,] craturesOnBoaerd = new Creature[2, 7]; //Keeps track of the creatures on the board
 	protected Player[] players = new Player[2];
 
 	protected bool coinUsed = false;
 	protected int coinPlayer;
-
-	protected float muliganTime = 15;
+	[SerializeField]
+	protected float muliganTime = 20;
+	protected MuliganScript muliganScript;
 	protected bool isPlaying = false;
 	
 	protected Text[] manaTexts = new Text[2];
@@ -40,11 +41,11 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
-		//playerDeck[0] = GetComponent<StringStorage>().PlayerDeck;
-		//playerDeck[1] = GetComponent<StringStorage>().EnemyDeck;
+		//TODO: Ladda in båda decksen till decks här.
+
 		players[0] = new Player();
 		players[1] = new Player();
-		whosTurn = Random.Range(0, 1);
+		whosTurn = Random.Range(0, 2);
 		roundTime = maxTime;
 		currentRoundstoTimeChange = roundsBetweenTimeChange;
 		dirLight = GameObject.Find("Directional Light").GetComponent<Light>();
@@ -52,6 +53,19 @@ public class GameManager : MonoBehaviour
 
 		manaTexts[0] = GameObject.Find("PlayerManaText").GetComponent<Text>();
 		manaTexts[1] = GameObject.Find("AiManaText").GetComponent<Text>();
+
+		decks[0] = new List<int>();
+		decks[1] = new List<int>();
+
+		for(int i = 0; i < 15; i++)
+		{
+			decks[0].Add(Random.Range(1, 5));
+			decks[1].Add(Random.Range(1, 5));
+		}
+
+		muliganScript = GameObject.Find("Muligan").GetComponent<MuliganScript>();
+
+		muliganScript.BeginMuligan(3 + whosTurn);
 
 	}
 
@@ -145,7 +159,10 @@ public class GameManager : MonoBehaviour
 		{
 			players[whosTurn].maxMana++;
 			players[whosTurn].currentMana++;
-			manaManager.AddMana(whosTurn, players[whosTurn].maxMana);
+			if (whosTurn == 0)
+			{
+				manaManager.AddMana(whosTurn, players[whosTurn].maxMana);
+			}
 			UpdateMana();
 		}
 	}
@@ -162,7 +179,7 @@ public class GameManager : MonoBehaviour
 	{
 		manaTexts[0].text = players[0].currentMana.ToString() + "/" + players[0].maxMana;
 		manaTexts[1].text = players[1].currentMana.ToString() + "/" + players[1].maxMana;
-		manaManager.UpdateMana(whosTurn);
+		manaManager.UpdateMana(0);
 	}
 
 	void UpdateHealth()
@@ -214,8 +231,14 @@ public class GameManager : MonoBehaviour
 
 	void EndMuligan()
 	{
+		muliganScript.EndMuligan();
 		isPlaying = true;
 		StartRound();
+	}
+
+	public List<int>[] Decks
+	{
+		get { return decks; }
 	}
 
 	void TimeChange()

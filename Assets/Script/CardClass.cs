@@ -6,11 +6,15 @@ using UnityEngine.UI;
 
 public class CardClass : MonoBehaviour
 {
+	CARDS cCards;
 
     [SerializeField]
     protected int rarity;
 
-    [SerializeField]
+	[SerializeField]
+	protected int cardId;
+
+	[SerializeField]
     protected string cardType;
 
     [SerializeField]
@@ -66,7 +70,13 @@ public class CardClass : MonoBehaviour
         get { return cardCost; }
     }
 
-    public string CardName
+	public int CardId
+	{
+		set { cardId = value; }
+		get { return cardId; }
+	}
+
+	public string CardName
     {
         set { cardName = value; }
         get { return cardName; }
@@ -78,6 +88,12 @@ public class CardClass : MonoBehaviour
         //Here would be awesome if we could set the current player as the owner.
 		
     }
+
+	public CARDS Card
+	{
+		get { return cCards; }
+		set { cCards = value; }
+	}
 
     void SetTarget()
     {

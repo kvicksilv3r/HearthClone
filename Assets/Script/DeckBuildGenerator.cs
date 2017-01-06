@@ -25,7 +25,7 @@ public class DeckBuildGenerator : MonoBehaviour {
 	{
 		for(int i =0; i< cards.Length; i++)
 		{
-			cards[i].GetComponent<CardGenerator>().GenerateCard(i + (generatorIndex * 8) +1);
+			//cards[i].GetComponent<CardGenerator>().GenerateCard(i + (generatorIndex * 8) +1);
 		}
 	}
 }

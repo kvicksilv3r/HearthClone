@@ -6,23 +6,19 @@ public class ManaManager : MonoBehaviour
 {
 
 	public GameObject[,] manaCrystals = new GameObject[2, 11];
-	public GameObject[] manaPositions = new GameObject[2];
 	public GameObject manaCrystal;
 	public GameObject playerManaPos;
-	public GameObject enemyManaPos;
 	protected GameManager gameManager;
 
 	// Use this for initialization
 	void Start()
 	{
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-		manaPositions[0] = playerManaPos;
-		manaPositions[1] = enemyManaPos;
 	}
 
 	public void AddMana(int playerIndex, int manaCount)
 	{
-		manaCrystals[playerIndex, manaCount - 1] = Instantiate(manaCrystal, manaPositions[playerIndex].transform.position + new Vector3(2.4f * manaCount - 1, 0, 0), Quaternion.Euler(-90, 0, 0), this.transform) as GameObject;
+		manaCrystals[playerIndex, manaCount - 1] = Instantiate(manaCrystal, playerManaPos.transform.position + new Vector3(2.4f * manaCount - 1, 0, 0), Quaternion.Euler(-90, 0, 0), this.transform) as GameObject;
 		UpdateMana(playerIndex);
 	}
 

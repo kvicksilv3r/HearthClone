@@ -27,17 +27,17 @@ public class SpellCardGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            GenerateCard();
+          //  GenerateCard(0);
         }
     }
 
-    void GenerateCard()
+    public void GenerateCard(CARDS c)
     {
         pictureAssetName = "Assets/Cards/Textures/" + cardPictureName + ".png";
         portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
 
         manaTextObj.GetComponent<Text>().text = "10";
-        cardTextObj.GetComponent<Text>().text = "<b>Battlecry</b>: Deal 10 Damage.";
+        cardTextObj.GetComponent<Text>().text = "Deal 10 Damage.";
         cardNameTextObj.GetComponent<Text>().text = "Pyroblast";
 
         gemHolderObj.SetActive(true);

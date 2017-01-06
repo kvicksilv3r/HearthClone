@@ -46,6 +46,7 @@ public class CardGenerator : MonoBehaviour
 	void Start()
 	{
 		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
+		 
 	}
 
 	// Update is called once per frame
@@ -53,13 +54,14 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			GenerateCard(Random.Range(1, 5));
+			//GenerateCard(Random.Range(1, 5));
 		}
 	}
 
-	public void GenerateCard(int cardId)
+	public void GenerateCard(CARDS card)
 	{
-		c = json.loadFile(cardId);
+		c = card;
+		GetComponent<CardClass>().Card = card;
 
 		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".jpg";
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));

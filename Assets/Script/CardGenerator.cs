@@ -39,7 +39,11 @@ public class CardGenerator : MonoBehaviour
 	[SerializeField]
 	GameObject hpPos;
 	[SerializeField]
+	GameObject portraitBorder;
+	[SerializeField]
 	GameObject tauntObj;
+	[SerializeField]
+	GameObject sleepingParticle;
 	ParseFromJSON json;
 	CARDS c;
 
@@ -109,6 +113,13 @@ public class CardGenerator : MonoBehaviour
 	{
 		hpPos.SetActive(true);
 		dmgPos.SetActive(true);
+
+		if (!GetComponent<Creature>().CanAttack == true)
+		{
+			sleepingParticle.SetActive(true);
+		}
+
+		portraitBorder.SetActive(true);
 
 		if (GetComponent<Creature>().HasTaunt) {
 			tauntObj.SetActive(true);

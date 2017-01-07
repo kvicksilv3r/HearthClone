@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour
 		get { return timeIndex; }
 	}
 
-	void EndMuligan()
+	public void EndMuligan()
 	{
 		muliganScript.EndMuligan();
 		isPlaying = true;

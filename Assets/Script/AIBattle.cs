@@ -21,12 +21,13 @@ public class AIBattle : MonoBehaviour
 
         foreach (Transform child in transform)
         {
-            if (child.GetChild(0).GetComponent<Creature>().CanAttack)
+            //if (child.GetChild(0).GetComponent<Creature>().CanAttack)
             {
                 //targets = new GameObject[GameObject.Find("Player Playfield").transform.childCount];
                 target = TargetList[Random.Range(0, TargetList.Count)];
                 
                 target.transform.GetChild(0).GetComponent<Creature>().Health -= child.GetChild(0).GetComponent<Creature>().Strength;
+
                 child.GetChild(0).GetComponent<Creature>().Health -= target.transform.GetChild(0).GetComponent<Creature>().Strength;
 
             }

@@ -38,6 +38,7 @@ public class AI : MonoBehaviour
                 }
             }
         }
+        GameObject.Find("Enemy Playfield").GetComponent<AIBattle>().AIBattlePhase();
     }
 
     void CheckCurrentMana()

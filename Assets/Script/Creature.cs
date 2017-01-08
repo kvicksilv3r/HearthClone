@@ -49,7 +49,13 @@ public class Creature : CardClass
 		get { return strength; }
 	}
 
-	void Combat(GameObject enemy)
+    public int CurrentAttacks
+    {
+        set { currentAttacks = value; }
+        get { return currentAttacks; }
+    }
+
+    void Combat(GameObject enemy)
 	{
 		if (canAttack)
 		{

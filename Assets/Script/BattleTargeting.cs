@@ -53,8 +53,18 @@ public class BattleTargeting : MonoBehaviour
                     {
                         if (transform.parent.parent.GetComponent<CardClass>().OwnerId != hit.transform.GetComponent<CardClass>().OwnerId || transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell")
                         {
-                            lastTarget = hit.transform.gameObject;
-                            print("Target hit was: " + lastTarget.GetComponent<CardClass>().CardName);
+                            if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks >= 1)
+                            {
+                                lastTarget = hit.transform.gameObject;
+                                print("Target hit was: " + lastTarget.GetComponent<CardClass>().CardName);
+
+                                lastTarget.GetComponent<Creature>().Health -= transform.parent.parent.GetComponent<Creature>().Strength;
+                                transform.parent.parent.GetComponent<Creature>().Health -= lastTarget.GetComponent<Creature>().Strength;
+                                transform.parent.parent.GetComponent<Creature>().UpdateHP();
+                                lastTarget.GetComponent<Creature>().UpdateHP();
+
+                                transform.parent.parent.GetComponent<Creature>().CurrentAttacks --;
+                            }
 
                             if (transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell")
                             {

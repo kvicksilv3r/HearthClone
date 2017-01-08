@@ -22,8 +22,6 @@ public class AI : MonoBehaviour
             {
                 Debug.Log("creature found");
 
-                child.GetChild(0).GetComponent<Creature>().OwnerId = 1;
-
                 CheckCurrentMana();
 
                 CheckCardManaCost();
@@ -36,7 +34,6 @@ public class AI : MonoBehaviour
                    // HandList.Remove(child.transform);
                     child.GetChild(0).GetChild(1).gameObject.SetActive(false);
                     child.GetComponent<Draggable>().playedCard = true;
-                    child.GetComponent<Draggable>().PlayCard();
                     child.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
                 }
             }

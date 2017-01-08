@@ -9,7 +9,6 @@ public class AIBattle : MonoBehaviour
     List<GameObject> TargetList;
     GameObject attackTarget;
     Creature creature;
-    GameObject priority;
 
     public void AIBattlePhase()
     {
@@ -21,8 +20,7 @@ public class AIBattle : MonoBehaviour
 
             if (target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
             {
-                priority = target.gameObject;
-                attackTarget = priority;
+                attackTarget = target.gameObject;
             }
             else
             {

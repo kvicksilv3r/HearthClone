@@ -77,7 +77,10 @@ public class CardGenerator : MonoBehaviour
 		cardRaceTextObj.GetComponent<Text>().text = c.race;
 		cardNameTextObj.GetComponent<Text>().text = c.card_name;
 
-		if (c.rarity.ToLower() == "legendary")
+        GetComponent<Creature>().Health = c.health;
+        GetComponent<Creature>().Strength = c.damage;
+
+        if (c.rarity.ToLower() == "legendary")
 		{
 			dragonObj.SetActive(true);
 		}

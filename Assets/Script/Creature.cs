@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 //By Johanna Pettersson
 
@@ -17,8 +18,26 @@ public class Creature : CardClass
 	public string enemyCreatureTag = "EnemyCreature";
 	public string enemyPlayerTag = "EnemyPlayer";
 
+    public Text creatureHPText;
+    public Text creatureDMGText;
 
-	public int Health
+    void Start()
+    {
+        creatureHPText.text = health.ToString();
+        creatureDMGText.text = strength.ToString();
+    }
+
+    public void UpdateHP()
+    {
+        creatureHPText.text = health.ToString();
+    }
+
+    public void UpdateDMG()
+    {
+        creatureDMGText.text = strength.ToString();
+    }
+
+    public int Health
 	{
 		set { health = value; }
 		get { return health; }

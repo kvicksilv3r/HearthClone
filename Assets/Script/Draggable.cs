@@ -9,6 +9,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	public Transform placeHolderParent = null;
 	Vector3 originalScale;
     Vector3 originalPosition;
+    float originalZ;
     public GameObject cardBackground;
 	public GameObject placeHolder = null;
 	public LayoutElement le;
@@ -23,6 +24,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		originalScale = this.transform.GetChild(0).localScale;
         originalPosition = this.transform.GetChild(0).position;
+        originalZ = this.transform.position.z;
 
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
@@ -144,7 +146,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
                 this.transform.GetChild(0).localScale = originalScale;
 
-                transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+                transform.position = new Vector3(transform.position.x, transform.position.y, originalZ);
 
                 // if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
                 //{

@@ -16,15 +16,29 @@ public class SoundManager : MonoBehaviour {
     public Slider volumeSlider;
 
     public AudioSource volumeAudio;
+    PlayerSettings playerSettings;
+
+    public AudioSource VolumeSlider {
+        get {return volumeAudio; }
+        set { volumeAudio = value; }
+        }
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        volumeSlider.value = volumeAudio.volume; 
+            
     }
 
 
     public void MasterVolumeControl()
     {
         volumeAudio.volume = volumeSlider.value;
+        
+
+    }
+
+    public void OnMouseEnter()
+    {
+        volumeAudio.Play();
     }
 }

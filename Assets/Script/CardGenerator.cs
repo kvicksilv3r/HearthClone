@@ -78,8 +78,10 @@ public class CardGenerator : MonoBehaviour
 
         GetComponent<Creature>().Health = c.health;
         GetComponent<Creature>().Strength = c.damage;
+        GetComponent<Creature>().CardCost = c.mana;
 
-		if(c.race != "none")
+
+        if (c.race != "none")
 		{
 			cardRaceTextObj.GetComponent<Text>().text = c.race;
 			cardRaceObj.SetActive(true);

@@ -188,8 +188,15 @@ public class GameManager : MonoBehaviour
 
 		if (whosTurn == 1)
 		{
-			GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
+            GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
 		}
+        if(whosTurn == 0)
+        {
+            foreach (Transform child in GameObject.Find("Enemy Playfield").transform)
+            {
+                child.GetChild(0).GetComponent<Creature>().CanAttack = true;
+            }
+        }
 	}
 
 	void AddMana()
@@ -213,14 +220,14 @@ public class GameManager : MonoBehaviour
 		UpdateMana();
 	}
 
-	void UpdateMana()
+	public void UpdateMana()
 	{
 		manaTexts[0].text = players[0].currentMana.ToString() + "/" + players[0].maxMana;
 		manaTexts[1].text = players[1].currentMana.ToString() + "/" + players[1].maxMana;
 		manaManager.UpdateMana(0);
 	}
 
-	void UpdateHealth()
+	public void UpdateHealth()
 	{
 		healthTexts[0].text = players[0].health.ToString();
 		healthTexts[1].text = players[1].health.ToString();

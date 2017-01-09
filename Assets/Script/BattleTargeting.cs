@@ -63,6 +63,15 @@ public class BattleTargeting : MonoBehaviour
                                 transform.parent.parent.GetComponent<Creature>().UpdateHP();
                                 lastTarget.GetComponent<Creature>().UpdateHP();
 
+                                if(lastTarget.GetComponent<Creature>().Health < 1)
+                                {
+                                    Destroy(lastTarget.transform.parent.gameObject);
+                                }
+                                if(transform.parent.parent.GetComponent<Creature>().Health < 1)
+                                {
+                                    Destroy(transform.parent.parent.parent.gameObject);
+                                }
+
                                 transform.parent.parent.GetComponent<Creature>().CurrentAttacks --;
                             }
 

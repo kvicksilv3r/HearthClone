@@ -181,7 +181,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		//if (!dragging)
+		if (!dragging)
 		{
 			this.transform.GetChild(0).position = this.transform.position;
 			this.transform.GetChild(0).localScale = originalScale;

@@ -31,6 +31,7 @@ public class AI : MonoBehaviour
                 if (aiCurrentMana >= manaCost)
                 {
                     child.SetParent(enemyPlayField);
+					GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
                     child.rotation = new Quaternion(0, 0, 0, 180);
                     aiManaSpent += manaCost;
                    // HandList.Remove(child.transform);

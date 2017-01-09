@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 	protected List<int>[] decks = new List<int>[2]; //Guess we should keep the decks here
 	protected Creature[,] craturesOnBoaerd = new Creature[2, 7]; //Keeps track of the creatures on the board
 	protected Player[] players = new Player[2];
+	protected bool isSleeping = false;
 
 	protected bool coinUsed = false;
 	protected int coinPlayer;
@@ -28,8 +29,14 @@ public class GameManager : MonoBehaviour
 	protected MuliganScript muliganScript;
 	protected bool isPlaying = false;
 
+	[SerializeField]
+	protected GameObject playerBoard;
+	[SerializeField]
+	protected GameObject enemyBoard;
+
+
 	protected bool[] heroPowerUsed = new bool[] { false, false };
-	
+
 	protected Text[] manaTexts = new Text[2];
 	[SerializeField]
 	protected Text[] healthTexts = new Text[2];
@@ -57,8 +64,8 @@ public class GameManager : MonoBehaviour
 		manaTexts[0] = GameObject.Find("PlayerManaText").GetComponent<Text>();
 		manaTexts[1] = GameObject.Find("AiManaText").GetComponent<Text>();
 
-		healthTexts[0] = GameObject.Find("Enemy Hp").GetComponent<Text>();
-		healthTexts[1] = GameObject.Find("Player HP").GetComponent<Text>();
+		healthTexts[1] = GameObject.Find("Enemy Hp").GetComponent<Text>();
+		healthTexts[0] = GameObject.Find("Player HP").GetComponent<Text>();
 
 		drawManager = GetComponent<DrawManager>();
 
@@ -69,7 +76,7 @@ public class GameManager : MonoBehaviour
 
 		//GameObject.Find("Board").BroadcastMessage("GenerateHero");
 
-		for(int i = 0; i < 15; i++)
+		for (int i = 0; i < 15; i++)
 		{
 			decks[0].Add(Random.Range(1, 5));
 			decks[1].Add(Random.Range(1, 5));
@@ -96,6 +103,11 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.N))
 		{
 			ExpendMana(1);
+		}
+
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			NextRound(false);
 		}
 
 		if (isPlaying)
@@ -125,6 +137,12 @@ public class GameManager : MonoBehaviour
 
 	public void NextRound(bool timeOut)
 	{
+		if (isSleeping)
+		{
+			GameObject.Find("Board").BroadcastMessage("StopSleep");
+			isSleeping = false;
+		}
+
 		if (burningRope && !timeOut)
 		{
 			StopRope();
@@ -162,14 +180,16 @@ public class GameManager : MonoBehaviour
 		DrawCard(whosTurn);
 		heroPowerUsed[whosTurn] = false;
 
+		GameObject.Find("Board").BroadcastMessage("ResetAttacks");
+
 		players[whosTurn].currentMana = players[whosTurn].maxMana;
 		players[whosTurn].usedPower = false;
 		roundTime = maxTime;
 
-        if(whosTurn == 1)
-        {
-            GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
-        }
+		if (whosTurn == 1)
+		{
+			GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
+		}
 	}
 
 	void AddMana()
@@ -182,8 +202,8 @@ public class GameManager : MonoBehaviour
 			{
 				manaManager.AddMana(whosTurn, players[whosTurn].maxMana);
 			}
-			UpdateMana();
 		}
+		UpdateMana();
 	}
 
 	void RemoveMana(int playerIndex)
@@ -302,6 +322,12 @@ public class GameManager : MonoBehaviour
 		currentRoundstoTimeChange = roundsBetweenTimeChange;
 
 		StartCoroutine(ChangeLight());
+	}
+
+	public bool IsSleeping
+	{
+		get { return isSleeping; }
+		set { isSleeping = value; }
 	}
 
 	IEnumerator ChangeLight()

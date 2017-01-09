@@ -114,6 +114,11 @@ public class Creature : CardClass
 		}
 	}
 
+	public void ResetAttacks()
+	{
+		currentAttacks = maxAttacks;
+	}
+
 	public IEnumerator Death()
 	{
 		print(health);

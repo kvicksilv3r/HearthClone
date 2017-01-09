@@ -90,7 +90,9 @@ public class CardGenerator : MonoBehaviour
 			dragonObj.SetActive(true);
 		}
 
-		if(c.abilities_cr.GetLength(0) > 0){
+		GetComponent<Creature>().MaxAttacks = 1;
+
+		if (c.abilities_cr.GetLength(0) > 0){
 			foreach(int i in c.abilities_cr)
 			{
 				if(i == 1)

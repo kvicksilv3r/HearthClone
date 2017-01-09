@@ -197,6 +197,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             transform.position = new Vector3(0, 0, 0);
             playedCard = true;
             onBoardDragger.SetActive(true);
+			GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
             transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
 			transform.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
 

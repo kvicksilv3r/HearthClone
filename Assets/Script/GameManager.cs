@@ -137,10 +137,12 @@ public class GameManager : MonoBehaviour
 
 	public void NextRound(bool timeOut)
 	{
-		if (isSleeping)
+		if (GameObject.FindGameObjectsWithTag("Sleeping") != null)
 		{
-			GameObject.Find("Board").BroadcastMessage("StopSleep");
-			isSleeping = false;
+			foreach (GameObject g in GameObject.FindGameObjectsWithTag("Sleeping"))
+			{
+				g.GetComponent<ParticleSystem>().Stop();
+			}
 		}
 
 		if (burningRope && !timeOut)
@@ -190,6 +192,8 @@ public class GameManager : MonoBehaviour
 		{
 			GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
 		}
+
+		UpdateMana();
 	}
 
 	void AddMana()

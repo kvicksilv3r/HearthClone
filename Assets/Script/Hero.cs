@@ -9,6 +9,8 @@ public class Hero : MonoBehaviour
     string pictureAssetName;
     public static bool priest;
     public static bool warlock;
+	public int playerId;
+	
 
     [SerializeField]
     GameObject portrait;

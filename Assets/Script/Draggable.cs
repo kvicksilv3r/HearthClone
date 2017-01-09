@@ -144,7 +144,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
                 this.transform.GetChild(0).localScale = originalScale;
 
-                transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+                transform.position = new Vector3(transform.position.x, transform.position.y, 7);
 
                 // if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
                 //{
@@ -194,7 +194,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
         if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
         {
-            transform.position = new Vector3(0, 0, 0);
+            //transform.position = new Vector3(0, 0, 0);
             playedCard = true;
             onBoardDragger.SetActive(true);
 			GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;

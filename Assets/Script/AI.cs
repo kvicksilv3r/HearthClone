@@ -32,11 +32,12 @@ public class AI : MonoBehaviour
 
                 manaCost = child.GetChild(0).GetComponent<Creature>().CardCost;
 
-                if (aiCurrentMana >= manaCost /* && GameObject.Find("Enemy Playfield").transform.childCount < 7 */)
+                if (aiCurrentMana >= manaCost  && GameObject.Find("Enemy Playfield").transform.childCount < 7)
                 {
                     child.SetParent(enemyPlayField);
 					GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
                     child.rotation = new Quaternion(0, 0, 0, 180);
+                    child.position = new Vector3(child.position.x, child.position.y, 0);
                     aiManaSpent += manaCost;
                     GameObject.Find("GameManager").GetComponent<GameManager>().UpdateMana();
                    // HandList.Remove(child.transform);
@@ -49,6 +50,7 @@ public class AI : MonoBehaviour
             }
         }
         GameObject.Find("Enemy Playfield").GetComponent<AIBattle>().AIBattlePhase();
+
     }
 
     void CheckCurrentMana()

@@ -64,7 +64,19 @@ public class AIBattle : MonoBehaviour
                 if (attackTarget == null)
                 {
                     Debug.Log("New target");
-                    attackTarget = TargetList[Random.Range(0, TargetList.Count)];
+
+                    foreach (Transform target in GameObject.Find("Player Playfield").transform)
+                    {
+                        if (target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
+                        {
+                            attackTarget = target.gameObject;
+                        }
+                        else
+                        {
+                            attackTarget = TargetList[Random.Range(0, TargetList.Count)];
+                        }
+                    }
+
                     if(attackTarget == null)
                     {
                         Debug.Log("no targets");
@@ -72,12 +84,15 @@ public class AIBattle : MonoBehaviour
                     }
                 }
 
-                attackTarget.transform.GetChild(0).GetComponent<Creature>().Health -= child.GetChild(0).GetComponent<Creature>().Strength;
-                child.GetChild(0).GetComponent<Creature>().Health -= attackTarget.transform.GetChild(0).GetComponent<Creature>().Strength;
-                attackTarget.transform.GetChild(0).GetComponent<Creature>().UpdateHP();
-                child.GetChild(0).GetComponent<Creature>().UpdateHP();
-                attackTarget.transform.GetChild(0).GetComponent<Creature>().CheckHealth(attackTarget.transform.GetChild(0).GetComponent<Creature>().Health);
-                child.GetChild(0).GetComponent<Creature>().CheckHealth(child.GetChild(0).GetComponent<Creature>().Health);
+                if (child.GetChild(0).GetComponent<Creature>().Health > 0)
+                {
+                    attackTarget.transform.GetChild(0).GetComponent<Creature>().Health -= child.GetChild(0).GetComponent<Creature>().Strength;
+                    child.GetChild(0).GetComponent<Creature>().Health -= attackTarget.transform.GetChild(0).GetComponent<Creature>().Strength;
+                    attackTarget.transform.GetChild(0).GetComponent<Creature>().UpdateHP();
+                    child.GetChild(0).GetComponent<Creature>().UpdateHP();
+                    attackTarget.transform.GetChild(0).GetComponent<Creature>().CheckHealth(attackTarget.transform.GetChild(0).GetComponent<Creature>().Health);
+                    child.GetChild(0).GetComponent<Creature>().CheckHealth(child.GetChild(0).GetComponent<Creature>().Health);
+                }
 
                 Debug.Log("Second Attack");
 

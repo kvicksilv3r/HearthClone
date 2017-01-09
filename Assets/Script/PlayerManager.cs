@@ -34,9 +34,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void WarlockAbility()
+    public void WarlockAbility()
     {
         playerHP -= 2;
+		gameManager.DrawCard(gameManager.PlayerTurn);
         UpdateHP();
         //DrawCard();
     }

@@ -171,7 +171,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		if (!playedCard && !dragging)
 		{
-			this.transform.GetChild(0).position = transform.position + new Vector3(0, 10f, -20);
+			this.transform.GetChild(0).position = transform.position + new Vector3(0, 15f, -20);
 			this.transform.GetChild(0).localScale = originalScale * 1.5f;
 		}
 

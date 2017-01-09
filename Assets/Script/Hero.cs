@@ -23,17 +23,10 @@ public class Hero : MonoBehaviour
     {
         dragAbility.SetActive(false);
         pressAbility.SetActive(false);
+		GenerateHero();
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GenerateHero();
-        }
-    }
-
-    void GenerateHero()
+    public void GenerateHero()
     {
         pictureAssetName = "Assets/Models/Heroes/Textures/" + cardPictureName + ".png";
         portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
@@ -49,7 +42,7 @@ public class Hero : MonoBehaviour
         if (cardPictureName == "Warlock")
         {
             warlock = true;
-            pressAbility.SetActive(true);
+            //pressAbility.SetActive(true);
         }
     }
 }

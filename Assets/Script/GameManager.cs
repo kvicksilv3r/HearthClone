@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 	protected bool ropeBurning = false;
 	[SerializeField]
 	protected GameObject burningRope;
+	protected DrawManager drawManager;
 	protected ManaManager manaManager;
 	protected int timeIndex = 0; //0 = dawn, 1 = day, 2 = night
 	protected int roundsBetweenTimeChange = 2;
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
 	protected float muliganTime = 20;
 	protected MuliganScript muliganScript;
 	protected bool isPlaying = false;
+
+	protected bool[] heroPowerUsed = new bool[] { false, false };
 	
 	protected Text[] manaTexts = new Text[2];
 	[SerializeField]
@@ -54,8 +57,17 @@ public class GameManager : MonoBehaviour
 		manaTexts[0] = GameObject.Find("PlayerManaText").GetComponent<Text>();
 		manaTexts[1] = GameObject.Find("AiManaText").GetComponent<Text>();
 
+		healthTexts[0] = GameObject.Find("Enemy Hp").GetComponent<Text>();
+		healthTexts[1] = GameObject.Find("Player HP").GetComponent<Text>();
+
+		drawManager = GetComponent<DrawManager>();
+
 		decks[0] = new List<int>();
 		decks[1] = new List<int>();
+
+		UpdateHealth();
+
+		//GameObject.Find("Board").BroadcastMessage("GenerateHero");
 
 		for(int i = 0; i < 15; i++)
 		{
@@ -138,7 +150,7 @@ public class GameManager : MonoBehaviour
 		StartRound();
 	}
 
-	void ExpendMana(int manaSpent)
+	public void ExpendMana(int manaSpent)
 	{
 		players[whosTurn].currentMana -= manaSpent;
 		UpdateMana();
@@ -147,6 +159,8 @@ public class GameManager : MonoBehaviour
 	void StartRound()
 	{
 		AddMana();
+		DrawCard(whosTurn);
+		heroPowerUsed[whosTurn] = false;
 
 		players[whosTurn].currentMana = players[whosTurn].maxMana;
 		players[whosTurn].usedPower = false;
@@ -176,7 +190,6 @@ public class GameManager : MonoBehaviour
 	{
 		manaManager.RemoveMana(playerIndex);
 		players[playerIndex].maxMana--;
-		players[playerIndex].currentMana--;
 		UpdateMana();
 	}
 
@@ -193,15 +206,33 @@ public class GameManager : MonoBehaviour
 		healthTexts[1].text = players[1].health.ToString();
 	}
 
-	void DrawCard(int playerId)
+	public void DrawCard(int playerId)
 	{
+		drawManager.CardDraw(playerId);
+	}
 
+	public void HeroDamage(int playerIndex, int dmgTaken)
+	{
+		players[playerIndex].health -= dmgTaken;
+		UpdateHealth();
 	}
 
 	public void PlayedCoin(int playerIndex)
 	{
 		coinPlayer = playerIndex;
+		players[playerIndex].maxMana++;
+		UpdateMana();
 		coinUsed = true;
+	}
+
+	public bool UsedHeroPower(int playerIndex)
+	{
+		return heroPowerUsed[playerIndex];
+	}
+
+	public void UseHeroPower(int playerIndex)
+	{
+		heroPowerUsed[playerIndex] = true;
 	}
 
 	void StartRope()
@@ -244,6 +275,11 @@ public class GameManager : MonoBehaviour
 	public List<int>[] Decks
 	{
 		get { return decks; }
+	}
+
+	public bool IsPlaying
+	{
+		get { return isPlaying; }
 	}
 
 	void TimeChange()

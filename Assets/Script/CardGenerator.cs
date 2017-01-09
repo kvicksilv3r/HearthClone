@@ -73,12 +73,17 @@ public class CardGenerator : MonoBehaviour
 		healthTextObj.GetComponent<Text>().text = c.health.ToString();
 		manaTextObj.GetComponent<Text>().text = c.mana.ToString();
 		damageTextObj.GetComponent<Text>().text = c.damage.ToString();
-		cardTextObj.GetComponent<Text>().text = c.description;
-		cardRaceTextObj.GetComponent<Text>().text = c.race;
+		cardTextObj.GetComponent<Text>().text = c.description;		
 		cardNameTextObj.GetComponent<Text>().text = c.card_name;
 
         GetComponent<Creature>().Health = c.health;
         GetComponent<Creature>().Strength = c.damage;
+
+		if(c.race != "none")
+		{
+			cardRaceTextObj.GetComponent<Text>().text = c.race;
+			cardRaceObj.SetActive(true);
+		}
 
         if (c.rarity.ToLower() == "legendary")
 		{

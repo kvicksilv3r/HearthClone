@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UI;
 
 public class MuliganScript : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class MuliganScript : MonoBehaviour
 
 	[SerializeField]
 	protected GameObject playerHand;
+	[SerializeField]
+	protected GameObject aiHand;
 
 	[SerializeField]
 	protected GameObject spellCard, creatureCard;
@@ -27,6 +30,9 @@ public class MuliganScript : MonoBehaviour
 	protected int[] aiMulCosts = new int[4];
 
 	protected int numCards;
+
+	protected List<CARDS> aiCards = new List<CARDS>();
+	protected List<CARDS> aiMul = new List<CARDS>();
 
 	CARDS c;
 
@@ -51,6 +57,7 @@ public class MuliganScript : MonoBehaviour
 	{
 		numCards = numberOfCards;
 
+
 		for (int i = 0; i < numberOfCards; i++)
 		{
 			int whatCard = Random.Range(1, decks[0].Count + 1);
@@ -69,16 +76,48 @@ public class MuliganScript : MonoBehaviour
 			}
 
 			muliganSelectors[i] = Instantiate(muliganSelctor, mulCards[i].transform, false);
-			muliganSelectors[i].transform.localPosition = new Vector3(0,0,0);
-            muliganSelectors[i].GetComponent<MuliganSelector>().id = i;
+			muliganSelectors[i].transform.localPosition = new Vector3(0, 0, 0);
+			muliganSelectors[i].GetComponent<MuliganSelector>().id = i;
 			mulCards[i].GetComponent<Draggable>().enabled = false;
 			decks[0].RemoveAt(whatCard - 1);
 		}
+
+		AiMul();
 	}
 
 	void AiMul()
 	{
+		for (int i = 0; i < 3 + (4 - numCards); i++)
+		{
+			int whatAiCard = Random.Range(1, decks[1].Count + 1);
+			c = json.loadFile(whatAiCard);
+			aiCards.Add(c);
+			decks[1].RemoveAt(whatAiCard - 1);
+		}
 
+		foreach (CARDS card in aiCards)
+		{
+			if (card.mana > 4)
+			{
+				aiMul.Add(card);
+			}
+		}
+
+		if (aiMul.Count > 0)
+		{
+			foreach (CARDS mul in aiMul)
+			{
+				decks[1].Add(mul.card_id);
+				aiCards.Remove(mul);
+			}
+
+			foreach(CARDS mul in aiMul)
+			{
+				int whatAiCard = Random.Range(0, decks[0].Count);
+				aiCards.Add(json.loadFile(whatAiCard));
+				decks[1].RemoveAt(whatAiCard);
+			}
+		}
 	}
 
 	public void EndMuligan()
@@ -105,7 +144,7 @@ public class MuliganScript : MonoBehaviour
 
 		foreach (int card in cardsToHand)
 		{
-			
+
 			c = json.loadFile(card);
 			GameObject g;
 
@@ -119,6 +158,25 @@ public class MuliganScript : MonoBehaviour
 				g = Instantiate(creatureCard, playerHand.transform, false) as GameObject;
 				g.transform.GetChild(0).GetComponent<CardGenerator>().GenerateCard(c);
 			}
+		}
+
+		foreach(CARDS aiCard in aiCards)
+		{
+			GameObject g;
+
+			if (c.card_type.ToLower() == "spell")
+			{
+				g = Instantiate(spellCard, aiHand.transform, false) as GameObject;
+				g.GetComponent<SpellCardGenerator>().GenerateCard(c);
+			}
+			else
+			{
+				g = Instantiate(creatureCard, aiHand.transform, false) as GameObject;
+				g.transform.GetChild(0).GetComponent<CardGenerator>().GenerateCard(c);
+			}
+
+			g.BroadcastMessage("DisableTexts");
+
 		}
 
 		Destroy(gameObject);

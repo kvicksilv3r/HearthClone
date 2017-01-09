@@ -123,7 +123,7 @@ public class Creature : CardClass
 	{
 		print(health);
 		yield return new WaitForSeconds(waitTime);
-		Destroy(transform.parent.parent.gameObject);
+		Destroy(transform.parent.gameObject);
 	}
 
 }

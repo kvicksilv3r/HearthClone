@@ -68,8 +68,22 @@ public class BattleTargeting : MonoBehaviour
 									transform.parent.parent.GetComponent<Creature>().TakeDamage(lastTarget.GetComponent<Creature>().Strength);
 								}
 
+<<<<<<< HEAD
 								transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
 							}
+=======
+                                if(lastTarget.GetComponent<Creature>().Health < 1)
+                                {
+                                    Destroy(lastTarget.transform.parent.gameObject);
+                                }
+                                if(transform.parent.parent.GetComponent<Creature>().Health < 1)
+                                {
+                                    Destroy(transform.parent.parent.parent.gameObject);
+                                }
+
+                                transform.parent.parent.GetComponent<Creature>().CurrentAttacks --;
+                            }
+>>>>>>> origin/master
 
 							if (transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell")
 							{

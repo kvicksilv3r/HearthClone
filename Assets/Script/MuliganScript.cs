@@ -176,8 +176,11 @@ public class MuliganScript : MonoBehaviour
 			}
 
 			g.BroadcastMessage("DisableTexts");
+            g.transform.GetChild(0).GetComponent<CardClass>().OwnerId = 1;
+            g.transform.GetComponent<Draggable>().enabled = false;
 
-		}
+
+        }
 
 		Destroy(gameObject);
 	}

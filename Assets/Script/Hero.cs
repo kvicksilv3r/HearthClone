@@ -35,6 +35,16 @@ public class Hero : MonoBehaviour
 
         heroAbilityObj.GetComponent<Text>().text = heroAbilityName;
 
+        if (transform.gameObject == GameObject.Find("Hero"))
+        {
+            playerId = 0;
+        }
+        
+        if(transform.gameObject == GameObject.Find("Enemy Hero"))
+        {
+            playerId = 1;
+        }
+
         if(cardPictureName == "Priest")
         {
             priest = true;

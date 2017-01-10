@@ -53,7 +53,9 @@ public class DrawManager : MonoBehaviour
 			if (playerIndex == 1)
 			{
 				g.BroadcastMessage("DisableTexts");
-			}
+                g.transform.GetChild(0).GetComponent<CardClass>().OwnerId = 1;
+                g.transform.GetComponent<Draggable>().enabled = false;
+            }
 
 			gameManager.Decks[playerIndex].RemoveAt(whatCard - 1);
 		}

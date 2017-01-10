@@ -30,7 +30,7 @@ public class BattleTargeting : MonoBehaviour
 
 	public void OnMouseDrag()
 	{
-		if (gameManager.PlayerTurn == 0)
+		if (gameManager.PlayerTurn == 0 && transform.parent.parent.GetComponent<CardClass>().OwnerId == 0)
 		{
 			ray.origin = transform.position;
 			Physics.Raycast(ray, out hit, 1000, lMask);

@@ -16,7 +16,6 @@ public class AI : MonoBehaviour
 
     public void AITurn()
     {
-        GameObject.Find("GameManager").GetComponent<GameManager>().Players()[1].currentMana = GameObject.Find("GameManager").GetComponent<GameManager>().Players()[1].maxMana;
         aiManaSpent = 0;
 
         aiCurrentMana = GameObject.Find("GameManager").GetComponent<GameManager>().Players()[1].currentMana;
@@ -29,7 +28,7 @@ public class AI : MonoBehaviour
             {
                 Debug.Log("creature found");
 
-                child.GetChild(0).GetComponent<Creature>().OwnerId = 1;
+                //child.GetChild(0).GetComponent<Creature>().OwnerId = 1;
 
                 CheckCurrentMana();
 

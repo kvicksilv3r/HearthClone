@@ -10,72 +10,62 @@ public class AIBattle : MonoBehaviour
     GameObject attackTarget;
     Creature aiCreature;
     Creature playerCreature;
+    GameManager gameManager;
+    float waitTime = 2;
 
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         TargetList = new List<GameObject>(GameObject.Find("Player Playfield").transform.childCount);
     }
 
     public void AIBattlePhase()
+    {
+        StartCoroutine("BattlePhase");
+    }
+
+    IEnumerator BattlePhase()
     {
         TargetList.Clear();
 
         foreach (Transform target in GameObject.Find("Player Playfield").transform)
         {
             TargetList.Add(target.gameObject);
-
-            if (target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
-            {
-                attackTarget = target.gameObject;
-            }
-            else
-            {
-                attackTarget = TargetList[Random.Range(0, TargetList.Count)];
-            }
-            playerCreature = attackTarget.transform.GetChild(0).GetComponent<Creature>();
         }
 
         foreach (Transform child in transform)
         {
             aiCreature = child.GetChild(0).GetComponent<Creature>();
 
-            if (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack)
+            CheckTarget();
+
+            if (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack && attackTarget != null)
             {
-                if(aiCreature.CurrentAttacks == 2)
+                if (aiCreature.CurrentAttacks == 2)
                 {
                     playerCreature.TakeDamage(aiCreature.Strength);
                     aiCreature.TakeDamage(playerCreature.Strength);
 
                     Debug.Log("First target hit");
-
+                    
                     aiCreature.CurrentAttacks--;
 
-                    if(playerCreature.Health < 1)
+                    if (playerCreature.Health < 1)
                     {
                         Debug.Log("Target killed on first attack");
 
                         attackTarget = null;
                     }
+                    yield return new WaitForSeconds(waitTime);
                 }
 
                 if (attackTarget == null)
                 {
                     Debug.Log("New target");
+                    //wait?
+                    CheckTarget();
 
-                    foreach (Transform target in GameObject.Find("Player Playfield").transform)
-                    {
-                        if (target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
-                        {
-                            attackTarget = target.gameObject;
-                        }
-                        else
-                        {
-                            attackTarget = TargetList[Random.Range(0, TargetList.Count)];
-                        }
-                        playerCreature = attackTarget.transform.GetChild(0).GetComponent<Creature>();
-                    }
-
-                    if(attackTarget == null)
+                    if (attackTarget == null)
                     {
                         Debug.Log("no targets");
                         break;
@@ -90,7 +80,40 @@ public class AIBattle : MonoBehaviour
                     Debug.Log("Second Attack");
 
                     aiCreature.CurrentAttacks--;
+
+                    yield return new WaitForSeconds(waitTime);
                 }
+            }
+        }
+
+        yield return new WaitForSeconds(waitTime);
+
+        gameManager.NextRound(false);
+
+        yield return null;
+    }
+
+    public void CheckTarget()
+    {
+        foreach (Transform target in GameObject.Find("Player Playfield").transform)
+        {
+            playerCreature = target.transform.GetChild(0).GetComponent<Creature>();
+
+            if (aiCreature.Strength >= playerCreature.Health && target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
+            {
+                attackTarget = target.gameObject;
+            }
+            else if (target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
+            {
+                attackTarget = target.gameObject;
+            }
+            else if (aiCreature.Strength >= playerCreature.Health)
+            {
+                attackTarget = target.gameObject;
+            }
+            else
+            {
+                attackTarget = TargetList[Random.Range(0, TargetList.Count)];
             }
         }
     }

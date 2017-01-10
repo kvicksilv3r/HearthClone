@@ -122,6 +122,11 @@ public class Creature : CardClass
 		currentAttacks = maxAttacks;
 	}
 
+    public IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(waitTime);
+    }
+
 	public IEnumerator Death()
 	{
 		print(health);

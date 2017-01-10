@@ -42,9 +42,7 @@ public class MuliganScript : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-		decks = gameManager.Decks;
-		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
+		
 	}
 
 	// Update is called once per frame
@@ -55,13 +53,19 @@ public class MuliganScript : MonoBehaviour
 
 	public void BeginMuligan(int numberOfCards)
 	{
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		decks = gameManager.Decks;
+		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
+
 		numCards = numberOfCards;
 
 
 		for (int i = 0; i < numberOfCards; i++)
 		{
 			int whatCard = Random.Range(1, decks[0].Count + 1);
-			c = json.loadFile(whatCard);
+			print(whatCard);
+			
+			c = json.loadFile(decks[0][whatCard]);
 
 
 			if (c.card_type.ToLower() == "spell")
@@ -89,8 +93,9 @@ public class MuliganScript : MonoBehaviour
 	{
 		for (int i = 0; i < 3 + (4 - numCards); i++)
 		{
-			int whatAiCard = Random.Range(1, decks[1].Count + 1);
-			c = json.loadFile(whatAiCard);
+			int whatAiCard = Random.Range(0, decks[1].Count + 1);
+			//HERE IS BROKEN RIP
+			c = json.loadFile(decks[1][whatAiCard]);
 			aiCards.Add(c);
 			decks[1].RemoveAt(whatAiCard - 1);
 		}
@@ -113,8 +118,8 @@ public class MuliganScript : MonoBehaviour
 
 			foreach(CARDS mul in aiMul)
 			{
-				int whatAiCard = Random.Range(0, decks[0].Count);
-				aiCards.Add(json.loadFile(whatAiCard));
+				int whatAiCard = Random.Range(0, decks[1].Count);
+				aiCards.Add(json.loadFile(decks[1][whatAiCard]));
 				decks[1].RemoveAt(whatAiCard);
 			}
 		}

@@ -91,10 +91,10 @@ public class GameManager : MonoBehaviour
 
 		//GameObject.Find("Board").BroadcastMessage("GenerateHero");
 
-		for (int i = 0; i < 15; i++)
+		for (int i = 0; i < 20; i++)
 		{
-			decks[0].Add(Random.Range(1, 5));
-			decks[1].Add(Random.Range(1, 5));
+			decks[0].Add(Random.Range(1, 9));
+			decks[1].Add(Random.Range(1, 9));
 		}
 
 		muliganScript = GameObject.Find("Muligan").GetComponent<MuliganScript>();

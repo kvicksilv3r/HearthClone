@@ -35,8 +35,8 @@ public class DrawManager : MonoBehaviour
 		if (gameManager.Decks[playerIndex].Count > 0)
 		{
 
-			int whatCard = Random.Range(1, gameManager.Decks[playerIndex].Count + 1);
-			c = json.loadFile(whatCard);
+			int whatCard = Random.Range(0, gameManager.Decks[playerIndex].Count + 1);
+			c = json.loadFile(gameManager.Decks[playerIndex][whatCard]+1);
 			GameObject g;
 
 			if (c.card_type.ToLower() == "spell")
@@ -57,7 +57,7 @@ public class DrawManager : MonoBehaviour
                 g.transform.GetComponent<Draggable>().enabled = false;
             }
 
-			gameManager.Decks[playerIndex].RemoveAt(whatCard - 1);
+			gameManager.Decks[playerIndex].RemoveAt(whatCard);
 		}
 
 		else

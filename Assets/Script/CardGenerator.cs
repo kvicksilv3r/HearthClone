@@ -110,7 +110,7 @@ public class CardGenerator : MonoBehaviour
 				}
 				else if(i == 2)
 				{
-					creature.CurrentAttacks = creature.MaxAttacks;
+                    creature.CanAttack = true;
 				}
 				else if(i == 3)
 				{
@@ -131,6 +131,11 @@ public class CardGenerator : MonoBehaviour
                 }
 			}
 		}
+
+        if (creature.CanAttack)
+        {
+            creature.CurrentAttacks = creature.MaxAttacks;
+        }
 
 		gemHolderObj.SetActive(true);
 		gemObj.SetActive(true);

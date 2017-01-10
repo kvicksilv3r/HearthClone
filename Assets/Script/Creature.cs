@@ -10,7 +10,7 @@ public class Creature : CardClass
 	[SerializeField]
 	protected int health, strength, maxAttacks, currentAttacks;
 	[SerializeField]
-	private float waitTime;
+	private float waitTime = 2f;
 
 	protected bool hasTaunt;
 	//[SerializeField] private GameObject target;

@@ -14,11 +14,16 @@ public class AI : MonoBehaviour
     int manaCost;
     public bool aiPlayedCard;
 
+    void Start()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+     
     public void AITurn()
     {
         aiManaSpent = 0;
 
-        aiCurrentMana = GameObject.Find("GameManager").GetComponent<GameManager>().Players()[1].currentMana;
+        aiCurrentMana = gameManager.Players()[1].currentMana;
 
         foreach (Transform child in transform)
         {
@@ -37,11 +42,10 @@ public class AI : MonoBehaviour
                 if (aiCurrentMana >= manaCost  && GameObject.Find("Enemy Playfield").transform.childCount < 7)
                 {
                     child.SetParent(enemyPlayField);
-					GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
+					gameManager.IsSleeping = true;
                     child.rotation = new Quaternion(0, 0, 0, 180);
                     child.position = new Vector3(child.position.x, child.position.y, 0);
                     gameManager.ExpendMana(manaCost);
-					CheckCurrentMana();
                    // HandList.Remove(child.transform);
                     child.GetChild(0).GetChild(1).gameObject.SetActive(false);
                     child.GetComponent<Draggable>().playedCard = true;

@@ -41,7 +41,7 @@ public class AIBattle : MonoBehaviour
 
             if (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack && attackTarget != null)
             {
-                if (aiCreature.CurrentAttacks == 2)
+                if (aiCreature.CurrentAttacks > 1 && playerCreature.Health > 0)
                 {
                     playerCreature.TakeDamage(aiCreature.Strength);
                     aiCreature.TakeDamage(playerCreature.Strength);
@@ -56,13 +56,12 @@ public class AIBattle : MonoBehaviour
 
                         attackTarget = null;
                     }
-                    yield return new WaitForSeconds(waitTime);
                 }
 
                 if (attackTarget == null)
                 {
                     Debug.Log("New target");
-                    //wait?
+                    
                     CheckTarget();
 
                     if (attackTarget == null)
@@ -71,6 +70,8 @@ public class AIBattle : MonoBehaviour
                         break;
                     }
                 }
+
+                yield return new WaitForSeconds(waitTime);
 
                 if (aiCreature.Health > 0 && playerCreature.Health > 0)
                 {

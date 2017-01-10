@@ -151,7 +151,7 @@ public class CardGenerator : MonoBehaviour
 		hpPos.SetActive(true);
 		dmgPos.SetActive(true);
 
-		if (GetComponent<Creature>().CurrentAttacks <= 0) 
+		if (!GetComponent<Creature>().CanAttack) 
 		{
 			sleepingParticle.SetActive(true);
 		}

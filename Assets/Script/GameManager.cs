@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	protected GameObject enemyBoard;
 
+	[SerializeField]
+	protected GameObject damageDisplay;
 
 	protected bool[] heroPowerUsed = new bool[] { false, false };
 
@@ -253,6 +255,11 @@ public class GameManager : MonoBehaviour
 		players[playerIndex].health -= dmgTaken;
         
 		UpdateHealth();
+
+		GameObject dDisplay = Instantiate(damageDisplay, enemyBoard.transform.parent.FindChild("Enemy Hero").transform, false);
+		dDisplay.transform.position += new Vector3(0, 0, -5);
+		dDisplay.transform.localRotation = Quaternion.Euler(0f, 200f, 0f);
+		dDisplay.GetComponent<DamageDisplay>().SetText(dmgTaken);
 
         if (players[1].health < 1)
         {

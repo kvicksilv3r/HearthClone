@@ -15,6 +15,8 @@ public class Creature : CardClass
 	[SerializeField]
 	private GameObject damageDisplay;
 
+	protected bool timeEffect;
+
     [SerializeField]
 	protected bool hasTaunt;
 	//[SerializeField] private GameObject target;
@@ -90,6 +92,12 @@ public class Creature : CardClass
 	{
 		get { return hasTaunt; }
 		set { hasTaunt = value; }
+	}
+
+	public bool TimeEffect
+	{
+		get { return timeEffect; }
+		set { timeEffect = value; }
 	}
 
 	public int MaxAttacks

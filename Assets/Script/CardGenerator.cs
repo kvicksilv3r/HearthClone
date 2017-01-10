@@ -52,7 +52,7 @@ public class CardGenerator : MonoBehaviour
 	void Start()
 	{
 		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
-		
+
 	}
 
 	// Update is called once per frame
@@ -78,7 +78,7 @@ public class CardGenerator : MonoBehaviour
 		healthTextObj.GetComponent<Text>().text = c.health.ToString();
 		manaTextObj.GetComponent<Text>().text = c.mana.ToString();
 		damageTextObj.GetComponent<Text>().text = c.damage.ToString();
-		cardTextObj.GetComponent<Text>().text = c.description;		
+		cardTextObj.GetComponent<Text>().text = c.description;
 		cardNameTextObj.GetComponent<Text>().text = c.card_name;
 
 		creature.Health = c.health;
@@ -86,13 +86,13 @@ public class CardGenerator : MonoBehaviour
 		creature.CardCost = c.mana;
 
 
-        if (c.race != "none")
+		if (c.race != "none")
 		{
 			cardRaceTextObj.GetComponent<Text>().text = c.race;
 			cardRaceObj.SetActive(true);
 		}
 
-        if (c.rarity.ToLower() == "legendary")
+		if (c.rarity.ToLower() == "legendary")
 		{
 			dragonObj.SetActive(true);
 		}
@@ -101,50 +101,70 @@ public class CardGenerator : MonoBehaviour
 		creature.MaxAttacks = 1;
 		creature.CurrentAttacks = 0;
 
-		if (c.abilities_cr.GetLength(0) > 0){
-			foreach(int i in c.abilities_cr)
+		if (c.abilities_cr.GetLength(0) > 0)
+		{
+			foreach (int i in c.abilities_cr)
 			{
-				if(i == 1)
+				if (i == 1)
 				{
 					creature.HasTaunt = true;
 				}
-				else if(i == 2)
+				else if (i == 2)
 				{
-                    creature.CanAttack = true;
+					creature.CanAttack = true;
 				}
-				else if(i == 3)
+				else if (i == 3)
 				{
 					creature.MaxAttacks = 2;
 				}
-				else if(i == 4)
+				else if (i == 5)
 				{
-					if(gameManager.TimeIndex == 2)
-					{
-						creature.Strength += 2;
-						creature.Health -= 1;
-					}
-					else if(gameManager.TimeIndex == 1)
-					{
-						creature.Strength -= 1;
-						creature.Health += 2;
-					}
-                }
-				else if(i == 5)
-				{
-					if(gameManager.TimeIndex == 1)
+					if (gameManager.TimeIndex == 1)
 					{
 						creature.Strength -= 3;
 						creature.Health -= 3;
 					}
 				}
+				else if (i == 6)
+				{
+					//day -3-3
+				}
+
+				else if (i == 7)
+				{
+					//give +0+2 +taunt 
+					// give as spell?
+				}
+
+				else if (i == 8)
+				{
+					//attach object, deal 1 dmg on round start
+				}
+				if (i == 9)
+				{
+					//no heals
+				}
+				else if (i == 10)
+				{
+					//night lifelink; day -2-0
+				}
 
 			}
 		}
 
-        if (creature.CanAttack)
-        {
-            creature.CurrentAttacks = creature.MaxAttacks;
-        }
+		if (c.day_or_night != "none")
+		{
+			creature.TimeEffect = true;
+		}
+		else
+		{
+			creature.TimeEffect = false;
+		}
+
+		if (creature.CanAttack)
+		{
+			creature.CurrentAttacks = creature.MaxAttacks;
+		}
 
 		gemHolderObj.SetActive(true);
 		gemObj.SetActive(true);
@@ -160,14 +180,33 @@ public class CardGenerator : MonoBehaviour
 		hpPos.SetActive(true);
 		dmgPos.SetActive(true);
 
-		if (!GetComponent<Creature>().CanAttack) 
+
+		if (c.abilities_cr.GetLength(0) > 0)
+		{
+			foreach (int i in c.abilities_cr)
+			{
+				if (gameManager.TimeIndex == 2)
+				{
+					creature.Strength += 2;
+					creature.Health -= 1;
+				}
+				else if (gameManager.TimeIndex == 1)
+				{
+					creature.Strength -= 1;
+					creature.Health += 2;
+				}
+			}
+		}
+
+		if (!GetComponent<Creature>().CanAttack)
 		{
 			sleepingParticle.SetActive(true);
 		}
 
 		portraitBorder.SetActive(true);
 
-		if (GetComponent<Creature>().HasTaunt) {
+		if (GetComponent<Creature>().HasTaunt)
+		{
 			tauntObj.SetActive(true);
 		}
 

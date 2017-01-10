@@ -72,7 +72,7 @@ public class CardGenerator : MonoBehaviour
 		c = card;
 		GetComponent<CardClass>().Card = card;
 
-		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".jpg";
+		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".png";
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
 
 		healthTextObj.GetComponent<Text>().text = c.health.ToString();
@@ -129,6 +129,15 @@ public class CardGenerator : MonoBehaviour
 						creature.Health += 2;
 					}
                 }
+				else if(i == 5)
+				{
+					if(gameManager.TimeIndex == 1)
+					{
+						creature.Strength -= 3;
+						creature.Health -= 3;
+					}
+				}
+
 			}
 		}
 

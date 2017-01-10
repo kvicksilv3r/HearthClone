@@ -10,6 +10,7 @@ public class AIBattle : MonoBehaviour
     GameObject attackTarget;
     Creature aiCreature;
     Creature playerCreature;
+    PlayerManager playerHero;
     GameManager gameManager;
     float waitTime = 2;
 
@@ -41,6 +42,11 @@ public class AIBattle : MonoBehaviour
 
             if (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack && attackTarget != null)
             {
+                if (aiCreature.CurrentAttacks > 1 && playerHero.playerHP > 0)
+                {
+                    playerHero.PlayerTakeDamage(aiCreature.Strength);
+                }
+
                 if (aiCreature.CurrentAttacks > 1 && playerCreature.Health > 0)
                 {
                     playerCreature.TakeDamage(aiCreature.Strength);
@@ -86,6 +92,7 @@ public class AIBattle : MonoBehaviour
                 }
             }
         }
+        TargetList.Clear();
 
         yield return new WaitForSeconds(waitTime);
 
@@ -99,14 +106,21 @@ public class AIBattle : MonoBehaviour
         foreach (Transform target in GameObject.Find("Player Playfield").transform)
         {
             playerCreature = target.transform.GetChild(0).GetComponent<Creature>();
+            playerHero = attackTarget.transform.GetComponent<PlayerManager>();
 
-            if (aiCreature.Strength >= playerCreature.Health && target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
+            if (aiCreature.Strength >= playerCreature.Health && target.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
             {
                 attackTarget = target.gameObject;
+                break;
             }
-            else if (target.gameObject.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
+            else if (target.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
             {
                 attackTarget = target.gameObject;
+                break;
+            }
+            else if(GameObject.Find("Player Playfield").transform.childCount < 2 && aiCreature.Strength < playerCreature.Health)
+            {
+                attackTarget = GameObject.Find("Hero");
             }
             else if (aiCreature.Strength >= playerCreature.Health)
             {
@@ -115,6 +129,7 @@ public class AIBattle : MonoBehaviour
             else
             {
                 attackTarget = TargetList[Random.Range(0, TargetList.Count)];
+                break;
             }
         }
     }

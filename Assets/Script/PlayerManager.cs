@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
     public Text playerTextHP;
-    int playerHP;
+    public int playerHP;
+    float waitTime = 1f;
     public int playerMaxHP = 30;
     GameManager gameManager;
 
-	void Start ()
+    void Start ()
     {
         playerHP = playerMaxHP;
         playerTextHP.text = playerHP.ToString();
@@ -16,7 +18,7 @@ public class PlayerManager : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 	
-	void UpdateHP ()
+	public void UpdateHP ()
     {
         playerTextHP.text = playerHP.ToString();
     }
@@ -47,5 +49,32 @@ public class PlayerManager : MonoBehaviour
         //point to object and heal object with 2
         GetComponent<BattleTargeting>().OnMouseDrag();
         GetComponent<BattleTargeting>().OnMouseUp();
+    }
+
+    public void PlayerTakeDamage(int damage)
+    {
+        playerHP -= damage;
+        UpdateHP();
+
+        CheckPlayerHealth(playerHP);
+    }
+
+    public void CheckPlayerHealth(int health)
+    {
+        if (health <= 0)
+        {
+            health = 0;
+            StartCoroutine("PlayerDeath");
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    public IEnumerator PlayerDeath()
+    {
+        yield return new WaitForSeconds(waitTime);
+        Destroy(transform.gameObject);
     }
 }

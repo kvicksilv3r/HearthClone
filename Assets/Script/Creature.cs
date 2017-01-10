@@ -24,6 +24,8 @@ public class Creature : CardClass
 	public string enemyCreatureTag = "EnemyCreature";
 	public string enemyPlayerTag = "EnemyPlayer";
 
+    GameManager gameManager;
+
     public Text creatureHPText;
     public Text creatureDMGText;
 
@@ -31,6 +33,8 @@ public class Creature : CardClass
     {
         creatureHPText.text = health.ToString();
         creatureDMGText.text = strength.ToString();
+
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void UpdateHP()
@@ -148,6 +152,5 @@ public class Creature : CardClass
 		yield return new WaitForSeconds(waitTime);
 		Destroy(transform.parent.gameObject);
 	}
-
 }
 

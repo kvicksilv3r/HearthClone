@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 	public float roundTime; //Counts down the current time
     bool youWon = false;
     bool youLost = false;
+    public bool tauntOnField;
 	[SerializeField]
 	protected float maxTime; // How long will a round be?
 	protected int whosTurn = 0;
@@ -214,6 +215,7 @@ public class GameManager : MonoBehaviour
                 child.GetChild(0).GetComponent<Creature>().CanAttack = true;
             }
         }
+        CheckForTauntOnField();
 	}
 
 	void AddMana()
@@ -381,4 +383,20 @@ public class GameManager : MonoBehaviour
 			StartCoroutine(ChangeLight());
 		}
 	}
+
+    public void CheckForTauntOnField()
+    {
+        foreach (Transform enemyCreature in GameObject.Find("Enemy Playfield").transform)
+        {
+            if (enemyCreature.GetChild(0).GetComponent<Creature>().HasTaunt)
+            {
+                tauntOnField = true;
+                break;
+            }
+            if (!enemyCreature.GetChild(0).GetComponent<Creature>().HasTaunt)
+            {
+                tauntOnField = false;
+            }
+        }
+    }
 }

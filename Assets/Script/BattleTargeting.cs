@@ -57,7 +57,6 @@ public class BattleTargeting : MonoBehaviour
                             {
                                 if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks > 0 && transform.parent.parent.GetComponent<Creature>().CanAttack)
                                 {
-
                                     lastTarget = hit.transform.gameObject;
                                     print("Target hit was: " + lastTarget.GetComponent<CardClass>().CardName);
 
@@ -70,7 +69,7 @@ public class BattleTargeting : MonoBehaviour
                         }
                         else if (hit.transform.GetComponent<Hero>().playerId != transform.parent.parent.GetComponent<CardClass>().OwnerId)
                         {
-                            if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks > 0 && transform.parent.parent.GetComponent<Creature>().CanAttack)
+                            if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks > 0 && transform.parent.parent.GetComponent<Creature>().CanAttack && !gameManager.tauntOnField)
                             {
                                 gameManager.HeroDamage(hit.transform.GetComponent<Hero>().playerId, transform.parent.parent.GetComponent<Creature>().Strength);
 

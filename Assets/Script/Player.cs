@@ -12,4 +12,5 @@ public class Player : MonoBehaviour
 	public bool usedPower = false;
 	public int armor;
 
+    
 }

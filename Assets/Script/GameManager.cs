@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 	public float roundTime; //Counts down the current time
+    bool youWon = false;
+    bool youLost = false;
 	[SerializeField]
 	protected float maxTime; // How long will a round be?
 	protected int whosTurn = 0;
@@ -249,8 +251,20 @@ public class GameManager : MonoBehaviour
 	public void HeroDamage(int playerIndex, int dmgTaken)
 	{
 		players[playerIndex].health -= dmgTaken;
+        
 		UpdateHealth();
-	}
+
+        if (players[1].health < 1)
+        {
+            youWon = true;
+        }
+
+        if (players[0].health < 1)
+        {
+            youLost = true;
+        }
+
+    }
 
 	public void PlayedCoin(int playerIndex)
 	{

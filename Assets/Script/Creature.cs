@@ -97,6 +97,7 @@ public class Creature : CardClass
 	public void TakeDamage(int damage)
 	{
 		health -= damage;
+		UpdateHP();
 
 		CheckHealth(health);
 	}
@@ -105,8 +106,9 @@ public class Creature : CardClass
 	{
 		if (health <= 0)
 		{
+			print(Card.card_name + " ahould be dead, yo");
 			health = 0;
-			Death();
+			StartCoroutine("Death");
 		}
 		else
 		{

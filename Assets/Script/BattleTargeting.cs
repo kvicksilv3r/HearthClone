@@ -36,14 +36,14 @@ public class BattleTargeting : MonoBehaviour
 			Physics.Raycast(ray, out hit, 1000, lMask);
 			ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
 			Physics.Raycast(ray2, out hit2, 1000, lMask2);
-			transform.position = hit2.point + new Vector3(0, 1, 0);
+			transform.position = hit2.point + new Vector3(0, 0, -10);
 			Debug.DrawRay(transform.position, Vector3.forward * 1000, Color.red);
 		}
 	}
 
 	public void OnMouseUp()
 	{
-		if (gameManager.PlayerTurn == 0)
+		if (gameManager.PlayerTurn == 0 && transform.parent.parent.GetComponent<CardClass>().OwnerId == 0)
 		{
 			if (hit.transform)
 			{
@@ -53,11 +53,11 @@ public class BattleTargeting : MonoBehaviour
 					{
 						if (transform.parent.parent.GetComponent<CardClass>().OwnerId != hit.transform.GetComponent<CardClass>().OwnerId || transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell" || hit.transform.GetComponent<Hero>().playerId != transform.parent.parent.GetComponent<CardClass>().OwnerId)
 						{
-							if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks >= 1)
+							if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks > 0)
 							{
 								if (hit.transform.GetComponent<Hero>())
 								{
-									gameManager.HeroDamage(hit.transform.GetComponent<Hero>().playerId, transform.parent.parent.GetComponent<CardClass>().Card.damage);
+									gameManager.HeroDamage(hit.transform.GetComponent<Hero>().playerId, transform.parent.parent.GetComponent<Creature>().Strength);
 								}
 								else
 								{
@@ -67,32 +67,18 @@ public class BattleTargeting : MonoBehaviour
 									lastTarget.GetComponent<Creature>().TakeDamage(transform.parent.parent.GetComponent<Creature>().Strength);
 									transform.parent.parent.GetComponent<Creature>().TakeDamage(lastTarget.GetComponent<Creature>().Strength);
 								}
-
-<<<<<<< HEAD
 								transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
 							}
-=======
-                                if(lastTarget.GetComponent<Creature>().Health < 1)
-                                {
-                                    Destroy(lastTarget.transform.parent.gameObject);
-                                }
-                                if(transform.parent.parent.GetComponent<Creature>().Health < 1)
-                                {
-                                    Destroy(transform.parent.parent.parent.gameObject);
-                                }
 
-                                transform.parent.parent.GetComponent<Creature>().CurrentAttacks --;
-                            }
->>>>>>> origin/master
-
-							if (transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell")
-							{
-								Destroy(transform.parent.parent.parent.gameObject);
-							}
-							else
-							{
-								//Attacker is a creature
-							}
+							transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
+						}
+						if (transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell")
+						{
+							Destroy(transform.parent.parent.parent.gameObject);
+						}
+						else
+						{
+							//Attacker is a creature
 						}
 					}
 				}
@@ -100,4 +86,6 @@ public class BattleTargeting : MonoBehaviour
 		}
 		transform.position = transform.parent.position;
 	}
+
 }
+

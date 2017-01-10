@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class CardGenerator : MonoBehaviour
 {
 	public string cardPictureName;
+	protected Creature creature;
+	protected GameManager gameManager;
 	string pictureAssetName;
 	[SerializeField]
 	GameObject portrait;
@@ -50,7 +52,7 @@ public class CardGenerator : MonoBehaviour
 	void Start()
 	{
 		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
-		 
+		
 	}
 
 	// Update is called once per frame
@@ -64,6 +66,9 @@ public class CardGenerator : MonoBehaviour
 
 	public void GenerateCard(CARDS card)
 	{
+
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		creature = GetComponent<Creature>();
 		c = card;
 		GetComponent<CardClass>().Card = card;
 
@@ -76,9 +81,9 @@ public class CardGenerator : MonoBehaviour
 		cardTextObj.GetComponent<Text>().text = c.description;		
 		cardNameTextObj.GetComponent<Text>().text = c.card_name;
 
-        GetComponent<Creature>().Health = c.health;
-        GetComponent<Creature>().Strength = c.damage;
-        GetComponent<Creature>().CardCost = c.mana;
+		creature.Health = c.health;
+		creature.Strength = c.damage;
+		creature.CardCost = c.mana;
 
 
         if (c.race != "none")
@@ -92,23 +97,38 @@ public class CardGenerator : MonoBehaviour
 			dragonObj.SetActive(true);
 		}
 
-		GetComponent<Creature>().MaxAttacks = 1;
+		creature.Strength = c.damage;
+		creature.MaxAttacks = 1;
+		creature.CurrentAttacks = 0;
 
 		if (c.abilities_cr.GetLength(0) > 0){
 			foreach(int i in c.abilities_cr)
 			{
 				if(i == 1)
 				{
-					GetComponent<Creature>().HasTaunt = true;
+					creature.HasTaunt = true;
 				}
 				else if(i == 2)
 				{
-					GetComponent<Creature>().CanAttack = true;
+					creature.CurrentAttacks = creature.MaxAttacks;
 				}
 				else if(i == 3)
 				{
-					GetComponent<Creature>().MaxAttacks = 2;
+					creature.MaxAttacks = 2;
 				}
+				else if(i == 4)
+				{
+					if(gameManager.TimeIndex == 2)
+					{
+						creature.Strength += 2;
+						creature.Health -= 1;
+					}
+					else if(gameManager.TimeIndex == 1)
+					{
+						creature.Strength -= 1;
+						creature.Health += 2;
+					}
+                }
 			}
 		}
 

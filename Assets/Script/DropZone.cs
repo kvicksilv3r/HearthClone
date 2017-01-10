@@ -48,7 +48,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 		if (gameManager.Players()[0].currentMana >= d.transform.GetChild(0).GetComponent<CardClass>().Card.mana)
 		{
-			if (d != null && playfieldfCardCount < maxCardsOnField && gameManager.PlayerTurn != 1)
+			if (d != null && playfieldfCardCount < maxCardsOnField && gameManager.PlayerTurn != 1 && d.transform.GetChild(0).GetComponent<CardClass>().OwnerId == 0)
 			{
 				d.parentToReturnTo = this.transform;
 

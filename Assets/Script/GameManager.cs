@@ -192,18 +192,14 @@ public class GameManager : MonoBehaviour
 		{
             GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
 		}
-<<<<<<< HEAD
-
 		UpdateMana();
-=======
-        if(whosTurn == 0)
+		if (whosTurn == 0)
         {
             foreach (Transform child in GameObject.Find("Enemy Playfield").transform)
             {
                 child.GetChild(0).GetComponent<Creature>().CanAttack = true;
             }
         }
->>>>>>> origin/master
 	}
 
 	void AddMana()

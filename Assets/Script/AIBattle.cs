@@ -86,12 +86,8 @@ public class AIBattle : MonoBehaviour
 
                 if (child.GetChild(0).GetComponent<Creature>().Health > 0)
                 {
-                    attackTarget.transform.GetChild(0).GetComponent<Creature>().Health -= child.GetChild(0).GetComponent<Creature>().Strength;
-                    child.GetChild(0).GetComponent<Creature>().Health -= attackTarget.transform.GetChild(0).GetComponent<Creature>().Strength;
-                    attackTarget.transform.GetChild(0).GetComponent<Creature>().UpdateHP();
-                    child.GetChild(0).GetComponent<Creature>().UpdateHP();
-                    attackTarget.transform.GetChild(0).GetComponent<Creature>().CheckHealth(attackTarget.transform.GetChild(0).GetComponent<Creature>().Health);
-                    child.GetChild(0).GetComponent<Creature>().CheckHealth(child.GetChild(0).GetComponent<Creature>().Health);
+                    attackTarget.transform.GetChild(0).GetComponent<Creature>().TakeDamage(child.GetChild(0).GetComponent<Creature>().Strength);
+                    child.GetChild(0).GetComponent<Creature>().TakeDamage(attackTarget.transform.GetChild(0).GetComponent<Creature>().Strength);
                 }
 
                 Debug.Log("Second Attack");

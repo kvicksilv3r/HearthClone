@@ -12,6 +12,9 @@ public class Creature : CardClass
 	[SerializeField]
 	private float waitTime = 2f;
 
+	[SerializeField]
+	private GameObject damageDisplay;
+
 	protected bool hasTaunt;
 	//[SerializeField] private GameObject target;
 
@@ -98,6 +101,9 @@ public class Creature : CardClass
 	{
 		health -= damage;
 		UpdateHP();
+
+		GameObject dDisplay = Instantiate(damageDisplay, transform, false);
+		dDisplay.GetComponent<DamageDisplay>().SetText(damage);
 
 		CheckHealth(health);
 	}

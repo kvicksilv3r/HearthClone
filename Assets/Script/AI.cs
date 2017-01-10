@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class AI : MonoBehaviour
 {
     GameManager gameManager;
+    Text manaText;
     public Transform enemyPlayField;
     //public List<Transform> HandList;
     int aiManaSpent;
@@ -56,6 +59,7 @@ public class AI : MonoBehaviour
     void CheckCurrentMana()
     {
         aiCurrentMana -= aiManaSpent;
+        
     }
 
     void PlaySpell()

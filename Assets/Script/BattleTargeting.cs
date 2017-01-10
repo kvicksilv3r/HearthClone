@@ -53,7 +53,7 @@ public class BattleTargeting : MonoBehaviour
 					{
 						if (transform.parent.parent.GetComponent<CardClass>().OwnerId != hit.transform.GetComponent<CardClass>().OwnerId || transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell" || hit.transform.GetComponent<Hero>().playerId != transform.parent.parent.GetComponent<CardClass>().OwnerId)
 						{
-							if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks > 0)
+							if (transform.parent.parent.GetComponent<Creature>().CurrentAttacks > 0 && transform.parent.parent.GetComponent<Creature>().CanAttack)
 							{
 								if (hit.transform.GetComponent<Hero>())
 								{
@@ -69,8 +69,6 @@ public class BattleTargeting : MonoBehaviour
 								}
 								transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
 							}
-
-							transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
 						}
 						if (transform.parent.parent.GetComponent<CardClass>().CardType.ToLower() == "spell")
 						{

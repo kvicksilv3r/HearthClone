@@ -8,7 +8,8 @@ public class AIBattle : MonoBehaviour
 
     List<GameObject> TargetList;
     GameObject attackTarget;
-    Creature creature;
+    Creature aiCreature;
+    Creature playerCreature;
 
     void Start()
     {
@@ -31,33 +32,29 @@ public class AIBattle : MonoBehaviour
             {
                 attackTarget = TargetList[Random.Range(0, TargetList.Count)];
             }
+            playerCreature = attackTarget.transform.GetChild(0).GetComponent<Creature>();
         }
 
         foreach (Transform child in transform)
         {
-            //targets = new GameObject[GameObject.Find("Player Playfield").transform.childCount];
-            if (child.GetChild(0).GetComponent<Creature>().CurrentAttacks >= 1 && child.GetChild(0).GetComponent<Creature>().CanAttack)
+            aiCreature = child.GetChild(0).GetComponent<Creature>();
+
+            if (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack)
             {
-                if(child.GetChild(0).GetComponent<Creature>().CurrentAttacks == 2)
+                if(aiCreature.CurrentAttacks == 2)
                 {
-                    attackTarget.transform.GetChild(0).GetComponent<Creature>().Health -= child.GetChild(0).GetComponent<Creature>().Strength;
-                    child.GetChild(0).GetComponent<Creature>().Health -= attackTarget.transform.GetChild(0).GetComponent<Creature>().Strength;
-                    attackTarget.transform.GetChild(0).GetComponent<Creature>().UpdateHP();
-                    child.GetChild(0).GetComponent<Creature>().UpdateHP();
-                    attackTarget.transform.GetChild(0).GetComponent<Creature>().CheckHealth(attackTarget.transform.GetChild(0).GetComponent<Creature>().Health);
-                    child.GetChild(0).GetComponent<Creature>().CheckHealth(child.GetChild(0).GetComponent<Creature>().Health);
+                    playerCreature.TakeDamage(aiCreature.Strength);
+                    aiCreature.TakeDamage(playerCreature.Strength);
+
                     Debug.Log("First target hit");
 
-                    child.GetChild(0).GetComponent<Creature>().CurrentAttacks--;
+                    aiCreature.CurrentAttacks--;
 
-                    if (attackTarget.transform.GetChild(0).GetComponent<Creature>().Health < 1)
+                    if(playerCreature.Health < 1)
                     {
-                        Destroy(attackTarget.gameObject);
+                        Debug.Log("Target killed on first attack");
+
                         attackTarget = null;
-                    }
-                    if (child.GetChild(0).GetComponent<Creature>().Health < 1)
-                    {
-                        Destroy(child.gameObject);
                     }
                 }
 
@@ -75,6 +72,7 @@ public class AIBattle : MonoBehaviour
                         {
                             attackTarget = TargetList[Random.Range(0, TargetList.Count)];
                         }
+                        playerCreature = attackTarget.transform.GetChild(0).GetComponent<Creature>();
                     }
 
                     if(attackTarget == null)
@@ -84,23 +82,14 @@ public class AIBattle : MonoBehaviour
                     }
                 }
 
-                if (child.GetChild(0).GetComponent<Creature>().Health > 0)
+                if (aiCreature.Health > 0 && playerCreature.Health > 0)
                 {
-                    attackTarget.transform.GetChild(0).GetComponent<Creature>().TakeDamage(child.GetChild(0).GetComponent<Creature>().Strength);
-                    child.GetChild(0).GetComponent<Creature>().TakeDamage(attackTarget.transform.GetChild(0).GetComponent<Creature>().Strength);
-                }
+                    playerCreature.TakeDamage(aiCreature.Strength);
+                    aiCreature.TakeDamage(playerCreature.Strength);
 
-                Debug.Log("Second Attack");
+                    Debug.Log("Second Attack");
 
-                child.GetChild(0).GetComponent<Creature>().CurrentAttacks--;
-
-                if (attackTarget.transform.GetChild(0).GetComponent<Creature>().Health < 1)
-                {
-                    Destroy(attackTarget.gameObject);
-                }
-                if (child.GetChild(0).GetComponent<Creature>().Health < 1)
-                {
-                    Destroy(child.gameObject);
+                    aiCreature.CurrentAttacks--;
                 }
             }
         }

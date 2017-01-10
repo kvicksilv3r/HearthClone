@@ -191,6 +191,11 @@ public class GameManager : MonoBehaviour
 		if (whosTurn == 1)
 		{
             GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
+
+            foreach (Transform child in GameObject.Find("Player Playfield").transform)
+            {
+                child.GetChild(0).GetComponent<Creature>().CanAttack = true;
+            }
 		}
 		UpdateMana();
 		if (whosTurn == 0)

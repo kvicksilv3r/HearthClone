@@ -38,6 +38,8 @@ public class BattleTargeting : MonoBehaviour
             Physics.Raycast(ray2, out hit2, 1000, lMask2);
             transform.position = hit2.point + new Vector3(0, 0, -10);
             Debug.DrawRay(transform.position, Vector3.forward * 1000, Color.red);
+
+            gameManager.CheckForTauntOnField();
         }
     }
 

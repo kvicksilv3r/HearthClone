@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 	public float roundTime; //Counts down the current time
     bool youWon = false;
     bool youLost = false;
+    [SerializeField]
+    GameObject win;
+    [SerializeField]
+    GameObject lost;
     public bool tauntOnField;
 	[SerializeField]
 	protected float maxTime; // How long will a round be?
@@ -98,7 +103,12 @@ public class GameManager : MonoBehaviour
 
 	}
 
-	void Update()
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.M))
 		{
@@ -271,11 +281,13 @@ public class GameManager : MonoBehaviour
         if (players[1].health < 1)
         {
             youWon = true;
+            win.SetActive(true);
         }
 
         if (players[0].health < 1)
         {
             youLost = true;
+            lost.SetActive(true);
         }
 
     }
@@ -393,7 +405,7 @@ public class GameManager : MonoBehaviour
                 tauntOnField = true;
                 break;
             }
-            if (!enemyCreature.GetChild(0).GetComponent<Creature>().HasTaunt)
+            else
             {
                 tauntOnField = false;
             }

@@ -154,7 +154,10 @@ public class Creature : CardClass
         {
             transform.parent.parent.BroadcastMessage("LowerCardcount");
         }
+        
 		Destroy(transform.parent.gameObject);
-	}
+
+        
+    }
 }
 

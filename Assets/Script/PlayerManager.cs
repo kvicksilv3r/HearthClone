@@ -50,31 +50,4 @@ public class PlayerManager : MonoBehaviour
         GetComponent<BattleTargeting>().OnMouseDrag();
         GetComponent<BattleTargeting>().OnMouseUp();
     }
-
-    public void PlayerTakeDamage(int damage)
-    {
-        playerHP -= damage;
-        UpdateHP();
-
-        CheckPlayerHealth(playerHP);
-    }
-
-    public void CheckPlayerHealth(int health)
-    {
-        if (health <= 0)
-        {
-            health = 0;
-            StartCoroutine("PlayerDeath");
-        }
-        else
-        {
-            return;
-        }
-    }
-
-    public IEnumerator PlayerDeath()
-    {
-        yield return new WaitForSeconds(waitTime);
-        Destroy(transform.gameObject);
-    }
 }

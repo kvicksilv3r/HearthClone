@@ -9,7 +9,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	public Transform placeHolderParent = null;
 	Vector3 originalScale;
     Vector3 originalPosition;
-    float originalPositionZ;
+    public float originalPositionZ;
     public GameObject cardBackground;
 	public GameObject placeHolder = null;
 	public LayoutElement le;

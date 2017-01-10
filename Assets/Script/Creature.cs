@@ -150,6 +150,10 @@ public class Creature : CardClass
 	{
 		print(health);
 		yield return new WaitForSeconds(waitTime);
+        if(ownerId == 0)
+        {
+            transform.parent.parent.BroadcastMessage("LowerCardcount");
+        }
 		Destroy(transform.parent.gameObject);
 	}
 }

@@ -51,7 +51,7 @@ public class AI : MonoBehaviour
                     child.SetParent(enemyPlayField);
                     gameManager.IsSleeping = true;
                     child.rotation = new Quaternion(0, 0, 0, 180);
-                    child.position = new Vector3(child.position.x, child.position.y, 0);
+                    child.position = new Vector3(child.position.x, child.position.y, 7);
                     gameManager.ExpendMana(manaCost);
                     // HandList.Remove(child.transform);
                     child.GetChild(0).GetChild(1).gameObject.SetActive(false);

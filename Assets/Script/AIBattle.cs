@@ -10,7 +10,6 @@ public class AIBattle : MonoBehaviour
     GameObject attackTarget;
     Creature aiCreature;
     Creature playerCreature;
-    PlayerManager playerHero;
     GameManager gameManager;
     float waitTime = 2;
 
@@ -38,61 +37,70 @@ public class AIBattle : MonoBehaviour
         {
             aiCreature = child.GetChild(0).GetComponent<Creature>();
 
-            CheckTarget();
-
-            if (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack && attackTarget != null)
+            if (CheckCreature())
             {
-                if (aiCreature.CurrentAttacks > 1 && playerHero.playerHP > 0)
+                if (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack && attackTarget != null)
                 {
-                    playerHero.PlayerTakeDamage(aiCreature.Strength);
-                }
-
-                if (aiCreature.CurrentAttacks > 1 && playerCreature.Health > 0)
-                {
-                    playerCreature.TakeDamage(aiCreature.Strength);
-                    aiCreature.TakeDamage(playerCreature.Strength);
-
-                    Debug.Log("First target hit");
-                    
-                    aiCreature.CurrentAttacks--;
-
-                    if (playerCreature.Health < 1)
+                    if (aiCreature.CurrentAttacks > 1 && playerCreature.Health > 0)
                     {
-                        Debug.Log("Target killed on first attack");
+                        attackTarget.transform.GetChild(0).GetComponent<Creature>().TakeDamage(aiCreature.Strength);
+                        aiCreature.TakeDamage(playerCreature.Strength);
 
-                        attackTarget = null;
+                        Debug.Log("First target hit");
+
+                        aiCreature.CurrentAttacks--;
+
+                        if (playerCreature.Health < 1)
+                        {
+                            Debug.Log("Target killed on first attack");
+
+                            attackTarget = null;
+                        }
                     }
-                }
-
-                if (attackTarget == null)
-                {
-                    Debug.Log("New target");
-                    
-                    CheckTarget();
 
                     if (attackTarget == null)
                     {
-                        Debug.Log("no targets");
-                        break;
+                        Debug.Log("New target");
+
+                        //recheck here yo
+
+                        if (attackTarget == null)
+                        {
+                            Debug.Log("no targets");
+                            break;
+                        }
                     }
-                }
-
-                yield return new WaitForSeconds(waitTime);
-
-                if (aiCreature.Health > 0 && playerCreature.Health > 0)
-                {
-                    playerCreature.TakeDamage(aiCreature.Strength);
-                    aiCreature.TakeDamage(playerCreature.Strength);
-
-                    Debug.Log("Second Attack");
-
-                    aiCreature.CurrentAttacks--;
 
                     yield return new WaitForSeconds(waitTime);
+
+                    if (aiCreature.Health > 0 && playerCreature.Health > 0)
+                    {
+                        playerCreature.TakeDamage(aiCreature.Strength);
+                        aiCreature.TakeDamage(playerCreature.Strength);
+
+                        Debug.Log("Second Attack");
+
+                        aiCreature.CurrentAttacks--;
+
+                        yield return new WaitForSeconds(waitTime);
+                    }
                 }
             }
+            else if (aiCreature.CanAttack && aiCreature.CurrentAttacks > 1 && GameObject.Find("Player Playfield").transform.childCount < 3)
+            {
+                gameManager.HeroDamage(0, aiCreature.Strength);
+                yield return new WaitForSeconds(waitTime);
+
+                aiCreature.CurrentAttacks--;
+            }
+            else if (aiCreature.CanAttack && aiCreature.CurrentAttacks > 0 && GameObject.Find("Player Playfield").transform.childCount < 3)
+            {
+                gameManager.HeroDamage(0, aiCreature.Strength);
+                yield return new WaitForSeconds(waitTime);
+
+                aiCreature.CurrentAttacks--;
+            }
         }
-        TargetList.Clear();
 
         yield return new WaitForSeconds(waitTime);
 
@@ -101,36 +109,40 @@ public class AIBattle : MonoBehaviour
         yield return null;
     }
 
-    public void CheckTarget()
+    public bool CheckCreature()
     {
+        bool returnBool = false;
+
+        if (GameObject.Find("Player Playfield").transform.childCount <= 0)
+        {
+            return false;
+        }
+
         foreach (Transform target in GameObject.Find("Player Playfield").transform)
         {
             playerCreature = target.transform.GetChild(0).GetComponent<Creature>();
-            playerHero = attackTarget.transform.GetComponent<PlayerManager>();
 
-            if (aiCreature.Strength >= playerCreature.Health && target.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
+
+            if (aiCreature.Strength >= playerCreature.Health && playerCreature.HasTaunt)
             {
                 attackTarget = target.gameObject;
-                break;
+                return true;
             }
-            else if (target.transform.GetChild(0).GetComponent<Creature>().HasTaunt)
+            else if (playerCreature.HasTaunt)
             {
                 attackTarget = target.gameObject;
-                break;
+                return true;
             }
-            else if(GameObject.Find("Player Playfield").transform.childCount < 2 && aiCreature.Strength < playerCreature.Health)
-            {
-                attackTarget = GameObject.Find("Hero");
-            }
-            else if (aiCreature.Strength >= playerCreature.Health)
+            else if (aiCreature.Strength >= playerCreature.Health && aiCreature.Health > playerCreature.Strength)
             {
                 attackTarget = target.gameObject;
+                returnBool = true;
             }
             else
             {
-                attackTarget = TargetList[Random.Range(0, TargetList.Count)];
-                break;
+                attackTarget = TargetList[Random.Range(0, TargetList.Count)].gameObject;
             }
         }
+        return returnBool;
     }
 }

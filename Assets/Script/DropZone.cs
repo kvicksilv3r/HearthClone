@@ -42,6 +42,11 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		}
 	}
 
+    public void LowerCardcount()
+    {
+        playfieldfCardCount--;
+    }
+
 	public void OnDrop(PointerEventData eventData)
 	{
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable>();

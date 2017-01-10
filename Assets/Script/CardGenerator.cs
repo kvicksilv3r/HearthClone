@@ -223,8 +223,8 @@ public class CardGenerator : MonoBehaviour
 
 	void UpdateText()
 	{
-		healthTextObj.GetComponent<Text>().text = c.health.ToString();
-		damageTextObj.GetComponent<Text>().text = c.damage.ToString();
+		healthTextObj.GetComponent<Text>().text = creature.Health.ToString();
+		damageTextObj.GetComponent<Text>().text = creature.Strength.ToString();
 	}
 
 }

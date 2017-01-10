@@ -75,9 +75,8 @@ public class CardGenerator : MonoBehaviour
 		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".png";
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
 
-		healthTextObj.GetComponent<Text>().text = c.health.ToString();
+		UpdateText();
 		manaTextObj.GetComponent<Text>().text = c.mana.ToString();
-		damageTextObj.GetComponent<Text>().text = c.damage.ToString();
 		cardTextObj.GetComponent<Text>().text = c.description;
 		cardNameTextObj.GetComponent<Text>().text = c.card_name;
 
@@ -185,15 +184,22 @@ public class CardGenerator : MonoBehaviour
 		{
 			foreach (int i in c.abilities_cr)
 			{
-				if (gameManager.TimeIndex == 2)
+				if (i == 4)
 				{
-					creature.Strength += 2;
-					creature.Health -= 1;
+					if (gameManager.TimeIndex == 2)
+					{
+						creature.Strength += 2;
+						creature.Health -= 1;
+					}
+					else if (gameManager.TimeIndex == 1)
+					{
+						creature.Strength -= 1;
+						creature.Health += 2;
+					}
 				}
-				else if (gameManager.TimeIndex == 1)
+				if (i == 11)
 				{
-					creature.Strength -= 1;
-					creature.Health += 2;
+					gameManager.HeroDamage(creature.OwnerId, 2);
 				}
 			}
 		}
@@ -212,6 +218,13 @@ public class CardGenerator : MonoBehaviour
 
 		healthTextObj.transform.position = hpPos.transform.position - new Vector3(0, 0, 0.2f);
 		damageTextObj.transform.position = dmgPos.transform.position - new Vector3(0, 0, 0.2f);
+		UpdateText();
+	}
+
+	void UpdateText()
+	{
+		healthTextObj.GetComponent<Text>().text = c.health.ToString();
+		damageTextObj.GetComponent<Text>().text = c.damage.ToString();
 	}
 
 }

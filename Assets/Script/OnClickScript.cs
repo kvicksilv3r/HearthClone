@@ -32,12 +32,12 @@ public class OnClickScript : MonoBehaviour
 					break;
 
 				case "tap":
-					if (!gameManager.UsedHeroPower(0) && gameManager.Players()[0].currentMana >= 2)
+					if (gameManager.UsedHeroPower(gameManager.PlayerTurn) != true && gameManager.Players()[gameManager.PlayerTurn].currentMana >= 2)
 					{
 						gameManager.ExpendMana(2);
 						gameManager.DrawCard(gameManager.PlayerTurn);
-						gameManager.HeroDamage(0, 2);
-						gameManager.UseHeroPower(gameManager.PlayerTurn);
+						gameManager.HeroDamage(gameManager.PlayerTurn, 2);
+						gameManager.UseHeroPower(gameManager.PlayerTurn);	
 					}
 					break;
 

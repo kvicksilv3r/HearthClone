@@ -32,9 +32,11 @@ public class GameManager : MonoBehaviour
 	protected bool isPlaying = false;
 
 	[SerializeField]
-	protected GameObject playerBoard;
+	protected GameObject playerHero;
 	[SerializeField]
-	protected GameObject enemyBoard;
+	protected GameObject enemyHero;
+
+	protected GameObject[] heroes = new GameObject[2];
 
 	[SerializeField]
 	protected GameObject damageDisplay;
@@ -75,6 +77,9 @@ public class GameManager : MonoBehaviour
 
 		decks[0] = new List<int>();
 		decks[1] = new List<int>();
+
+		heroes[0] = GameObject.Find("Player Hero");
+		heroes[1] = GameObject.Find("Enemy Hero");
 
 		UpdateHealth();
 
@@ -256,7 +261,7 @@ public class GameManager : MonoBehaviour
         
 		UpdateHealth();
 
-		GameObject dDisplay = Instantiate(damageDisplay, enemyBoard.transform.parent.FindChild("Enemy Hero").transform, false);
+		GameObject dDisplay = Instantiate(damageDisplay, heroes[playerIndex].transform, false);
 		dDisplay.transform.position += new Vector3(0, 0, -5);
 		dDisplay.transform.localRotation = Quaternion.Euler(0f, 200f, 0f);
 		dDisplay.GetComponent<DamageDisplay>().SetText(dmgTaken);

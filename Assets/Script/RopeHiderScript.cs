@@ -50,6 +50,7 @@ public class RopeHiderScript : MonoBehaviour {
 	public void Deactivate()
 	{
 		StartCoroutine(RemoveFire(0));
+		transform.position = new Vector3(0, yPos, zPos);
 	}
 
 	IEnumerator RemoveFire(int killTime)

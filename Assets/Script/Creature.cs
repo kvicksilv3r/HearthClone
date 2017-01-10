@@ -106,6 +106,7 @@ public class Creature : CardClass
 	{
 		if (health <= 0)
 		{
+			currentAttacks = 0;
 			print(Card.card_name + " ahould be dead, yo");
 			health = 0;
 			StartCoroutine("Death");

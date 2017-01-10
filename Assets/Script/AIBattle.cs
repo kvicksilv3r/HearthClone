@@ -138,9 +138,9 @@ public class AIBattle : MonoBehaviour
                 attackTarget = target.gameObject;
                 returnBool = true;
             }
-            else
+            else if(aiCreature.CanAttack && aiCreature.CurrentAttacks > 0)
             {
-                attackTarget = TargetList[Random.Range(0, TargetList.Count)].gameObject;
+                attackTarget = TargetList[Random.Range(0, TargetList.Count + 1)].gameObject;
             }
         }
         return returnBool;

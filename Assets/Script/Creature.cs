@@ -15,6 +15,7 @@ public class Creature : CardClass
 	[SerializeField]
 	private GameObject damageDisplay;
 
+    [SerializeField]
 	protected bool hasTaunt;
 	//[SerializeField] private GameObject target;
 

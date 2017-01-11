@@ -43,7 +43,7 @@ public class AIBattle : MonoBehaviour
 		foreach (Creature creature in transform.GetComponentsInChildren<Creature>())
 		{
 			aiCreature = creature;
-			while (creature.CurrentAttacks >= 1 && aiCreature.CanAttack)
+			while (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack)
 			{
 				if (CheckCreature())
 				{
@@ -127,7 +127,7 @@ public class AIBattle : MonoBehaviour
 		{
 			playerCreature = creature;
 
-			if (aiCreature.Strength >= playerCreature.Health && playerCreature.GetComponent<Creature>())
+			if (aiCreature.Strength >= playerCreature.Health && playerCreature.HasTaunt)
 			{
 				killabeTaunt.Add(playerCreature);
 				continue;

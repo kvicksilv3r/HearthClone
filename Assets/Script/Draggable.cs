@@ -10,10 +10,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	Vector3 originalScale;
     Vector3 originalPosition;
     public float originalPositionZ;
-    public GameObject cardBackground;
 	public GameObject placeHolder = null;
 	public LayoutElement le;
-    public bool playedCard = false;
+	public bool playedCard;// = false;
 	public static bool dragging;
     public static bool spellCard;
 	public LayerMask lMask;
@@ -157,11 +156,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                     this.transform.SetSiblingIndex(placeHolder.transform.GetSiblingIndex());
                 }
 
-                if (playedCard == true)
-                {
-                    cardBackground.SetActive(false);
-                }
-
                 GetComponent<CanvasGroup>().blocksRaycasts = true;
 
                 Destroy(placeHolder);
@@ -202,6 +196,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 			GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
             transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
 			transform.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
+			GameObject.Find("GameManager").GetComponent<GameManager>().SetNumberOnBoard(transform.GetChild(0).gameObject.GetComponent<CardClass>().OwnerId, 1);
 
 		}
     }

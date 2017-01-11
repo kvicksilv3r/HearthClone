@@ -46,6 +46,8 @@ public class CardGenerator : MonoBehaviour
 	GameObject tauntObj;
 	[SerializeField]
 	GameObject sleepingParticle;
+	[SerializeField]
+	GameObject endRoundStuff;
 	ParseFromJSON json;
 	CARDS c;
 
@@ -60,8 +62,15 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			//GenerateCard(Random.Range(1, 5));
+			
 		}
+	}
+
+	public void GenerateCard(int card)
+	{
+		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
+		c = json.loadFile(card);
+		GenerateCard(c);
 	}
 
 	public void GenerateCard(CARDS card)
@@ -201,6 +210,11 @@ public class CardGenerator : MonoBehaviour
 				{
 					gameManager.HeroDamage(creature.OwnerId, 2);
 				}
+				if (i == 12)
+				{
+					GameObject roundEnd = Instantiate(endRoundStuff, transform, false);
+					roundEnd.GetComponent<RoundEndStuff>().effect = i;
+				}
 			}
 		}
 
@@ -215,6 +229,9 @@ public class CardGenerator : MonoBehaviour
 		{
 			tauntObj.SetActive(true);
 		}
+
+		
+		transform.FindChild("Card Stuff").gameObject.SetActive(false);
 
 		healthTextObj.transform.position = hpPos.transform.position - new Vector3(0, 0, 0.2f);
 		damageTextObj.transform.position = dmgPos.transform.position - new Vector3(0, 0, 0.2f);

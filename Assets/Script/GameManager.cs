@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 	protected int roundsBetweenTimeChange = 2;
 	protected int currentRoundstoTimeChange; //Current rounds between timechange
 	protected List<int>[] decks = new List<int>[2]; //Guess we should keep the decks here
-	protected Creature[,] craturesOnBoaerd = new Creature[2, 7]; //Keeps track of the creatures on the board
+	protected int[] creatureNumOnBoard = new int[] { 0, 0 }; //Keeps track of numbers of creatures on the board
 	protected Player[] players = new Player[2];
 	protected bool isSleeping = false;
 
@@ -171,7 +171,12 @@ public class GameManager : MonoBehaviour
 			ropeBurning = false;
 		}
 
-		if (coinUsed)
+		if (GameObject.FindGameObjectWithTag("RoundEnd"))
+		{
+			GameObject.Find("Board").BroadcastMessage("RoundEndActions");
+		}
+
+        if (coinUsed)
 		{
 			RemoveMana(coinPlayer);
 			coinUsed = false;
@@ -325,6 +330,16 @@ public class GameManager : MonoBehaviour
 	public Player[] Players()
 	{
 		return players;
+	}
+
+	public int GetNumberOnBoard(int playerIndex)
+	{
+		return creatureNumOnBoard[playerIndex];
+	}
+
+	public void SetNumberOnBoard(int playerIndex, int change)
+	{
+		creatureNumOnBoard[playerIndex] += change;
 	}
 
 	public int PlayerTurn

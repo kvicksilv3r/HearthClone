@@ -35,7 +35,7 @@ public class DrawManager : MonoBehaviour
 		if (gameManager.Decks[playerIndex].Count > 0)
 		{
 
-			int whatCard = Random.Range(0, gameManager.Decks[playerIndex].Count + 1);
+			int whatCard = Random.Range(0, gameManager.Decks[playerIndex].Count);
 			c = json.loadFile(gameManager.Decks[playerIndex][whatCard]+1);
 			GameObject g;
 

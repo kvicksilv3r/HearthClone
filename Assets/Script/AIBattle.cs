@@ -11,7 +11,11 @@ public class AIBattle : MonoBehaviour
     Creature aiCreature;
     Creature playerCreature;
     GameManager gameManager;
-    float waitTime = 2;
+	List<Creature> killabeTaunt = new List<Creature>();
+	List<Creature> tauntCreatures = new List<Creature>();
+	List<Creature> killableCreatures = new List<Creature>();
+	List<Creature> rest = new List<Creature>();
+	float waitTime = 2;
 
     void Start()
     {
@@ -86,14 +90,14 @@ public class AIBattle : MonoBehaviour
                     }
                 }
             }
-            else if (aiCreature.CanAttack && aiCreature.CurrentAttacks > 1 && GameObject.Find("Player Playfield").transform.childCount < 3)
+            else if (aiCreature.CanAttack && aiCreature.CurrentAttacks > 1)
             {
                 gameManager.HeroDamage(0, aiCreature.Strength);
                 yield return new WaitForSeconds(waitTime);
 
                 aiCreature.CurrentAttacks--;
             }
-            else if (aiCreature.CanAttack && aiCreature.CurrentAttacks > 0 && GameObject.Find("Player Playfield").transform.childCount < 3)
+            else if (aiCreature.CanAttack && aiCreature.CurrentAttacks > 0)
             {
                 gameManager.HeroDamage(0, aiCreature.Strength);
                 yield return new WaitForSeconds(waitTime);
@@ -113,6 +117,11 @@ public class AIBattle : MonoBehaviour
     {
         bool returnBool = false;
 
+		killabeTaunt.Clear();
+		tauntCreatures.Clear();
+		killableCreatures.Clear();
+		rest.Clear();
+
         if (GameObject.Find("Player Playfield").transform.childCount <= 0)
         {
             return false;
@@ -122,27 +131,60 @@ public class AIBattle : MonoBehaviour
         {
             playerCreature = target.transform.GetChild(0).GetComponent<Creature>();
 
-
-            if (aiCreature.Strength >= playerCreature.Health && playerCreature.HasTaunt)
+            if (aiCreature.Strength >= playerCreature.Health && playerCreature.GetComponent<Creature>())
             {
-                attackTarget = target.gameObject;
-                return true;
+				killabeTaunt.Add(playerCreature);
+				continue;
             }
             else if (playerCreature.HasTaunt)
             {
-                attackTarget = target.gameObject;
-                return true;
+				tauntCreatures.Add(playerCreature);
+				continue;
             }
             else if (aiCreature.Strength >= playerCreature.Health && aiCreature.Health > playerCreature.Strength)
             {
-                attackTarget = target.gameObject;
-                returnBool = true;
+				killableCreatures.Add(playerCreature);
+				continue;
             }
             else if(aiCreature.CanAttack && aiCreature.CurrentAttacks > 0)
             {
-                attackTarget = TargetList[Random.Range(0, TargetList.Count + 1)].gameObject;
+				rest.Add(playerCreature);
+				continue;
             }
         }
-        return returnBool;
+        
+		if(killabeTaunt.Count > 0)
+		{
+			attackTarget = killabeTaunt[Random.Range(0, killabeTaunt.Count)].gameObject;
+			return true;
+		}
+		else if(tauntCreatures.Count > 0)
+		{
+			attackTarget = tauntCreatures[Random.Range(0, tauntCreatures.Count)].gameObject;
+			return true;
+		}
+		else if (killableCreatures.Count > 0)
+		{
+			attackTarget = killableCreatures[Random.Range(0, killableCreatures.Count)].gameObject;
+			return true;
+		}
+		else if(rest.Count > 0)
+		{
+			if(Random.Range(0,3) != 0)
+			{
+				attackTarget = rest[Random.Range(0, rest.Count)].gameObject;
+				returnBool = true;
+			}
+			else
+			{
+				returnBool = false;
+			}
+		}
+		else
+		{
+			returnBool = false;
+		}
+
+		return returnBool;
     }
 }

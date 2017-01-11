@@ -14,6 +14,8 @@ public class MuliganScript : MonoBehaviour
 
 	[SerializeField]
 	protected GameObject muliganSelctor;
+	[SerializeField]
+	protected GameObject theCoin;
 
 	[SerializeField]
 	protected GameObject playerHand;
@@ -59,13 +61,21 @@ public class MuliganScript : MonoBehaviour
 
 		numCards = numberOfCards;
 
+		//if(numberOfCards == 4)
+		//{
+		//	Instantiate(theCoin, playerHand.transform, false);
+		//}
+		//else
+		//{
+		//	Instantiate(theCoin, aiHand.transform, false);
+		//}
 
 		for (int i = 0; i < numberOfCards; i++)
 		{
-			int whatCard = Random.Range(1, decks[0].Count + 1);
+			int whatCard = Random.Range(1, decks[0].Count-1);
 			print(whatCard);
 			
-			c = json.loadFile(decks[0][whatCard]);
+			c = json.loadFile(decks[0][whatCard+1]);
 
 
 			if (c.card_type.ToLower() == "spell")
@@ -93,11 +103,11 @@ public class MuliganScript : MonoBehaviour
 	{
 		for (int i = 0; i < 3 + (4 - numCards); i++)
 		{
-			int whatAiCard = Random.Range(0, decks[1].Count + 1);
-			//HERE IS BROKEN RIP
+			int whatAiCard = Random.Range(0, decks[1].Count);
 			c = json.loadFile(decks[1][whatAiCard]);
 			aiCards.Add(c);
-			decks[1].RemoveAt(whatAiCard - 1);
+			print(c.card_name);
+			decks[1].RemoveAt(whatAiCard);
 		}
 
 		foreach (CARDS card in aiCards)
@@ -119,7 +129,7 @@ public class MuliganScript : MonoBehaviour
 			foreach(CARDS mul in aiMul)
 			{
 				int whatAiCard = Random.Range(0, decks[1].Count);
-				aiCards.Add(json.loadFile(decks[1][whatAiCard]));
+				aiCards.Add(json.loadFile(decks[1][whatAiCard+1]));
 				decks[1].RemoveAt(whatAiCard);
 			}
 		}
@@ -172,19 +182,17 @@ public class MuliganScript : MonoBehaviour
 			if (c.card_type.ToLower() == "spell")
 			{
 				g = Instantiate(spellCard, aiHand.transform, false) as GameObject;
-				g.GetComponent<SpellCardGenerator>().GenerateCard(c);
+				g.GetComponent<SpellCardGenerator>().GenerateCard(aiCard);
 			}
 			else
 			{
 				g = Instantiate(creatureCard, aiHand.transform, false) as GameObject;
-				g.transform.GetChild(0).GetComponent<CardGenerator>().GenerateCard(c);
+				g.transform.GetChild(0).GetComponent<CardGenerator>().GenerateCard(aiCard);
 			}
 
 			g.BroadcastMessage("DisableTexts");
             g.transform.GetChild(0).GetComponent<CardClass>().OwnerId = 1;
             g.transform.GetComponent<Draggable>().enabled = false;
-
-
         }
 
 		Destroy(gameObject);

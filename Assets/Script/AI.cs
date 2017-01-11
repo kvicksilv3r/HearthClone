@@ -57,7 +57,6 @@ public class AI : MonoBehaviour
                     child.GetChild(0).GetChild(1).gameObject.SetActive(false);
                     child.GetComponent<Draggable>().playedCard = true;
                     child.GetComponent<Draggable>().PlayCard();
-                    child.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
                     child.GetChild(0).GetComponent<BoxCollider>().enabled = true;
                 }
             }

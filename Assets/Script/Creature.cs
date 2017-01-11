@@ -150,10 +150,8 @@ public class Creature : CardClass
 	{
 		print(health);
 		yield return new WaitForSeconds(waitTime);
-        if(ownerId == 0)
-        {
-            transform.parent.parent.BroadcastMessage("LowerCardcount");
-        }
+
+		GameObject.Find("GameManager").GetComponent<GameManager>().SetNumberOnBoard(ownerId, -1);
         
 		Destroy(transform.parent.gameObject);
 

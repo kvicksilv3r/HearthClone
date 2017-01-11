@@ -295,8 +295,9 @@ public class GameManager : MonoBehaviour
 	public void PlayedCoin(int playerIndex)
 	{
 		coinPlayer = playerIndex;
-		players[playerIndex].maxMana++;
-		UpdateMana();
+        //players[playerIndex].maxMana++;
+        //UpdateMana();
+        AddMana();
 		coinUsed = true;
 	}
 

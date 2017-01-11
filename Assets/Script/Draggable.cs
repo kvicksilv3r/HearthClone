@@ -110,7 +110,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                     //this.transform.position = eventData.position;
                     //transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
 
-                    if (placeHolder.transform.parent != placeHolderParent && DropZone.playfieldfCardCount < DropZone.maxCardsOnField)
+                    if (transform.tag == "Coin" || placeHolder.transform.parent != placeHolderParent && DropZone.playfieldfCardCount < DropZone.maxCardsOnField)
                     {
                         placeHolder.transform.SetParent(placeHolderParent);
                     }
@@ -171,7 +171,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		if (!playedCard && !dragging)
+		if (!playedCard && !dragging && gameManager.IsPlaying)
 		{
 			this.transform.GetChild(0).position = transform.position + new Vector3(0, 15f, -20);
 			this.transform.GetChild(0).localScale = originalScale * 1.5f;
@@ -197,12 +197,22 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
         {
             //transform.position = new Vector3(0, 0, 0);
-            playedCard = true;
-            onBoardDragger.SetActive(true);
-			GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
-            transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
-			transform.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
+            if (transform.tag != "Coin")
+            {
+                playedCard = true;
+                onBoardDragger.SetActive(true);
+                GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
+                transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
+                transform.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
+            }
 
+            if(transform.tag == "Coin")
+            {
+                gameManager.PlayedCoin(0);
+                playedCard = true;
+                Destroy(placeHolder);
+                Destroy(transform.gameObject);
+            }
 		}
     }
 }

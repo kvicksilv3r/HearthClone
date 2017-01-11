@@ -61,16 +61,16 @@ public class MuliganScript : MonoBehaviour
 
 		numCards = numberOfCards;
 
-		//if(numberOfCards == 4)
-		//{
-		//	Instantiate(theCoin, playerHand.transform, false);
-		//}
-		//else
-		//{
-		//	Instantiate(theCoin, aiHand.transform, false);
-		//}
+        if (numberOfCards == 4)
+        {
+            Instantiate(theCoin, playerHand.transform, false);
+        }
+        //else
+        //{
+        //	Instantiate(theCoin, aiHand.transform, false);
+        //}
 
-		for (int i = 0; i < numberOfCards; i++)
+        for (int i = 0; i < numberOfCards; i++)
 		{
 			int whatCard = Random.Range(1, decks[0].Count-1);
 			print(whatCard);

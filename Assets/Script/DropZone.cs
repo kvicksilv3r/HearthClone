@@ -51,17 +51,24 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	{
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
 
-		if (gameManager.Players()[0].currentMana >= d.transform.GetChild(0).GetComponent<CardClass>().Card.mana)
+		if (d.transform.tag == "Coin" || gameManager.Players()[0].currentMana >= d.transform.GetChild(0).GetComponent<CardClass>().Card.mana)
 		{
-			if (d != null && playfieldfCardCount < maxCardsOnField && gameManager.PlayerTurn != 1 && d.transform.GetChild(0).GetComponent<CardClass>().OwnerId == 0)
+			if (d != null && playfieldfCardCount < maxCardsOnField && gameManager.PlayerTurn != 1 && d.transform.GetChild(0).GetComponent<CardClass>().OwnerId == 0 || d.transform.tag == "Coin")
 			{
 				d.parentToReturnTo = this.transform;
 
 				if (!d.playedCard)
 				{
-					d.PlayCard();
-					gameManager.ExpendMana(d.transform.GetChild(0).GetComponent<CardClass>().Card.mana);
-					playfieldfCardCount++;
+                    if (d.transform.tag == "Coin")
+                    {
+                        d.PlayCard();
+                    }
+                    else
+                    {
+                        d.PlayCard();
+                        gameManager.ExpendMana(d.transform.GetChild(0).GetComponent<CardClass>().Card.mana);
+                        playfieldfCardCount++;
+                    }
 				}
 			}
 		}

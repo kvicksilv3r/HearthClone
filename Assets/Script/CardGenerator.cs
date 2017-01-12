@@ -62,7 +62,7 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			
+
 		}
 	}
 
@@ -215,19 +215,31 @@ public class CardGenerator : MonoBehaviour
 					GameObject roundEnd = Instantiate(endRoundStuff, transform, false);
 					roundEnd.GetComponent<RoundEndStuff>().effect = i;
 				}
+				if (i == 14)
+				{
+					FableCreatureAbility();
+				}
 				if (i == 19)
 				{
-					int random = Random.Range(0, 100);
-					print(random);
-                    if (random > 50)
+					MissionaryAbility();
+				}
+
+				if (i == 22)
+				{
+					if (gameManager.TimeIndex == 1)
 					{
-						gameManager.DrawCard(creature.OwnerId);
-						gameManager.DrawCard(creature.OwnerId);
+						creature.Strength += 2;
 					}
 				}
-				if(i == 23)
+
+				if (i == 23)
 				{
 					gameManager.HeroDamage(Mathf.Abs(creature.OwnerId + 1 - 2), 5);
+				}
+
+				if (i == 25)
+				{
+					WyvernAbility();
 				}
 			}
 		}
@@ -244,12 +256,85 @@ public class CardGenerator : MonoBehaviour
 			tauntObj.SetActive(true);
 		}
 
-		
+
 		transform.FindChild("Card Stuff").gameObject.SetActive(false);
 
 		healthTextObj.transform.position = hpPos.transform.position - new Vector3(0, 0, 0.2f);
 		damageTextObj.transform.position = dmgPos.transform.position - new Vector3(0, 0, 0.2f);
 		UpdateText();
+	}
+
+	void WyvernAbility()
+	{
+		if (gameManager.Boards[Mathf.Abs(creature.OwnerId + 1 - 2)].transform.childCount <= 0)
+		{
+			gameManager.HeroDamage(Mathf.Abs(creature.OwnerId + 1 - 2), 6);
+		}
+
+		else
+		{
+			List<Creature> toDie = new List<Creature>();
+
+			foreach (Creature cr in gameManager.Boards[Mathf.Abs(creature.OwnerId + 1 - 2)].transform.GetComponentsInChildren<Creature>())
+			{
+				if (!cr.IsDead)
+				{
+					toDie.Add(cr);
+				}
+			}
+
+			for (int o = 0; o < 6; o++)
+			{
+				if (toDie.Count > 0 && Random.Range(0, 2) == 0)
+				{
+					int whatToDie = Random.Range(0, toDie.Count);
+					toDie[whatToDie].TakeDamage(1);
+					if (toDie[whatToDie].IsDead)
+					{
+						toDie.RemoveAt(whatToDie);
+					}
+				}
+				else
+				{
+					gameManager.HeroDamage(Mathf.Abs(creature.OwnerId + 1 - 2), 1);
+				}
+
+			}
+		}
+	}
+
+	void MissionaryAbility()
+	{
+		int random = Random.Range(0, 100);
+		print(random);
+		if (random > 50)
+		{
+			gameManager.DrawCard(creature.OwnerId);
+			gameManager.DrawCard(creature.OwnerId);
+		}
+	}
+
+	void FableCreatureAbility()
+	{
+
+		List<Creature> toDie = new List<Creature>();
+		if (gameManager.Boards[Mathf.Abs(creature.OwnerId + 1 - 2)].transform.childCount > 0)
+		{
+			print("creatures found on the other board");
+			foreach (Creature cr in gameManager.Boards[Mathf.Abs(creature.OwnerId + 1 - 2)].transform.GetComponentsInChildren<Creature>())
+			{
+				if (cr.Health <= creature.Health)
+				{
+					toDie.Add(cr);
+				}
+			}
+
+			if (toDie.Count > 0)
+			{
+				int whatToDie = Random.Range(0, toDie.Count);
+				toDie[whatToDie].TakeDamage(toDie[whatToDie].Health);
+			}
+		}
 	}
 
 	void UpdateText()

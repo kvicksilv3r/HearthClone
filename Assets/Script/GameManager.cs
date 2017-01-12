@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
 
 	protected GameObject[] heroes = new GameObject[2];
 
+	protected string[] timeNames = new string[] { "DAWN", "DAY", "NIGHT" };
+
 	[SerializeField]
 	protected GameObject damageDisplay;
 
@@ -53,6 +55,11 @@ public class GameManager : MonoBehaviour
 	protected Text[] manaTexts = new Text[2];
 	[SerializeField]
 	protected Text[] healthTexts = new Text[2];
+
+	protected GameObject[] boards = new GameObject[2];
+
+	[SerializeField]
+	protected GameObject timeTextObject;
 
 	#region LightVars
 	protected Light dirLight;
@@ -90,8 +97,6 @@ public class GameManager : MonoBehaviour
 
 		UpdateHealth();
 
-		//GameObject.Find("Board").BroadcastMessage("GenerateHero");
-
 		for (int i = 0; i < 30; i++)
 		{
 			decks[0].Add(Random.Range(1, 28));
@@ -99,6 +104,9 @@ public class GameManager : MonoBehaviour
 		}
 
 		muliganScript = GameObject.Find("Muligan").GetComponent<MuliganScript>();
+
+		boards[0] = GameObject.Find("Player Playfield");
+		boards[1] = GameObject.Find("Enemy Playfield");
 
 		muliganScript.BeginMuligan(3 + whosTurn);
 	}
@@ -368,6 +376,11 @@ public class GameManager : MonoBehaviour
 		StartRound();
 	}
 
+	public GameObject[] Boards
+	{
+		get { return boards; }
+	}
+
 	public List<int>[] Decks
 	{
 		get { return decks; }
@@ -396,6 +409,18 @@ public class GameManager : MonoBehaviour
 		}
 
 		currentRoundstoTimeChange = roundsBetweenTimeChange;
+
+		string timetext = ("");
+
+		//For llo som fyller på emd chars från timetext
+		
+		foreach(char c in timeNames[timeIndex])
+		{
+			timetext += c;
+			timetext += ("\n");
+		}
+
+		timeTextObject.GetComponent<Text>().text = timetext;
 
 		StartCoroutine(ChangeLight());
 	}

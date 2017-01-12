@@ -25,7 +25,6 @@ public class DrawManager : MonoBehaviour
 	void Start()
 	{
 		gameManager = GetComponent<GameManager>();
-		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
 		playerHands[0] = playerHand;
 		playerHands[1] = aiHand;
 	}
@@ -34,6 +33,7 @@ public class DrawManager : MonoBehaviour
 	{
 		if (gameManager.Decks[playerIndex].Count > 0)
 		{
+			json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
 			int whatCard = Random.Range(0, gameManager.Decks[playerIndex].Count);
 			print("drawCArd to json" + whatCard);
 			c = json.loadFile(gameManager.Decks[playerIndex][whatCard]+1);

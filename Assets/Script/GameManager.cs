@@ -99,8 +99,8 @@ public class GameManager : MonoBehaviour
 
 		for (int i = 0; i < 30; i++)
 		{
-			decks[0].Add(Random.Range(1, 28));
-			decks[1].Add(Random.Range(1, 28));
+			decks[0].Add(Random.Range(1, 29));
+			decks[1].Add(Random.Range(1, 29));
 		}
 
 		muliganScript = GameObject.Find("Muligan").GetComponent<MuliganScript>();

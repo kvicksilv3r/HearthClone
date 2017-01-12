@@ -57,15 +57,6 @@ public class CardGenerator : MonoBehaviour
 
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-
-		}
-	}
-
 	public void GenerateCard(int card)
 	{
 		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
@@ -75,6 +66,8 @@ public class CardGenerator : MonoBehaviour
 
 	public void GenerateCard(CARDS card)
 	{
+		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
+		c = json.loadFile(card.card_id);
 
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 		creature = GetComponent<Creature>();

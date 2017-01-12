@@ -19,38 +19,38 @@ public class Creature : CardClass
 
 	protected bool timeEffect;
 
-    [SerializeField]
+	[SerializeField]
 	protected bool hasTaunt;
 	//[SerializeField] private GameObject target;
 
 	public string enemyCreatureTag = "EnemyCreature";
 	public string enemyPlayerTag = "EnemyPlayer";
 
-    GameManager gameManager;
+	GameManager gameManager;
 
-    public Text creatureHPText;
-    public Text creatureDMGText;
+	public Text creatureHPText;
+	public Text creatureDMGText;
 
-    void Start()
-    {
-        creatureHPText.text = health.ToString();
-        creatureDMGText.text = strength.ToString();
+	void Start()
+	{
+		creatureHPText.text = health.ToString();
+		creatureDMGText.text = strength.ToString();
 
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-    }
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+	}
 
-    public void UpdateHP()
-    {
-		if(creatureHPText.text != null)
-        creatureHPText.text = health.ToString();
-    }
+	public void UpdateHP()
+	{
+		if (creatureHPText)
+			creatureHPText.text = health.ToString();
+	}
 
-    public void UpdateDMG()
-    {
-        creatureDMGText.text = strength.ToString();
-    }
+	public void UpdateDMG()
+	{
+		creatureDMGText.text = strength.ToString();
+	}
 
-    public int Health
+	public int Health
 	{
 		set { health = value; }
 		get { return health; }
@@ -62,11 +62,11 @@ public class Creature : CardClass
 		get { return strength; }
 	}
 
-    public int CurrentAttacks
-    {
-        set { currentAttacks = value; }
-        get { return currentAttacks; }
-    }
+	public int CurrentAttacks
+	{
+		set { currentAttacks = value; }
+		get { return currentAttacks; }
+	}
 
 	public bool IsDead
 	{
@@ -149,10 +149,10 @@ public class Creature : CardClass
 		currentAttacks = maxAttacks;
 	}
 
-    public IEnumerator Attack()
-    {
-        yield return new WaitForSeconds(waitTime);
-    }
+	public IEnumerator Attack()
+	{
+		yield return new WaitForSeconds(waitTime);
+	}
 
 	public IEnumerator Death()
 	{
@@ -161,10 +161,10 @@ public class Creature : CardClass
 		yield return new WaitForSeconds(waitTime);
 
 		GameObject.Find("GameManager").GetComponent<GameManager>().SetNumberOnBoard(ownerId, -1);
-        
+
 		Destroy(transform.parent.gameObject);
 
-        
-    }
+
+	}
 }
 

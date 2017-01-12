@@ -34,17 +34,17 @@ public class DrawManager : MonoBehaviour
 	{
 		if (gameManager.Decks[playerIndex].Count > 0)
 		{
-
 			int whatCard = Random.Range(0, gameManager.Decks[playerIndex].Count);
+			print("drawCArd to json" + whatCard);
 			c = json.loadFile(gameManager.Decks[playerIndex][whatCard]+1);
 			GameObject g;
 
-			if (c.card_type.ToLower() == "spell")
-			{
-				g = (Instantiate(spellCard, playerHands[playerIndex].transform, false) as GameObject);
-				g.transform.GetChild(0).GetComponent<SpellCardGenerator>().GenerateCard(c);
-			}
-			else
+			//if (c.card_type.ToLower() == "spell")
+			//{
+			//	g = (Instantiate(spellCard, playerHands[playerIndex].transform, false) as GameObject);
+			//	g.transform.GetChild(0).GetComponent<SpellCardGenerator>().GenerateCard(c);
+			//}
+			//else
 			{
 				g = (Instantiate(creatureCard, playerHands[playerIndex].transform, false) as GameObject);
 				g.transform.GetChild(0).GetComponent<CardGenerator>().GenerateCard(c);

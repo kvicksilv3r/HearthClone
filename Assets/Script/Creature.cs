@@ -12,6 +12,8 @@ public class Creature : CardClass
 	[SerializeField]
 	private float waitTime = 2f;
 
+	private bool dead = false;
+
 	[SerializeField]
 	private GameObject damageDisplay;
 
@@ -39,6 +41,7 @@ public class Creature : CardClass
 
     public void UpdateHP()
     {
+		if(creatureHPText.text != null)
         creatureHPText.text = health.ToString();
     }
 
@@ -65,7 +68,12 @@ public class Creature : CardClass
         get { return currentAttacks; }
     }
 
-    void Combat(GameObject enemy)
+	public bool IsDead
+	{
+		get { return dead; }
+	}
+
+	void Combat(GameObject enemy)
 	{
 		if (canAttack)
 		{
@@ -148,6 +156,7 @@ public class Creature : CardClass
 
 	public IEnumerator Death()
 	{
+		dead = true;
 		print(health);
 		yield return new WaitForSeconds(waitTime);
 

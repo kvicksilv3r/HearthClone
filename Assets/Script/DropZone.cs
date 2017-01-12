@@ -42,33 +42,24 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		}
 	}
 
-    public void LowerCardcount()
-    {
-        playfieldfCardCount--;
-    }
-
 	public void OnDrop(PointerEventData eventData)
 	{
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
 
 		if (d.transform.tag == "Coin" || gameManager.Players()[0].currentMana >= d.transform.GetChild(0).GetComponent<CardClass>().Card.mana)
 		{
-			if (d != null && playfieldfCardCount < maxCardsOnField && gameManager.PlayerTurn != 1 && d.transform.GetChild(0).GetComponent<CardClass>().OwnerId == 0 || d.transform.tag == "Coin")
+			if (d != null && gameManager.GetNumberOnBoard(0) < maxCardsOnField && gameManager.PlayerTurn != 1 && d.transform.GetChild(0).GetComponent<CardClass>().OwnerId == 0 || d.transform.tag == "Coin")
 			{
 				d.parentToReturnTo = this.transform;
 
 				if (!d.playedCard)
 				{
-                    if (d.transform.tag == "Coin")
-                    {
-                        d.PlayCard();
-                    }
-                    else
-                    {
-                        d.PlayCard();
-                        gameManager.ExpendMana(d.transform.GetChild(0).GetComponent<CardClass>().Card.mana);
-                        playfieldfCardCount++;
-                    }
+					d.PlayCard();
+					if (d.transform.tag != "Coin")
+					{
+						gameManager.ExpendMana(d.transform.GetChild(0).GetComponent<CardClass>().Card.mana);
+						gameManager.SetNumberOnBoard(d.transform.GetChild(0).GetComponent<CardClass>().OwnerId, 1);
+					}
 				}
 			}
 		}

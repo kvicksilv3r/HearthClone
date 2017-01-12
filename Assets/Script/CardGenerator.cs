@@ -215,6 +215,20 @@ public class CardGenerator : MonoBehaviour
 					GameObject roundEnd = Instantiate(endRoundStuff, transform, false);
 					roundEnd.GetComponent<RoundEndStuff>().effect = i;
 				}
+				if (i == 19)
+				{
+					int random = Random.Range(0, 100);
+					print(random);
+                    if (random > 50)
+					{
+						gameManager.DrawCard(creature.OwnerId);
+						gameManager.DrawCard(creature.OwnerId);
+					}
+				}
+				if(i == 23)
+				{
+					gameManager.HeroDamage(Mathf.Abs(creature.OwnerId + 1 - 2), 5);
+				}
 			}
 		}
 

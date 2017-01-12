@@ -61,21 +61,12 @@ public class MuliganScript : MonoBehaviour
 
 		numCards = numberOfCards;
 
-        if (numberOfCards == 4)
-        {
-            Instantiate(theCoin, playerHand.transform, false);
-        }
-        //else
-        //{
-        //	Instantiate(theCoin, aiHand.transform, false);
-        //}
-
         for (int i = 0; i < numberOfCards; i++)
 		{
-			int whatCard = Random.Range(1, decks[0].Count-1);
+			int whatCard = Random.Range(0, decks[0].Count);
 			print(whatCard);
 			
-			c = json.loadFile(decks[0][whatCard+1]);
+			c = json.loadFile(decks[0][whatCard]);
 
 
 			if (c.card_type.ToLower() == "spell")
@@ -93,7 +84,7 @@ public class MuliganScript : MonoBehaviour
 			muliganSelectors[i].transform.localPosition = new Vector3(0, 0, 0);
 			muliganSelectors[i].GetComponent<MuliganSelector>().id = i;
 			mulCards[i].GetComponent<Draggable>().enabled = false;
-			decks[0].RemoveAt(whatCard - 1);
+			decks[0].RemoveAt(whatCard);
 		}
 
 		AiMul();
@@ -104,6 +95,7 @@ public class MuliganScript : MonoBehaviour
 		for (int i = 0; i < 3 + (4 - numCards); i++)
 		{
 			int whatAiCard = Random.Range(0, decks[1].Count);
+
 			c = json.loadFile(decks[1][whatAiCard]);
 			aiCards.Add(c);
 			print(c.card_name);
@@ -194,6 +186,15 @@ public class MuliganScript : MonoBehaviour
             g.transform.GetChild(0).GetComponent<CardClass>().OwnerId = 1;
             g.transform.GetComponent<Draggable>().enabled = false;
         }
+
+		if (numCards == 4)
+		{
+			Instantiate(theCoin, playerHand.transform, false);
+		}
+		else
+		{
+			Instantiate(theCoin, aiHand.transform, false);
+		}
 
 		Destroy(gameObject);
 	}

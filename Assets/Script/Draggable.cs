@@ -196,6 +196,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	{
         if (transform.GetChild(0).gameObject.GetComponent<CardClass>().CardType.ToLower() != "spell")
         {
+			dragging = false;
             //transform.position = new Vector3(0, 0, 0);
             if (transform.tag != "Coin")
             {
@@ -204,14 +205,15 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                 GameObject.Find("GameManager").GetComponent<GameManager>().IsSleeping = true;
                 transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
                 transform.GetChild(0).GetComponent<CardGenerator>().PlayedCard();
-            }
+			}
 
             if(transform.tag == "Coin")
             {
                 gameManager.PlayedCoin(0);
-                playedCard = true;
-                Destroy(placeHolder);
-                Destroy(transform.gameObject);
+				//playedCard = true;
+				Destroy(placeHolder);
+                Destroy(gameObject);
+                //Destroy(transform.gameObject);
             }
 		}
     }

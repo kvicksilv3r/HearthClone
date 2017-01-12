@@ -7,13 +7,13 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 	public float roundTime; //Counts down the current time
-    bool youWon = false;
-    bool youLost = false;
-    [SerializeField]
-    GameObject win;
-    [SerializeField]
-    GameObject lost;
-    public bool tauntOnField;
+	bool youWon = false;
+	bool youLost = false;
+	[SerializeField]
+	GameObject win;
+	[SerializeField]
+	GameObject lost;
+	public bool tauntOnField;
 	[SerializeField]
 	protected float maxTime; // How long will a round be?
 	protected int whosTurn = 0;
@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
 	protected int timeIndex = 0; //0 = dawn, 1 = day, 2 = night
 	protected int roundsBetweenTimeChange = 2;
 	protected int currentRoundstoTimeChange; //Current rounds between timechange
-	protected List<int>[] decks = new List<int>[2]; //Guess we should keep the decks here
+	protected List<int>[] decks = new List<int>[2];//Guess we should keep the decks here
+	
 	protected int[] creatureNumOnBoard = new int[] { 0, 0 }; //Keeps track of numbers of creatures on the board
 	protected Player[] players = new Player[2];
 	protected bool isSleeping = false;
@@ -93,22 +94,21 @@ public class GameManager : MonoBehaviour
 
 		for (int i = 0; i < 30; i++)
 		{
-			decks[0].Add(Random.Range(1, 9));
-			decks[1].Add(Random.Range(10, 18) -9);
+			decks[0].Add(Random.Range(1, 28));
+			decks[1].Add(Random.Range(1, 28));
 		}
 
 		muliganScript = GameObject.Find("Muligan").GetComponent<MuliganScript>();
 
 		muliganScript.BeginMuligan(3 + whosTurn);
-
 	}
 
-    public void LoadMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
-    }
+	public void LoadMainMenu()
+	{
+		SceneManager.LoadScene("MainMenu");
+	}
 
-    void Update()
+	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.M))
 		{
@@ -176,7 +176,7 @@ public class GameManager : MonoBehaviour
 			GameObject.Find("Board").BroadcastMessage("RoundEndActions");
 		}
 
-        if (coinUsed)
+		if (coinUsed)
 		{
 			RemoveMana(coinPlayer);
 			coinUsed = false;
@@ -215,22 +215,27 @@ public class GameManager : MonoBehaviour
 
 		if (whosTurn == 1)
 		{
-            GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
-
-            foreach (Transform child in GameObject.Find("Player Playfield").transform)
-            {
-                child.GetChild(0).GetComponent<Creature>().CanAttack = true;
-            }
+			foreach (Transform child in GameObject.Find("Player Playfield").transform)
+			{
+				if (child != null)
+				{
+					if (child.GetChild(0).GetComponent<Creature>())
+					{
+						child.GetChild(0).GetComponent<Creature>().CanAttack = true;
+					}
+				}
+			}
+			GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
 		}
 		UpdateMana();
 		if (whosTurn == 0)
-        {
-            foreach (Transform child in GameObject.Find("Enemy Playfield").transform)
-            {
-                child.GetChild(0).GetComponent<Creature>().CanAttack = true;
-            }
-        }
-        CheckForTauntOnField();
+		{
+			foreach (Transform child in GameObject.Find("Enemy Playfield").transform)
+			{
+				child.GetChild(0).GetComponent<Creature>().CanAttack = true;
+			}
+		}
+		CheckForTauntOnField();
 	}
 
 	void AddMana()
@@ -275,7 +280,7 @@ public class GameManager : MonoBehaviour
 	public void HeroDamage(int playerIndex, int dmgTaken)
 	{
 		players[playerIndex].health -= dmgTaken;
-        
+
 		UpdateHealth();
 
 		GameObject dDisplay = Instantiate(damageDisplay, heroes[playerIndex].transform, false);
@@ -283,26 +288,26 @@ public class GameManager : MonoBehaviour
 		dDisplay.transform.localRotation = Quaternion.Euler(0f, 200f, 0f);
 		dDisplay.GetComponent<DamageDisplay>().SetText(dmgTaken);
 
-        if (players[1].health < 1)
-        {
-            youWon = true;
-            win.SetActive(true);
-        }
+		if (players[1].health < 1)
+		{
+			youWon = true;
+			win.SetActive(true);
+		}
 
-        if (players[0].health < 1)
-        {
-            youLost = true;
-            lost.SetActive(true);
-        }
+		if (players[0].health < 1)
+		{
+			youLost = true;
+			lost.SetActive(true);
+		}
 
-    }
+	}
 
 	public void PlayedCoin(int playerIndex)
 	{
 		coinPlayer = playerIndex;
-        //players[playerIndex].maxMana++;
-        //UpdateMana();
-        AddMana();
+		//players[playerIndex].maxMana++;
+		//UpdateMana();
+		AddMana();
 		coinUsed = true;
 	}
 
@@ -412,19 +417,19 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-    public void CheckForTauntOnField()
-    {
-        foreach (Transform enemyCreature in GameObject.Find("Enemy Playfield").transform)
-        {
-            if (enemyCreature.GetChild(0).GetComponent<Creature>().HasTaunt)
-            {
-                tauntOnField = true;
-                break;
-            }
-            else
-            {
-                tauntOnField = false;
-            }
-        }
-    }
+	public void CheckForTauntOnField()
+	{
+		foreach (Transform enemyCreature in GameObject.Find("Enemy Playfield").transform)
+		{
+			if (enemyCreature.GetChild(0).GetComponent<Creature>().HasTaunt)
+			{
+				tauntOnField = true;
+				break;
+			}
+			else
+			{
+				tauntOnField = false;
+			}
+		}
+	}
 }

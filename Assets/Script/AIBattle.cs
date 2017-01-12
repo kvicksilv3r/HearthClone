@@ -42,6 +42,11 @@ public class AIBattle : MonoBehaviour
 
 		foreach (Creature creature in transform.GetComponentsInChildren<Creature>())
 		{
+			if(creature.Strength <= 0)
+			{
+				continue;
+			}
+
 			aiCreature = creature;
 			while (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack)
 			{
@@ -96,7 +101,7 @@ public class AIBattle : MonoBehaviour
 
 		foreach (Creature cr in transform.GetComponentsInChildren<Creature>())
 		{
-			if (cr.CanAttack && cr.CurrentAttacks > 0)
+			if (cr.CanAttack && cr.CurrentAttacks > 0 && cr.Strength > 0)
 				dmg += cr.Strength * cr.CurrentAttacks;
 		}
 
@@ -126,6 +131,10 @@ public class AIBattle : MonoBehaviour
 		foreach (Creature creature in GameObject.Find("Player Playfield").transform.GetComponentsInChildren<Creature>())
 		{
 			playerCreature = creature;
+			if (playerCreature.IsDead)
+			{
+				continue;
+			}
 
 			if (aiCreature.Strength >= playerCreature.Health && playerCreature.HasTaunt)
 			{

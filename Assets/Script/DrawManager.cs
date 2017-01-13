@@ -36,7 +36,7 @@ public class DrawManager : MonoBehaviour
 			json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
 			int whatCard = Random.Range(0, gameManager.Decks[playerIndex].Count);
 			print("drawCArd to json" + whatCard);
-			c = json.loadFile(gameManager.Decks[playerIndex][whatCard]+1);
+			c = json.loadFile(gameManager.Decks[playerIndex][whatCard+1]);
 			GameObject g;
 
 			//if (c.card_type.ToLower() == "spell")

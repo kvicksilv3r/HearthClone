@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class CARDS
 {
 	public int card_id;
@@ -21,5 +19,6 @@ public class CARDS
 	public int[] abilities_sp;
 	public string flavor_text;
 	public string day_or_night;
+	public bool deathrattle;
 }
 

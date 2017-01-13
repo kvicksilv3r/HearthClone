@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 
 public class SpellCardGenerator : MonoBehaviour
@@ -41,9 +40,9 @@ public class SpellCardGenerator : MonoBehaviour
 		spell = GetComponent<Spell>();
 		GetComponent<CardClass>().Card = card;
 
-		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".png";
-		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
-		
+		pictureAssetName = "Cards/Textures/" + c.picture_name;
+		portrait.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(pictureAssetName) as Texture;
+
 		manaTextObj.GetComponent<Text>().text = c.mana.ToString();
 		cardTextObj.GetComponent<Text>().text = c.description;
 		cardNameTextObj.GetComponent<Text>().text = c.card_name;
@@ -51,9 +50,9 @@ public class SpellCardGenerator : MonoBehaviour
 		gemHolderObj.SetActive(true);
         gemObj.SetActive(true);
 
-		gemObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Gems/gem_" + c.rarity + ".png", typeof(Texture2D));
+		gemObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Gems/gem_" + c.rarity) as Texture;
 
-		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_spell_" + c.class_name + ".png", typeof(Texture2D));
+		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Cardfronts/card_spell_" + c.class_name) as Texture;
 		transform.GetComponent<CardClass>().CardName = cardNameTextObj.GetComponent<Text>().text;
 	}
 

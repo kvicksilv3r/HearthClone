@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 
 public class MuliganScript : MonoBehaviour
@@ -121,7 +120,7 @@ public class MuliganScript : MonoBehaviour
 			foreach(CARDS mul in aiMul)
 			{
 				int whatAiCard = Random.Range(0, decks[1].Count);
-				aiCards.Add(json.loadFile(decks[1][whatAiCard+1]));
+				aiCards.Add(json.loadFile(decks[1][whatAiCard]));
 				decks[1].RemoveAt(whatAiCard);
 			}
 		}

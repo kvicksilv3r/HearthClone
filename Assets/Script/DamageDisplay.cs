@@ -8,7 +8,17 @@ public class DamageDisplay : MonoBehaviour {
 
 	public void SetText(int damage)
 	{
-		transform.GetChild(0).GetComponent<TextMesh>().text = "-" + damage.ToString();
+		//if negative value set emitting color greeen, change text to +S
+		if(damage < 0)
+		{
+			transform.GetChild(0).GetComponent<TextMesh>().text = "+" + damage.ToString();
+			//transform.GetChild(0).GetComponent<MeshRenderer>().material.color = Color.green;
+        }
+		else
+		{
+			transform.GetChild(0).GetComponent<TextMesh>().text = "-" + damage.ToString();
+		}
+		
 		transform.position = transform.parent.position + new Vector3(0, 3.5f, -1);
 		StartCoroutine("KillSelf");
 	}

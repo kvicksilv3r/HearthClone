@@ -19,6 +19,8 @@ public class Creature : CardClass
 
 	protected bool timeEffect;
 
+	protected bool deathrattle;
+
 	[SerializeField]
 	protected bool hasTaunt;
 	//[SerializeField] private GameObject target;
@@ -71,6 +73,12 @@ public class Creature : CardClass
 	public bool IsDead
 	{
 		get { return dead; }
+	}
+
+	public bool Deathrattle
+	{
+		get { return deathrattle; }
+		set { deathrattle = value; }
 	}
 
 	void Combat(GameObject enemy)
@@ -156,6 +164,10 @@ public class Creature : CardClass
 
 	public IEnumerator Death()
 	{
+		if (deathrattle)
+		{
+			BroadcastMessage("DeathRattle");
+		}
 		dead = true;
 		print(health);
 		yield return new WaitForSeconds(waitTime);

@@ -288,6 +288,11 @@ public class GameManager : MonoBehaviour
 	public void HeroDamage(int playerIndex, int dmgTaken)
 	{
 		players[playerIndex].health -= dmgTaken;
+		
+		if(players[playerIndex].health > 30)
+		{
+			players[playerIndex].health = 30;
+        }
 
 		UpdateHealth();
 

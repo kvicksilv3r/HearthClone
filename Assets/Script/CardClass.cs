@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class CardClass : MonoBehaviour
 {
-	CARDS cCards;
+
+	public CARDS cCards;
 
     [SerializeField]
     protected int rarity;

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 
 public class Hero : MonoBehaviour
@@ -30,8 +29,8 @@ public class Hero : MonoBehaviour
 
     public void GenerateHero()
     {
-        pictureAssetName = "Assets/Models/Heroes/Textures/" + cardPictureName + ".png";
-        portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
+        pictureAssetName = "Models/Heroes/Textures/" + cardPictureName;
+        portrait.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(pictureAssetName) as Texture2D;
 
         heroAbilityObj.GetComponent<Text>().text = heroAbilityName;
 

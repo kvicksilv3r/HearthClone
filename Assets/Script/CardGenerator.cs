@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 
 public class CardGenerator : MonoBehaviour
@@ -48,6 +47,8 @@ public class CardGenerator : MonoBehaviour
 	GameObject sleepingParticle;
 	[SerializeField]
 	GameObject endRoundStuff;
+	[SerializeField]
+	GameObject deathRattle;
 	ParseFromJSON json;
 	CARDS c;
 
@@ -67,15 +68,16 @@ public class CardGenerator : MonoBehaviour
 	public void GenerateCard(CARDS card)
 	{
 		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
-		c = json.loadFile(card.card_id);
+		//c = json.loadFile(card.card_id);
 
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 		creature = GetComponent<Creature>();
 		c = card;
 		GetComponent<CardClass>().Card = card;
-
-		pictureAssetName = "Assets/Cards/Textures/" + c.picture_name + ".png";
-		portrait.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(pictureAssetName, typeof(Texture2D));
+		
+		pictureAssetName = "Cards/Textures/" + c.picture_name;
+		print(pictureAssetName);
+		portrait.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(pictureAssetName) as Texture;
 
 		UpdateText();
 		manaTextObj.GetComponent<Text>().text = c.mana.ToString();
@@ -101,6 +103,8 @@ public class CardGenerator : MonoBehaviour
 		creature.Strength = c.damage;
 		creature.MaxAttacks = 1;
 		creature.CurrentAttacks = 0;
+		creature.CardId = c.card_id;
+		creature.Deathrattle = c.deathrattle;
 
 		if (c.abilities_cr.GetLength(0) > 0)
 		{
@@ -170,9 +174,9 @@ public class CardGenerator : MonoBehaviour
 		gemHolderObj.SetActive(true);
 		gemObj.SetActive(true);
 
-		gemObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Gems/gem_" + c.rarity + ".png", typeof(Texture2D));
+		gemObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Gems/gem_" + c.rarity) as Texture2D;
 
-		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Cards/Textures/Cardfronts/card_minion_" + c.class_name + ".png", typeof(Texture2D));
+		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Cardfronts/card_minion_" + c.class_name) as Texture;
 		transform.GetComponent<CardClass>().CardName = cardNameTextObj.GetComponent<Text>().text;
 	}
 
@@ -181,6 +185,10 @@ public class CardGenerator : MonoBehaviour
 		hpPos.SetActive(true);
 		dmgPos.SetActive(true);
 
+		if (c.deathrattle)
+		{
+			Instantiate(deathRattle, transform, false);
+		}
 
 		if (c.abilities_cr.GetLength(0) > 0)
 		{

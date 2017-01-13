@@ -106,11 +106,11 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
                     Physics.Raycast(ray, out hit, 1000, lMask);
 
-                    transform.position = hit.point + new Vector3(0, 0, -0.1f);
+                    transform.position = hit.point + new Vector3(0, 0, -2f);
                     //this.transform.position = eventData.position;
                     //transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
 
-                    if (placeHolder.transform.parent != placeHolderParent && DropZone.playfieldfCardCount < DropZone.maxCardsOnField)
+                    if (placeHolder.transform.parent != placeHolderParent && gameManager.GetNumberOnBoard(0) < DropZone.maxCardsOnField)
                     {
                         placeHolder.transform.SetParent(placeHolderParent);
                     }

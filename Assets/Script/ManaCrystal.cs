@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-
 public class ManaCrystal : MonoBehaviour
 {
 
-	string fullCrystal = "mana_gem.png";
-	string emptyCrystal = "mana_gem_empty.png";
-	string assetPath = "Assets/Cards/Textures/";
+	string fullCrystal = "mana_gem";
+	string emptyCrystal = "mana_gem_empty";
+	string assetPath = "Cards/Textures/";
 
 	// Use this for initialization
 	void Start()
@@ -23,12 +21,12 @@ public class ManaCrystal : MonoBehaviour
 
 	public void EmptyMana()
 	{
-		GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(assetPath + emptyCrystal, typeof(Texture2D));
+		GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(assetPath + emptyCrystal) as Texture;
 	}
 
 	public void Reset()
 	{
-		GetComponent<MeshRenderer>().material.mainTexture = (Texture2D)AssetDatabase.LoadAssetAtPath(assetPath + fullCrystal, typeof(Texture2D));
+		GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(assetPath + fullCrystal) as Texture;
 	}
 
 

@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 //By Johanna Pettersson
 
 public class ButtonBehaviour : MonoBehaviour {
-
     [SerializeField]
     protected GameObject settingsMenu;
 
@@ -19,20 +18,43 @@ public class ButtonBehaviour : MonoBehaviour {
     [SerializeField]
     protected GameObject optionsMenu;
 
+    [SerializeField]
+    protected GameObject[] otherCanvas;
+
+    [SerializeField]
+    protected GameObject popUpInfo;
+
 
     // Use this for initialization
-    void Start () {
-		
-	}
-	
+    void Start()
+    {
+
+    }
+
     public void LoadMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
     }
 
+
+    public void LoadMyCollection()
+    {
+        SceneManager.LoadScene("MyCollection");
+    }
+
     public void LoadLevel()
     {
         SceneManager.LoadScene("Cardgames On Motorcycles");
+    }
+
+    public void LoadOpenPacks()
+    {
+        SceneManager.LoadScene("OpenPacks");
+    }
+
+    public void LoadChooseDeck()
+    {
+        SceneManager.LoadScene("ChooseYourDeck");
     }
 
     public void LoadSettings()
@@ -54,10 +76,24 @@ public class ButtonBehaviour : MonoBehaviour {
     {
         Application.Quit();
     }
-    
+
     public void LoadOptions()
     {
         optionsMenu.gameObject.SetActive(!optionsMenu.gameObject.active);
+    }
+
+
+    public void LoadPopUpInfo()
+    {
+        popUpInfo.gameObject.SetActive(!popUpInfo.gameObject.active);
+    }
+
+    public void InactivateCanvases()
+    {
+        foreach (GameObject canvas in otherCanvas)
+        {
+            canvas.gameObject.SetActive(!canvas.gameObject.active);
+        }
     }
 
 }

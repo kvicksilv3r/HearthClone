@@ -57,6 +57,11 @@ public class ButtonBehaviour : MonoBehaviour {
         SceneManager.LoadScene("ChooseYourDeck");
     }
 
+    public void LoadCredits()
+    {
+        SceneManager.LoadScene("Credits");
+    }
+
     public void LoadSettings()
     {
         settingsMenu.gameObject.SetActive(!settingsMenu.gameObject.active);

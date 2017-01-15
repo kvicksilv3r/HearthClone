@@ -25,7 +25,7 @@ public class SoundManager : MonoBehaviour {
 
     void Awake()
     {
-        volumeSlider.value = volumeAudio.volume; 
+        //volumeSlider.value = volumeAudio.volume; 
             
     }
 

@@ -19,7 +19,7 @@ public class Creature : CardClass
 
 	protected bool timeEffect;
 
-	protected bool deathrattle;
+	protected bool deathrattle, onattack;
 
 	[SerializeField]
 	protected bool hasTaunt;

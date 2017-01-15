@@ -82,8 +82,20 @@ public class ButtonBehaviour : MonoBehaviour {
         optionsMenu.gameObject.SetActive(!optionsMenu.gameObject.active);
     }
 
+	public void PriestPic()
+	{
+		GameObject.Find("ImgPlane").GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Models/Heroes/Textures/hero_priest_oliver") as Texture;
+		GameObject.Find("HeroPowerPic").GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Models/Heroes/Textures/hero_priest_oliver") as Texture;
+    }
 
-    public void LoadPopUpInfo()
+	public void WarlockPic()
+	{
+		GameObject.Find("ImgPlane").GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Models/Heroes/Textures/hero_warlock_oliver") as Texture;GameObject.Find("ImgPlane").GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Models/Heroes/Textures/hero_warlock_oliver") as Texture;
+		GameObject.Find("HeroPowerPic").GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Models/Heroes/Textures/hero_warlock_oliver") as Texture;
+	}
+
+
+	public void LoadPopUpInfo()
     {
         popUpInfo.gameObject.SetActive(!popUpInfo.gameObject.active);
     }

@@ -63,10 +63,8 @@ public class MuliganScript : MonoBehaviour
         for (int i = 0; i < numberOfCards; i++)
 		{
 			int whatCard = Random.Range(0, decks[0].Count);
-			print(whatCard);
 			
 			c = json.loadFile(decks[0][whatCard]);
-
 
 			if (c.card_type.ToLower() == "spell")
 			{

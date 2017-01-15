@@ -50,7 +50,7 @@ public class CardGenerator : MonoBehaviour
 	[SerializeField]
 	GameObject deathRattle;
 	ParseFromJSON json;
-	CARDS c;
+	CARDS card;
 
 	void Start()
 	{
@@ -58,57 +58,56 @@ public class CardGenerator : MonoBehaviour
 
 	}
 
-	public void GenerateCard(int card)
+	public void GenerateCard(int cardId)
 	{
 		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
-		c = json.loadFile(card);
-		GenerateCard(c);
+		card = json.loadFile(cardId);
+		GenerateCard(card);
 	}
 
 	public void GenerateCard(CARDS card)
 	{
 		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
-		//c = json.loadFile(card.card_id);
 
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 		creature = GetComponent<Creature>();
-		c = card;
+		this.card = card;
 		GetComponent<CardClass>().Card = card;
-		
-		pictureAssetName = "Cards/Textures/" + c.picture_name;
+
+		pictureAssetName = "Cards/Textures/" + this.card.picture_name;
 		print(pictureAssetName);
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(pictureAssetName) as Texture;
 
 		UpdateText();
-		manaTextObj.GetComponent<Text>().text = c.mana.ToString();
-		cardTextObj.GetComponent<Text>().text = c.description;
-		cardNameTextObj.GetComponent<Text>().text = c.card_name;
+		manaTextObj.GetComponent<Text>().text = this.card.mana.ToString();
+		cardTextObj.GetComponent<Text>().text = this.card.description;
+		cardNameTextObj.GetComponent<Text>().text = this.card.card_name;
 
-		creature.Health = c.health;
-		creature.Strength = c.damage;
-		creature.CardCost = c.mana;
+		creature.Health = this.card.health;
+		creature.Strength = this.card.damage;
+		creature.CardCost = this.card.mana;
 
 
-		if (c.race != "none")
+		if (this.card.race != "none")
 		{
-			cardRaceTextObj.GetComponent<Text>().text = c.race;
+			cardRaceTextObj.GetComponent<Text>().text = this.card.race;
 			cardRaceObj.SetActive(true);
 		}
 
-		if (c.rarity.ToLower() == "legendary")
+		if (this.card.rarity.ToLower() == "legendary")
 		{
 			dragonObj.SetActive(true);
 		}
 
-		creature.Strength = c.damage;
+		creature.Strength = this.card.damage;
 		creature.MaxAttacks = 1;
 		creature.CurrentAttacks = 0;
-		creature.CardId = c.card_id;
-		creature.Deathrattle = c.deathrattle;
+		creature.CardId = this.card.card_id;
+		creature.Deathrattle = this.card.deathrattle;
 
-		if (c.abilities_cr.GetLength(0) > 0)
+		if (this.card.abilities_cr.GetLength(0) > 0)
 		{
-			foreach (int i in c.abilities_cr)
+			foreach (int i in this.card.abilities_cr)
 			{
 				if (i == 1)
 				{
@@ -157,7 +156,7 @@ public class CardGenerator : MonoBehaviour
 			}
 		}
 
-		if (c.day_or_night != "none")
+		if (this.card.day_or_night != "none")
 		{
 			creature.TimeEffect = true;
 		}
@@ -174,9 +173,9 @@ public class CardGenerator : MonoBehaviour
 		gemHolderObj.SetActive(true);
 		gemObj.SetActive(true);
 
-		gemObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Gems/gem_" + c.rarity) as Texture2D;
+		gemObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Gems/gem_" + this.card.rarity) as Texture2D;
 
-		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Cardfronts/card_minion_" + c.class_name) as Texture;
+		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Cardfronts/card_minion_" + this.card.class_name) as Texture;
 		transform.GetComponent<CardClass>().CardName = cardNameTextObj.GetComponent<Text>().text;
 	}
 
@@ -185,14 +184,14 @@ public class CardGenerator : MonoBehaviour
 		hpPos.SetActive(true);
 		dmgPos.SetActive(true);
 
-		if (c.deathrattle)
+		if (card.deathrattle)
 		{
 			Instantiate(deathRattle, transform, false);
 		}
 
-		if (c.abilities_cr.GetLength(0) > 0)
+		if (card.abilities_cr.GetLength(0) > 0)
 		{
-			foreach (int i in c.abilities_cr)
+			foreach (int i in card.abilities_cr)
 			{
 				if (i == 4)
 				{

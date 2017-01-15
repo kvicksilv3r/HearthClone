@@ -72,7 +72,6 @@ public class BattleTargeting : MonoBehaviour
 									else if (hit.transform.GetComponent<Creature>().HasTaunt)
 									{
 										lastTarget = hit.transform.gameObject;
-										print("Target hit was: " + lastTarget.GetComponent<CardClass>().CardName);
 
 										lastTarget.GetComponent<Creature>().TakeDamage(transform.parent.parent.GetComponent<Creature>().Strength);
 										transform.parent.parent.GetComponent<Creature>().TakeDamage(lastTarget.GetComponent<Creature>().Strength);

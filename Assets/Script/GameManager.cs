@@ -235,6 +235,10 @@ public class GameManager : MonoBehaviour
 			}
 			GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
 		}
+		else
+		{
+			GameObject.Find("YourTurn").GetComponent<YourTurn>().DisplayYourTurn();
+		}
 		UpdateMana();
 		if (whosTurn == 0)
 		{

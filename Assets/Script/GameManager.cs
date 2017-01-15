@@ -215,31 +215,31 @@ public class GameManager : MonoBehaviour
 		DrawCard(whosTurn);
 		heroPowerUsed[whosTurn] = false;
 
-		GameObject.Find("Board").BroadcastMessage("ResetAttacks");
+		if (boards[whosTurn].GetComponentInChildren<Creature>())
+		{
+			boards[whosTurn].BroadcastMessage("ResetAttacks");
+		}
 
 		players[whosTurn].currentMana = players[whosTurn].maxMana;
 		players[whosTurn].usedPower = false;
 		roundTime = maxTime;
 
+		if (boards[whosTurn].GetComponentInChildren<OnRoundStart>())
+		{
+			boards[whosTurn].BroadcastMessage("RoundStart");
+		}
+
 		if (whosTurn == 1)
 		{
-			foreach (Transform child in GameObject.Find("Player Playfield").transform)
-			{
-				if (child != null)
-				{
-					if (child.GetChild(0).GetComponent<Creature>())
-					{
-						child.GetChild(0).GetComponent<Creature>().CanAttack = true;
-					}
-				}
-			}
 			GameObject.Find("Enemy Hand").GetComponent<AI>().AITurn();
 		}
 		else
 		{
 			GameObject.Find("YourTurn").GetComponent<YourTurn>().DisplayYourTurn();
 		}
+
 		UpdateMana();
+
 		if (whosTurn == 0)
 		{
 			foreach (Transform child in GameObject.Find("Enemy Playfield").transform)
@@ -247,6 +247,7 @@ public class GameManager : MonoBehaviour
 				child.GetChild(0).GetComponent<Creature>().CanAttack = true;
 			}
 		}
+
 		CheckForTauntOnField();
 	}
 
@@ -438,6 +439,11 @@ public class GameManager : MonoBehaviour
 	{
 		get { return isSleeping; }
 		set { isSleeping = value; }
+	}
+
+	public void UpdateCreatureHp()
+	{
+		GameObject.Find("Board").BroadcastMessage("UpdateHP");
 	}
 
 	IEnumerator ChangeLight()

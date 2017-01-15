@@ -48,66 +48,66 @@ public class CardGenerator : MonoBehaviour
 	[SerializeField]
 	GameObject endRoundStuff;
 	[SerializeField]
-	GameObject deathRattle;
+	GameObject deathRattle, startRoundAbility;
 	ParseFromJSON json;
 	CARDS card;
-
-	void Start()
-	{
-		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
-
-	}
-
+	
 	public void GenerateCard(int cardId)
 	{
-		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
-		card = json.loadFile(cardId);
-		GenerateCard(card);
+		card = GameObject.Find("GameManager").GetComponent<ParseFromJSON>().loadFile(cardId);
+		GenerateCard();
 	}
 
-	public void GenerateCard(CARDS card)
+	public void GenerateCard(CARDS cardd)
 	{
-		json = GameObject.Find("GameManager").GetComponent<ParseFromJSON>();
+		card = cardd;
+		GenerateCard();
+	}
 
+
+	public void GenerateCard()
+	{
+		
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 		creature = GetComponent<Creature>();
-		this.card = card;
 		GetComponent<CardClass>().Card = card;
 
-		pictureAssetName = "Cards/Textures/" + this.card.picture_name;
+		pictureAssetName = "Cards/Textures/" + card.picture_name;
 		print(pictureAssetName);
 		portrait.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load(pictureAssetName) as Texture;
 
 		UpdateText();
-		manaTextObj.GetComponent<Text>().text = this.card.mana.ToString();
-		cardTextObj.GetComponent<Text>().text = this.card.description;
-		cardNameTextObj.GetComponent<Text>().text = this.card.card_name;
+		manaTextObj.GetComponent<Text>().text = card.mana.ToString();
+		cardTextObj.GetComponent<Text>().text = card.description;
+		cardNameTextObj.GetComponent<Text>().text = card.card_name;
 
-		creature.Health = this.card.health;
-		creature.Strength = this.card.damage;
-		creature.CardCost = this.card.mana;
+		creature.Health = card.health;
+		creature.Strength = card.damage;
+		creature.CardCost = card.mana;
+		creature.Abilities = card.abilities_cr;
 
 
-		if (this.card.race != "none")
+		if (card.race != "none")
 		{
-			cardRaceTextObj.GetComponent<Text>().text = this.card.race;
+			cardRaceTextObj.GetComponent<Text>().text = card.race;
 			cardRaceObj.SetActive(true);
+			creature.Race = card.race;
 		}
 
-		if (this.card.rarity.ToLower() == "legendary")
+		if (card.rarity.ToLower() == "legendary")
 		{
 			dragonObj.SetActive(true);
 		}
 
-		creature.Strength = this.card.damage;
+		creature.Strength = card.damage;
 		creature.MaxAttacks = 1;
 		creature.CurrentAttacks = 0;
-		creature.CardId = this.card.card_id;
-		creature.Deathrattle = this.card.deathrattle;
+		creature.CardId = card.card_id;
+		creature.Deathrattle = card.deathrattle;
 
-		if (this.card.abilities_cr.GetLength(0) > 0)
+		if (card.abilities_cr.GetLength(0) > 0)
 		{
-			foreach (int i in this.card.abilities_cr)
+			foreach (int i in card.abilities_cr)
 			{
 				if (i == 1)
 				{
@@ -121,42 +121,10 @@ public class CardGenerator : MonoBehaviour
 				{
 					creature.MaxAttacks = 2;
 				}
-				else if (i == 5)
-				{
-					if (gameManager.TimeIndex == 1)
-					{
-						creature.Strength -= 3;
-						creature.Health -= 3;
-					}
-				}
-				else if (i == 6)
-				{
-					//day -3-3
-				}
-
-				else if (i == 7)
-				{
-					//give +0+2 +taunt 
-					// give as spell?
-				}
-
-				else if (i == 8)
-				{
-					//attach object, deal 1 dmg on round start
-				}
-				if (i == 9)
-				{
-					//no heals
-				}
-				else if (i == 10)
-				{
-					//night lifelink; day -2-0
-				}
-
 			}
 		}
 
-		if (this.card.day_or_night != "none")
+		if (card.day_or_night != "none")
 		{
 			creature.TimeEffect = true;
 		}
@@ -173,9 +141,9 @@ public class CardGenerator : MonoBehaviour
 		gemHolderObj.SetActive(true);
 		gemObj.SetActive(true);
 
-		gemObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Gems/gem_" + this.card.rarity) as Texture2D;
+		gemObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Gems/gem_" + card.rarity) as Texture2D;
 
-		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Cardfronts/card_minion_" + this.card.class_name) as Texture;
+		cardFaceObj.GetComponent<MeshRenderer>().material.mainTexture = Resources.Load("Cards/Textures/Cardfronts/card_minion_" + card.class_name) as Texture;
 		transform.GetComponent<CardClass>().CardName = cardNameTextObj.GetComponent<Text>().text;
 	}
 
@@ -195,36 +163,45 @@ public class CardGenerator : MonoBehaviour
 			{
 				if (i == 4)
 				{
-					if (gameManager.TimeIndex == 2)
+					NightStalkerAbility();
+                }
+
+				else if(i == 5)
+				{
+					if (gameManager.TimeIndex == 1)
 					{
-						creature.Strength += 2;
-						creature.Health -= 1;
-					}
-					else if (gameManager.TimeIndex == 1)
-					{
-						creature.Strength -= 1;
-						creature.Health += 2;
+						creature.Strength -= 3;
+						creature.Health -= 3;
 					}
 				}
-				if (i == 11)
+				else if (i == 11)
 				{
 					gameManager.HeroDamage(creature.OwnerId, 2);
 				}
-				if (i == 12)
+				else if (i == 12)
 				{
 					GameObject roundEnd = Instantiate(endRoundStuff, transform, false);
 					roundEnd.GetComponent<RoundEndStuff>().effect = i;
 				}
-				if (i == 14)
+				else if (i == 14)
 				{
 					FableCreatureAbility();
 				}
-				if (i == 19)
+
+				else if (i == 16)
+				{
+					if(gameManager.TimeIndex == 2)
+					{
+						creature.MaxAttacks = 2;
+					}
+				}
+
+				else if (i == 19)
 				{
 					MissionaryAbility();
 				}
 
-				if (i == 22)
+				else if (i == 22)
 				{
 					if (gameManager.TimeIndex == 1)
 					{
@@ -232,14 +209,22 @@ public class CardGenerator : MonoBehaviour
 					}
 				}
 
-				if (i == 23)
+				else if (i == 23)
 				{
 					gameManager.HeroDamage(Mathf.Abs(creature.OwnerId + 1 - 2), 5);
 				}
 
-				if (i == 25)
+				else if (i == 25)
 				{
 					WyvernAbility();
+				}
+
+				else if (i == 27)
+				{
+					if(gameManager.TimeIndex == 1)
+					{
+						ExorcistAbility();
+					}
 				}
 			}
 		}
@@ -263,6 +248,38 @@ public class CardGenerator : MonoBehaviour
 		damageTextObj.transform.position = dmgPos.transform.position - new Vector3(0, 0, 0.2f);
 		UpdateText();
 	}
+
+	void NightStalkerAbility()
+	{
+		if (gameManager.TimeIndex == 2)
+		{
+			creature.Strength += 2;
+			creature.Health -= 1;
+		}
+		else if (gameManager.TimeIndex == 1)
+		{
+			creature.Strength -= 1;
+			creature.Health += 2;
+		}
+	}
+
+	void ExorcistAbility()
+	{
+		List<Creature> demons = new List<Creature>();
+
+		foreach (Creature cr in gameManager.Boards[Mathf.Abs(creature.OwnerId + 1 - 2)].transform.GetComponentsInChildren<Creature>())
+		{
+			if(cr.Race.ToLower() == "demon")
+			{
+				demons.Add(cr);
+			}
+		}
+
+		if (demons.Count > 0)
+		{
+			demons[Random.Range(0, demons.Count)].Death(true);
+		}
+    }
 
 	void WyvernAbility()
 	{
@@ -332,7 +349,8 @@ public class CardGenerator : MonoBehaviour
 			if (toDie.Count > 0)
 			{
 				int whatToDie = Random.Range(0, toDie.Count);
-				toDie[whatToDie].TakeDamage(toDie[whatToDie].Health);
+				print("should DIE");
+				toDie[whatToDie].StartCoroutine("Death", true);
 			}
 		}
 	}

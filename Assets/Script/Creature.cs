@@ -14,11 +14,14 @@ public class Creature : CardClass
 
 	private bool dead = false;
 
+	protected int[] abilities;
+
 	[SerializeField]
 	private GameObject damageDisplay;
 
 	protected bool timeEffect;
 
+	protected string race;
 	protected bool deathrattle, onattack;
 
 	[SerializeField]
@@ -27,6 +30,9 @@ public class Creature : CardClass
 
 	public string enemyCreatureTag = "EnemyCreature";
 	public string enemyPlayerTag = "EnemyPlayer";
+
+	[SerializeField]
+	GameObject deathDisplay;
 
 	GameManager gameManager;
 
@@ -45,6 +51,12 @@ public class Creature : CardClass
 	{
 		if (creatureHPText)
 			creatureHPText.text = health.ToString();
+	}
+
+	public int[] Abilities
+	{
+		get { return abilities; }
+		set { abilities = value; }
 	}
 
 	public void UpdateDMG()
@@ -108,6 +120,12 @@ public class Creature : CardClass
 
 	}
 
+	public string Race
+	{
+		get { return race; }
+		set { race = value; }
+	}
+
 	public bool HasTaunt
 	{
 		get { return hasTaunt; }
@@ -144,7 +162,7 @@ public class Creature : CardClass
 			currentAttacks = 0;
 			print(Card.card_name + " ahould be dead, yo");
 			health = 0;
-			StartCoroutine("Death");
+			StartCoroutine("Death", false);
 		}
 		else
 		{
@@ -154,7 +172,11 @@ public class Creature : CardClass
 
 	public void ResetAttacks()
 	{
-		currentAttacks = maxAttacks;
+		if (gameManager.PlayerTurn == ownerId)
+		{
+			currentAttacks = maxAttacks;
+			CanAttack = true;
+		}
 	}
 
 	public IEnumerator Attack()
@@ -162,21 +184,26 @@ public class Creature : CardClass
 		yield return new WaitForSeconds(waitTime);
 	}
 
-	public IEnumerator Death()
+	public IEnumerator Death(bool destroyed)
 	{
+		dead = true;
+
 		if (deathrattle)
 		{
 			BroadcastMessage("DeathRattle");
 		}
-		dead = true;
-		print(health);
+
+		if (destroyed)
+		{
+			GameObject dDisplay = Instantiate(deathDisplay, transform, false);
+			dDisplay.transform.position = transform.parent.position + new Vector3(0, 3.5f, -1);
+		}
+		
 		yield return new WaitForSeconds(waitTime);
 
 		GameObject.Find("GameManager").GetComponent<GameManager>().SetNumberOnBoard(ownerId, -1);
 
 		Destroy(transform.parent.gameObject);
-
-
 	}
 }
 

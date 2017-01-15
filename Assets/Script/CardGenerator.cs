@@ -211,7 +211,8 @@ public class CardGenerator : MonoBehaviour
 
 				else if (i == 23)
 				{
-					gameManager.HeroDamage(Mathf.Abs(creature.OwnerId + 1 - 2), 5);
+					gameManager.HeroDamage(Mathf.Abs(creature.OwnerId + 1 - 2), 3);
+					gameManager.HeroDamage(creature.OwnerId, -5);
 				}
 
 				else if (i == 25)

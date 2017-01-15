@@ -8,6 +8,8 @@ public class MuliganSelector : MonoBehaviour {
 	bool visible;
 	[SerializeField]
 	GameObject selectorDisplay;
+	[SerializeField]
+	GameObject glow;
 
 	// Use this for initialization
 	void Start () {
@@ -24,5 +26,6 @@ public class MuliganSelector : MonoBehaviour {
 		visible = !visible;
 		transform.parent.parent.GetComponent<MuliganScript>().ChoseDiscard(id);
 		selectorDisplay.SetActive(visible);
+		glow.SetActive(!visible);
 	}
 }

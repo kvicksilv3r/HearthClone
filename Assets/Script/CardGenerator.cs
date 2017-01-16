@@ -194,7 +194,6 @@ public class CardGenerator : MonoBehaviour
 						break;
 
 					case 13:
-
 						OldSeerAbility();
 						break;
 
@@ -402,6 +401,7 @@ public class CardGenerator : MonoBehaviour
 		if (gameManager.TimeIndex == 2)
 		{
 			creature.MaxAttacks = 2;
+			creature.CurrentAttacks = 2;
 		}
 		Instantiate(timeChangeAbility, transform, false);
 	}
@@ -420,6 +420,7 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (gameManager.GetNumberOnBoard(creature.OwnerId) <= 0)
 		{
+			print(gameManager.GetNumberOnBoard(creature.OwnerId));
 			creature.Strength += 1;
 			creature.Health += 1;
 		}
@@ -532,6 +533,7 @@ public class CardGenerator : MonoBehaviour
 			foreach (Creature cr in gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>())
 			{
 				cr.CanAttack = true;
+				gameManager.StopSleeping();
 			}
         }
     }
@@ -542,8 +544,16 @@ public class CardGenerator : MonoBehaviour
 		{
 			foreach (Creature cr in gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>())
 			{
-				creature.Strength += 1;
 				creature.Health += 1;
+
+				if(gameManager.TimeIndex == 2)
+				{
+					creature.Strength += 2;
+				}
+				else
+				{
+					creature.Strength += 1;
+				}
 			}
 		}
 	}
@@ -563,10 +573,13 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (gameManager.Players()[creature.OwnerId].health < gameManager.Players()[Mathf.Abs(creature.OwnerId + 1 - 2)].health)
 		{
+			print("hp lower");
 			if (gameManager.GetNumberOnBoard(creature.OwnerId) > 0)
 			{
+				print("creatures on your side");
 				foreach (Creature cr in gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>())
 				{
+					print("should be buffd");
 					cr.Strength += 1;
 					cr.Health += 2;
 				}

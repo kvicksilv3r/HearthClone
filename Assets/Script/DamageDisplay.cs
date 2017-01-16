@@ -11,8 +11,7 @@ public class DamageDisplay : MonoBehaviour {
 		//if negative value set emitting color greeen, change text to +S
 		if(damage < 0)
 		{
-			transform.GetChild(0).GetComponent<TextMesh>().text = "+" + damage.ToString();
-			//transform.GetChild(0).GetComponent<MeshRenderer>().material.color = Color.green;
+			transform.GetChild(0).GetComponent<TextMesh>().text = "+" + Mathf.Abs(damage).ToString();
         }
 		else
 		{

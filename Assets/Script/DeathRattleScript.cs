@@ -28,7 +28,7 @@ public class DeathRattleScript : MonoBehaviour
 
 		foreach (int ability in parent.Abilities)
 		{
-			if (ability == 13 && parent.IsDead == false) //old seer
+			if (ability == 13) //old seer
 			{
 				foreach (Creature cr in gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>())
 				{

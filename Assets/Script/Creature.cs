@@ -210,6 +210,11 @@ public class Creature : CardClass
 
 	public IEnumerator Death(bool destroyed)
 	{
+		if (deathrattle && !dead)
+		{
+			BroadcastMessage("DeathRattle", strength);
+		}
+
 		dead = true;
 
 		if(ownerId == 1)
@@ -217,11 +222,7 @@ public class Creature : CardClass
 			gameManager.CheckForTauntOnField();
 		}
 
-		if (deathrattle)
-		{
-			BroadcastMessage("DeathRattle", strength);
-		}
-
+		
 		if (destroyed)
 		{
 			GameObject dDisplay = Instantiate(deathDisplay, transform, false);

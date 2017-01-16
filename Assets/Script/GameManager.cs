@@ -165,13 +165,7 @@ public class GameManager : MonoBehaviour
 
 	public void NextRound(bool timeOut)
 	{
-		if (GameObject.FindGameObjectsWithTag("Sleeping") != null)
-		{
-			foreach (GameObject g in GameObject.FindGameObjectsWithTag("Sleeping"))
-			{
-				g.GetComponent<ParticleSystem>().Stop();
-			}
-		}
+		StopSleeping();
 
 		if (burningRope && !timeOut)
 		{
@@ -363,6 +357,17 @@ public class GameManager : MonoBehaviour
 	public Player[] Players()
 	{
 		return players;
+	}
+
+	public void StopSleeping()
+	{
+		if (GameObject.FindGameObjectsWithTag("Sleeping") != null)
+		{
+			foreach (GameObject g in GameObject.FindGameObjectsWithTag("Sleeping"))
+			{
+				g.GetComponent<ParticleSystem>().Stop();
+			}
+		}
 	}
 
 	public int GetNumberOnBoard(int playerIndex)

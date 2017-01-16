@@ -18,11 +18,13 @@ public class Creature : CardClass
 
 	[SerializeField]
 	private GameObject damageDisplay;
+	[SerializeField]
+	private GameObject tauntShield;
 
 	protected bool timeEffect;
 
 	protected string race;
-	protected bool deathrattle, onattack;
+	protected bool deathrattle, onattack, timechange, endround, startround;
 
 	[SerializeField]
 	protected bool hasTaunt;
@@ -51,6 +53,8 @@ public class Creature : CardClass
 	{
 		if (creatureHPText)
 			creatureHPText.text = health.ToString();
+
+		CheckHealth(health);
 	}
 
 	public int[] Abilities
@@ -93,31 +97,39 @@ public class Creature : CardClass
 		set { deathrattle = value; }
 	}
 
-	void Combat(GameObject enemy)
+	public bool StartRound
 	{
-		if (canAttack)
-		{
-			if (enemy != null && enemy.tag == enemyCreatureTag) // if(target != null && target != ally && target == creature)
-			{
-				Creature currentenemy = enemy.GetComponent<Creature>();
-				currentenemy.TakeDamage(strength);
-				TakeDamage(currentenemy.strength);
-				canAttack = false;
-			}
-			else if (enemy != null && enemy.tag == enemyPlayerTag) //if(target != null && target != owner && target == player)
-			{
-				canAttack = false;
-			}
-			else
-			{
-				return;
-			}
-		}
-		else
-		{
-			//Can not attack.
-		}
+		get { return startround; }
+		set { startround = value; }
+	}
 
+	public bool AttackAbility
+	{
+		get { return onattack; }
+		set { onattack = value; }
+	}
+
+	public bool EndRound
+	{
+		get { return endround; }
+		set { endround = value; }
+	}
+
+	public bool TimeChange
+	{
+		get { return timechange; }
+		set { timechange = value; }
+	}
+
+	public void GetTaunt()
+	{
+		hasTaunt = true;
+		tauntShield.SetActive(true);
+		
+		if(ownerId != 0)
+		{
+			gameManager.CheckForTauntOnField();
+		}
 	}
 
 	public string Race
@@ -146,13 +158,25 @@ public class Creature : CardClass
 
 	public void TakeDamage(int damage)
 	{
-		health -= damage;
-		UpdateHP();
+		if (!dead)
+		{
+			gameManager.SetLastAttackedCreature(ownerId, this);
 
-		GameObject dDisplay = Instantiate(damageDisplay, transform, false);
-		dDisplay.GetComponent<DamageDisplay>().SetText(damage);
+			if(damage > health)
+			{
+				gameManager.SetLastDamage(ownerId, health);
+			}
+			else
+			{
+				gameManager.SetLastDamage(ownerId, damage);
+			}
 
-		CheckHealth(health);
+			health -= damage;
+			UpdateHP();
+
+			GameObject dDisplay = Instantiate(damageDisplay, transform, false);
+			dDisplay.GetComponent<DamageDisplay>().SetText(damage);
+		}
 	}
 
 	public void CheckHealth(int health)
@@ -160,7 +184,6 @@ public class Creature : CardClass
 		if (health <= 0)
 		{
 			currentAttacks = 0;
-			print(Card.card_name + " ahould be dead, yo");
 			health = 0;
 			StartCoroutine("Death", false);
 		}
@@ -179,18 +202,24 @@ public class Creature : CardClass
 		}
 	}
 
-	public IEnumerator Attack()
+	public void Update()
 	{
-		yield return new WaitForSeconds(waitTime);
+		UpdateHP();
+		UpdateDMG();
 	}
 
 	public IEnumerator Death(bool destroyed)
 	{
 		dead = true;
 
+		if(ownerId == 1)
+		{
+			gameManager.CheckForTauntOnField();
+		}
+
 		if (deathrattle)
 		{
-			BroadcastMessage("DeathRattle");
+			BroadcastMessage("DeathRattle", strength);
 		}
 
 		if (destroyed)
@@ -198,7 +227,7 @@ public class Creature : CardClass
 			GameObject dDisplay = Instantiate(deathDisplay, transform, false);
 			dDisplay.transform.position = transform.parent.position + new Vector3(0, 3.5f, -1);
 		}
-		
+
 		yield return new WaitForSeconds(waitTime);
 
 		GameObject.Find("GameManager").GetComponent<GameManager>().SetNumberOnBoard(ownerId, -1);

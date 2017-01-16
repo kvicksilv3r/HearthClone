@@ -126,6 +126,12 @@ public class MuliganScript : MonoBehaviour
 
 	public void EndMuligan()
 	{
+		if (numCards == 4)
+		{
+			Instantiate(theCoin, playerHand.transform, false);
+		}
+
+
 		if (discardedCards.Count > 0)
 		{
 			foreach (int discard in discardedCards)
@@ -183,16 +189,7 @@ public class MuliganScript : MonoBehaviour
             g.transform.GetChild(0).GetComponent<CardClass>().OwnerId = 1;
             g.transform.GetComponent<Draggable>().enabled = false;
         }
-
-		if (numCards == 4)
-		{
-			Instantiate(theCoin, playerHand.transform, false);
-		}
-		else
-		{
-			Instantiate(theCoin, aiHand.transform, false);
-		}
-
+		
 		Destroy(gameObject);
 	}
 

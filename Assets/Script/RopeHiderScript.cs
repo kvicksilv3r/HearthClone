@@ -12,8 +12,7 @@ public class RopeHiderScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
-		particleHolder = GameObject.Find("ParticleHolder");
+		
         yPos = transform.position.y;
         zPos = transform.position.z;
 		
@@ -27,7 +26,6 @@ public class RopeHiderScript : MonoBehaviour {
 			transform.position = new Vector3(transform.position.x + ((75 / 20f) * Time.deltaTime), yPos, zPos);
 			if (transform.position.x > 0)
 			{
-				active = false;
                 transform.position = new Vector3(0, yPos, zPos);
 				StartCoroutine(RemoveFire(3));
 			}
@@ -55,6 +53,7 @@ public class RopeHiderScript : MonoBehaviour {
 
 	IEnumerator RemoveFire(int killTime)
 	{
+		active = false;
 		yield return new WaitForSeconds(killTime);
 		particleHolder.SetActive(false);
 	}

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnRoundStart : MonoBehaviour {
+public class OnRoundStart : MonoBehaviour
+{
 
 	Creature parent;
 	GameManager gameManager;
@@ -12,17 +13,26 @@ public class OnRoundStart : MonoBehaviour {
 		parent = transform.parent.GetComponent<Creature>();
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-		foreach(int ability in parent.Abilities)
+		if (parent.IsDead == false && gameManager.PlayerTurn == parent.OwnerId)
 		{
-			if(ability == 8)
+			print("Stuff should happen");
+			foreach (int ability in parent.Abilities)
 			{
-				parent.TakeDamage(1);
-				gameManager.HeroDamage(parent.OwnerId, 1);
+				if (ability == 8) //Evil meda
+				{
+					print("Evil Meda");
+					parent.TakeDamage(1);
+					gameManager.HeroDamage(parent.OwnerId, 1);
+				}
+
+				else if (ability == 21) //maiden of favor
+				{
+					print("Hello world");
+					gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.GetNumberOnBoard(parent.OwnerId))].Strength += 2;
+					gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.GetNumberOnBoard(parent.OwnerId))].Health += 1;
+
+				}
 			}
-
-
 		}
-
-
 	}
 }

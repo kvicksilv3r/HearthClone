@@ -68,6 +68,11 @@ public class BattleTargeting : MonoBehaviour
 										transform.parent.parent.GetComponent<Creature>().TakeDamage(lastTarget.GetComponent<Creature>().Strength);
 
 										transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
+
+										if (transform.parent.parent.GetComponent<Creature>().AttackAbility)
+										{
+											transform.parent.parent.BroadcastMessage("Attack");
+										}
 									}
 									else if (hit.transform.GetComponent<Creature>().HasTaunt)
 									{
@@ -77,6 +82,11 @@ public class BattleTargeting : MonoBehaviour
 										transform.parent.parent.GetComponent<Creature>().TakeDamage(lastTarget.GetComponent<Creature>().Strength);
 
 										transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
+
+										if (transform.parent.parent.GetComponent<Creature>().AttackAbility)
+										{
+											transform.parent.parent.BroadcastMessage("Attack");
+                                        }
 									}
 								}
 							}
@@ -88,6 +98,11 @@ public class BattleTargeting : MonoBehaviour
 								gameManager.HeroDamage(hit.transform.GetComponent<Hero>().playerId, transform.parent.parent.GetComponent<Creature>().Strength);
 
 								transform.parent.parent.GetComponent<Creature>().CurrentAttacks--;
+
+								if (transform.parent.parent.GetComponent<Creature>().AttackAbility)
+								{
+									transform.parent.parent.BroadcastMessage("Attack");
+								}
 							}
 						}
 

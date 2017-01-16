@@ -31,12 +31,17 @@ public class GameManager : MonoBehaviour
 	protected Player[] players = new Player[2];
 	protected bool isSleeping = false;
 
+	protected int[] lastDamage = new int[] { 0, 0 };
+
 	protected bool coinUsed = false;
 	protected int coinPlayer;
 	[SerializeField]
 	protected float muliganTime = 20;
 	protected MuliganScript muliganScript;
 	protected bool isPlaying = false;
+
+	[SerializeField]
+	protected Creature[] lastAttacked = new Creature[2];
 
 	[SerializeField]
 	protected GameObject playerHero;
@@ -99,8 +104,8 @@ public class GameManager : MonoBehaviour
 
 		for (int i = 0; i < 30; i++)
 		{
-			decks[0].Add(Random.Range(1, 29));
-			decks[1].Add(Random.Range(1, 29));
+			decks[0].Add(Random.Range(1, 36));
+			decks[1].Add(Random.Range(1, 36));
 		}
 
 		muliganScript = GameObject.Find("Muligan").GetComponent<MuliganScript>();
@@ -110,12 +115,7 @@ public class GameManager : MonoBehaviour
 
 		muliganScript.BeginMuligan(3 + whosTurn);
 	}
-
-	public void LoadMainMenu()
-	{
-		SceneManager.LoadScene("MainMenu");
-	}
-
+	
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.M))
@@ -224,9 +224,16 @@ public class GameManager : MonoBehaviour
 		players[whosTurn].usedPower = false;
 		roundTime = maxTime;
 
-		if (boards[whosTurn].GetComponentInChildren<OnRoundStart>())
+		if (GameObject.FindGameObjectWithTag("RoundStart"))
 		{
-			boards[whosTurn].BroadcastMessage("RoundStart");
+			try
+			{
+				GameObject.Find("Board").BroadcastMessage("RoundStart");
+			}
+			catch (System.Exception)
+			{
+				throw;
+			}
 		}
 
 		if (whosTurn == 1)
@@ -292,6 +299,8 @@ public class GameManager : MonoBehaviour
 
 	public void HeroDamage(int playerIndex, int dmgTaken)
 	{
+		lastDamage[playerIndex] = dmgTaken;
+
 		players[playerIndex].health -= dmgTaken;
 		
 		if(players[playerIndex].health > 30)
@@ -366,6 +375,16 @@ public class GameManager : MonoBehaviour
 		creatureNumOnBoard[playerIndex] += change;
 	}
 
+	public int LastDamageTaken(int playerIndex)
+	{
+		return lastDamage[playerIndex];
+	}
+
+	public void SetLastDamage(int playerIndex, int damage)
+	{
+		lastDamage[playerIndex] = damage;
+	}
+
 	public int PlayerTurn
 	{
 		get
@@ -384,6 +403,16 @@ public class GameManager : MonoBehaviour
 		muliganScript.EndMuligan();
 		isPlaying = true;
 		StartRound();
+	}
+
+	public Creature GetLastAttackedCreature(int playerIndex)
+	{
+		return lastAttacked[playerIndex];
+	}
+
+	public void SetLastAttackedCreature(int playerIndex, Creature creature)
+	{
+		lastAttacked[playerIndex] = creature;
 	}
 
 	public GameObject[] Boards
@@ -418,6 +447,10 @@ public class GameManager : MonoBehaviour
 				break;
 		}
 
+		if (GameObject.FindGameObjectWithTag("TimeChange"))
+		{
+			GameObject.Find("Board").BroadcastMessage("TimeChange", timeIndex);
+		}
 		currentRoundstoTimeChange = roundsBetweenTimeChange;
 
 		string timetext = ("");

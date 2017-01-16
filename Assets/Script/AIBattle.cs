@@ -58,18 +58,35 @@ public class AIBattle : MonoBehaviour
 						attackTarget.TakeDamage(aiCreature.Strength);
 						aiCreature.TakeDamage(attackTarget.Strength);
 						aiCreature.CurrentAttacks--;
-						
+
+						if (aiCreature.AttackAbility)
+						{
+							aiCreature.transform.BroadcastMessage("Attack");
+						}
+
 					}
 					else
 					{
 						yield return new WaitForSeconds(waitTime);
 						AttackHero(aiCreature.Strength);
+						aiCreature.CurrentAttacks--;
+
+						if (aiCreature.AttackAbility)
+						{
+							aiCreature.transform.BroadcastMessage("Attack");
+						}
 					}
 				}
 				else
 				{
 					yield return new WaitForSeconds(waitTime);
 					AttackHero(aiCreature.Strength);
+					aiCreature.CurrentAttacks--;
+
+					if (aiCreature.AttackAbility)
+					{
+						aiCreature.transform.BroadcastMessage("Attack");
+					}
 				}
 			}
 		}
@@ -175,7 +192,7 @@ public class AIBattle : MonoBehaviour
 		}
 		else if (rest.Count > 0)
 		{
-			if (Random.Range(0, 3) != 0)
+			if (Random.Range(0, 2) != 0)
 			{
 				attackTarget = rest[Random.Range(0, rest.Count)];
 				return true;

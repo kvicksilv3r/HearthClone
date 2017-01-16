@@ -26,11 +26,21 @@ public class DeathRattleScript : MonoBehaviour
 		parent = transform.parent.GetComponent<Creature>();
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-
-		if (parent.Card.card_id == 18)
+		foreach (int ability in parent.Abilities)
 		{
-			print("should heal");
-			gameManager.HeroDamage(parent.OwnerId, -2);
+			if (ability == 13 && parent.IsDead == false) //old seer
+			{
+				foreach (Creature cr in gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>())
+				{
+					cr.Strength -= 2;
+					cr.Health -= 1;
+				}
+			}
+
+			else if (ability == 15) //Young martyr
+			{
+				gameManager.HeroDamage(parent.OwnerId, -3);
+			}
 		}
 
 	}

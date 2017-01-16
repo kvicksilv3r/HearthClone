@@ -410,8 +410,9 @@ public class CardGenerator : MonoBehaviour
 	{
 		if (gameManager.Boards[creature.OwnerId].transform.childCount > 0)
 		{
-			gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.Boards[creature.OwnerId].transform.childCount)].GetTaunt();
-			gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.Boards[creature.OwnerId].transform.childCount)].Health += 2;
+			int creatureIndex = Random.Range(0, gameManager.Boards[creature.OwnerId].transform.childCount);
+            gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>()[creatureIndex].GetTaunt();
+			gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>()[creatureIndex].Health += 2;
 		}
 	}
 
@@ -567,7 +568,7 @@ public class CardGenerator : MonoBehaviour
 				foreach (Creature cr in gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>())
 				{
 					cr.Strength += 1;
-					cr.Health += 1;
+					cr.Health += 2;
 				}
 			}
 		}

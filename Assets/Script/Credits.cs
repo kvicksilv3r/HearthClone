@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Credits : MonoBehaviour {
-        private float speed = 20f;
+        private float speed = 40f;
         private bool crawling = true;
     GameObject go;
 

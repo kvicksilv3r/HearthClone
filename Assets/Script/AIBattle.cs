@@ -33,37 +33,50 @@ public class AIBattle : MonoBehaviour
 	{
 		TargetList.Clear();
 
-		goFace = CanKillHero();
 
-		foreach (Transform target in GameObject.Find("Player Playfield").transform)
+		if (!CanKillHero())
 		{
-			TargetList.Add(target.gameObject);
-		}
-
-		foreach (Creature creature in transform.GetComponentsInChildren<Creature>())
-		{
-			if(creature.Strength <= 0)
+			foreach (Transform target in GameObject.Find("Player Playfield").transform)
 			{
-				continue;
+				TargetList.Add(target.gameObject);
 			}
 
-			aiCreature = creature;
-			while (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack)
+			foreach (Creature creature in transform.GetComponentsInChildren<Creature>())
 			{
-				if (CheckCreature())
+				if (creature.Strength <= 0)
 				{
-					if (attackTarget != null)
+					continue;
+				}
+
+				aiCreature = creature;
+				while (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack)
+				{
+					if (CheckCreature())
 					{
-						yield return new WaitForSeconds(waitTime);
-						attackTarget.TakeDamage(aiCreature.Strength);
-						aiCreature.TakeDamage(attackTarget.Strength);
-						aiCreature.CurrentAttacks--;
-
-						if (aiCreature.AttackAbility)
+						if (attackTarget != null)
 						{
-							aiCreature.transform.BroadcastMessage("Attack");
-						}
+							yield return new WaitForSeconds(waitTime);
+							attackTarget.TakeDamage(aiCreature.Strength);
+							aiCreature.TakeDamage(attackTarget.Strength);
+							aiCreature.CurrentAttacks--;
 
+							if (aiCreature.AttackAbility)
+							{
+								aiCreature.transform.BroadcastMessage("Attack");
+							}
+
+						}
+						else
+						{
+							yield return new WaitForSeconds(waitTime);
+							AttackHero(aiCreature.Strength);
+							aiCreature.CurrentAttacks--;
+
+							if (aiCreature.AttackAbility)
+							{
+								aiCreature.transform.BroadcastMessage("Attack");
+							}
+						}
 					}
 					else
 					{
@@ -77,7 +90,13 @@ public class AIBattle : MonoBehaviour
 						}
 					}
 				}
-				else
+			}
+		}
+		else
+		{
+			foreach (Creature creature in transform.GetComponentsInChildren<Creature>())
+			{
+				while (aiCreature.CurrentAttacks >= 1 && aiCreature.CanAttack)
 				{
 					yield return new WaitForSeconds(waitTime);
 					AttackHero(aiCreature.Strength);
@@ -122,7 +141,7 @@ public class AIBattle : MonoBehaviour
 				dmg += cr.Strength * cr.CurrentAttacks;
 		}
 
-		if (dmg > gameManager.Players()[0].health)
+		if (dmg >= gameManager.Players()[0].health)
 		{
 			return true;
 		}

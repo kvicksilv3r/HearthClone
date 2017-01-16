@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MuliganScript : MonoBehaviour
 {
-
+	public GameObject tauntButton;
 	protected GameManager gameManager;
 
 	protected List<GameObject> mulCards = new List<GameObject>();
@@ -189,7 +189,9 @@ public class MuliganScript : MonoBehaviour
             g.transform.GetChild(0).GetComponent<CardClass>().OwnerId = 1;
             g.transform.GetComponent<Draggable>().enabled = false;
         }
-		
+
+		tauntButton.SetActive(true);
+
 		Destroy(gameObject);
 	}
 

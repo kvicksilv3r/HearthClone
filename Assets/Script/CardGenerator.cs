@@ -88,7 +88,7 @@ public class CardGenerator : MonoBehaviour
 		creature.Abilities = card.abilities_cr;
 
 
-		if (card.race != "none")
+		if (card.race != "none" || card.race != "")
 		{
 			cardRaceTextObj.GetComponent<Text>().text = card.race;
 			cardRaceObj.SetActive(true);
@@ -363,7 +363,7 @@ public class CardGenerator : MonoBehaviour
 
 		Instantiate(deathRattle, transform, false);
 
-		if (gameManager.GetNumberOnBoard(creature.OwnerId) > 0)
+		if (gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>().Length > 0)
 		{
 			foreach (Creature cr in gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>())
 			{
@@ -411,6 +411,8 @@ public class CardGenerator : MonoBehaviour
 		if (gameManager.Boards[creature.OwnerId].transform.childCount > 0)
 		{
 			int creatureIndex = Random.Range(0, gameManager.Boards[creature.OwnerId].transform.childCount);
+			print(gameManager.Boards[creature.OwnerId].transform.childCount);
+			print(creatureIndex);
             gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>()[creatureIndex].GetTaunt();
 			gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>()[creatureIndex].Health += 2;
 		}
@@ -418,9 +420,8 @@ public class CardGenerator : MonoBehaviour
 
 	void Ancestor()
 	{
-		if (gameManager.GetNumberOnBoard(creature.OwnerId) <= 0)
+		if (gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>().Length <= 0)
 		{
-			print(gameManager.GetNumberOnBoard(creature.OwnerId));
 			creature.Strength += 1;
 			creature.Health += 1;
 		}
@@ -428,23 +429,14 @@ public class CardGenerator : MonoBehaviour
 
 	void Exorcist()
 	{
-		List<Creature> demons = new List<Creature>();
-
+		
 		if (gameManager.TimeIndex == 1)
 		{
-			foreach (Creature cr in gameManager.Boards[Mathf.Abs(creature.OwnerId + 1 - 2)].transform.GetComponentsInChildren<Creature>())
+			if (gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>().Length > 0)
 			{
-				if (cr.Race.ToLower() == "demon")
-				{
-					demons.Add(cr);
-				}
+				gameManager.Boards[Mathf.Abs(creature.OwnerId + 1 - 2)].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>().Length)].StartCoroutine("Death",true);
 			}
-
-			if (demons.Count > 0)
-			{
-				demons[Random.Range(0, demons.Count)].Death(true);
-			}
-		}
+        }
 	}
 
 	void MoonlightAssassin()
@@ -540,7 +532,7 @@ public class CardGenerator : MonoBehaviour
 
 	void WolfWarrior()
 	{
-		if (gameManager.GetNumberOnBoard(creature.OwnerId) > 0)
+		if (gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>().Length > 0)
 		{
 			foreach (Creature cr in gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>())
 			{
@@ -574,7 +566,7 @@ public class CardGenerator : MonoBehaviour
 		if (gameManager.Players()[creature.OwnerId].health < gameManager.Players()[Mathf.Abs(creature.OwnerId + 1 - 2)].health)
 		{
 			print("hp lower");
-			if (gameManager.GetNumberOnBoard(creature.OwnerId) > 0)
+			if (gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>().Length > 0)
 			{
 				print("creatures on your side");
 				foreach (Creature cr in gameManager.Boards[creature.OwnerId].transform.GetComponentsInChildren<Creature>())

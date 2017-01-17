@@ -28,8 +28,8 @@ public class OnRoundStart : MonoBehaviour
 				else if (ability == 21) //maiden of favor
 				{
 					print("Hello world");
-					gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.GetNumberOnBoard(parent.OwnerId))].Strength += 2;
-					gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.GetNumberOnBoard(parent.OwnerId))].Health += 1;
+					gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>().Length)].Strength += 2;
+					gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>()[Random.Range(0, gameManager.Boards[parent.OwnerId].transform.GetComponentsInChildren<Creature>().Length)].Health += 1;
 
 				}
 			}

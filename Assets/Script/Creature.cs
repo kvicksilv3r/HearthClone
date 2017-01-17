@@ -23,6 +23,7 @@ public class Creature : CardClass
 
 	protected bool timeEffect;
 
+	[SerializeField]
 	protected string race;
 	protected bool deathrattle, onattack, timechange, endround, startround;
 
@@ -230,8 +231,6 @@ public class Creature : CardClass
 		}
 
 		yield return new WaitForSeconds(waitTime);
-
-		GameObject.Find("GameManager").GetComponent<GameManager>().SetNumberOnBoard(ownerId, -1);
 
 		Destroy(transform.parent.gameObject);
 	}

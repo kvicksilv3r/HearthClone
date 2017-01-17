@@ -48,7 +48,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 		if (d.transform.tag == "Coin" || gameManager.Players()[0].currentMana >= d.transform.GetChild(0).GetComponent<CardClass>().Card.mana)
 		{
-			if (d != null && gameManager.GetNumberOnBoard(0) < maxCardsOnField && gameManager.PlayerTurn != 1 && d.transform.GetChild(0).GetComponent<CardClass>().OwnerId == 0 || d.transform.tag == "Coin")
+			if (d != null && gameManager.Boards[0].transform.GetComponentsInChildren<Creature>().Length < maxCardsOnField && gameManager.PlayerTurn != 1 && d.transform.GetChild(0).GetComponent<CardClass>().OwnerId == 0 || d.transform.tag == "Coin")
 			{
 				d.parentToReturnTo = this.transform;
 

@@ -110,7 +110,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                     //this.transform.position = eventData.position;
                     //transform.GetChild(0).transform.position = new Vector3(transform.GetChild(0).transform.position.x, transform.GetChild(0).transform.position.y, -20);
 
-                    if (placeHolder.transform.parent != placeHolderParent && gameManager.GetNumberOnBoard(0) < DropZone.maxCardsOnField)
+                    if (placeHolder.transform.parent != placeHolderParent && gameManager.Boards[0].transform.GetComponentsInChildren<Creature>().Length < DropZone.maxCardsOnField)
                     {
                         placeHolder.transform.SetParent(placeHolderParent);
                     }

@@ -24,13 +24,6 @@ public class OnClickScript : MonoBehaviour
 		{
 			if (action == "mulligan")
                 gameManager.EndMuligan();
-
-            if(currentTrack != null)
-            {
-                nextTrack.Play();
-                currentTrack.Stop();
-            }
-
         }
 
 		if (gameManager.PlayerTurn == 0 && gameManager.IsPlaying)

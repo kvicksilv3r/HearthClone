@@ -24,12 +24,27 @@ public class ButtonBehaviour : MonoBehaviour {
     [SerializeField]
     protected GameObject popUpInfo;
 
+	protected CursorMode cursorMode = CursorMode.Auto;
+	protected Vector2 hotSpot = Vector2.zero;
 
-    // Use this for initialization
-    void Start()
+
+	// Use this for initialization
+	void Start()
     {
+		Cursor.SetCursor(Resources.Load("Cards/Textures/hand") as Texture2D, hotSpot, cursorMode);
+	}
 
-    }
+	void Update()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+			Cursor.SetCursor(Resources.Load("Cards/Textures/down") as Texture2D, hotSpot, cursorMode);
+		}
+		if (Input.GetMouseButtonUp(0))
+		{
+			Cursor.SetCursor(Resources.Load("Cards/Textures/hand") as Texture2D, hotSpot, cursorMode);
+		}
+	}
 
     public void LoadMainMenu()
     {

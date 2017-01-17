@@ -50,6 +50,13 @@ public class GameManager : MonoBehaviour
 
 	protected GameObject[] heroes = new GameObject[2];
 
+	[SerializeField]
+	protected Texture2D cursorTexture;
+	[SerializeField]
+	protected Texture2D cursorDownTexture;
+	protected CursorMode cursorMode = CursorMode.Auto;
+	protected Vector2 hotSpot = Vector2.zero;
+
 	protected string[] timeNames = new string[] { "DAWN", "DAY", "NIGHT" };
 
 	[SerializeField]
@@ -100,6 +107,8 @@ public class GameManager : MonoBehaviour
 		heroes[0] = GameObject.Find("Player Hero");
 		heroes[1] = GameObject.Find("Enemy Hero");
 
+		Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
+
 		UpdateHealth();
 
 		for (int i = 0; i < 30; i++)
@@ -136,6 +145,15 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.R))
 		{
 			NextRound(false);
+		}
+
+		if (Input.GetMouseButtonDown(0))
+		{
+			Cursor.SetCursor(cursorDownTexture, hotSpot, cursorMode);
+		}
+		if (Input.GetMouseButtonUp(0))
+		{
+			Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
 		}
 
 		if (isPlaying)
@@ -370,10 +388,10 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public int GetNumberOnBoard(int playerIndex)
-	{
-		return creatureNumOnBoard[playerIndex];
-	}
+	//public int GetNumberOnBoard(int playerIndex)
+	//{
+	//	return creatureNumOnBoard[playerIndex];
+	//}
 
 	public void SetNumberOnBoard(int playerIndex, int change)
 	{
@@ -407,6 +425,8 @@ public class GameManager : MonoBehaviour
 	{
 		muliganScript.EndMuligan();
 		isPlaying = true;
+		GameObject.Find("OnARoll").GetComponent<AudioSource>().Play();
+		GameObject.Find("MulliganSong").GetComponent<AudioSource>().Stop();
 		StartRound();
 	}
 

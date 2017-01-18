@@ -41,6 +41,16 @@ public class DeathRattleScript : MonoBehaviour
 			{
 				gameManager.HeroDamage(parent.OwnerId, -3);
 			}
+
+			else if (ability == 33) //Young martyr
+			{
+				int random = Random.Range(0, 100);
+				if (random > 50)
+				{
+					gameManager.DrawCard(Mathf.Abs(parent.OwnerId + 1 - 2));
+					gameManager.DrawCard(Mathf.Abs(parent.OwnerId + 1 - 2));
+				}
+			}
 		}
 
 	}

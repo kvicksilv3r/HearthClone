@@ -559,6 +559,8 @@ public class CardGenerator : MonoBehaviour
 			gameManager.DrawCard(creature.OwnerId);
 			gameManager.DrawCard(creature.OwnerId);
 		}
+
+		DeathRattler();
 	}
 
 	void ForgottenGod()
@@ -623,6 +625,12 @@ public class CardGenerator : MonoBehaviour
 	{
 		healthTextObj.GetComponent<Text>().text = creature.Health.ToString();
 		damageTextObj.GetComponent<Text>().text = creature.Strength.ToString();
+	}
+
+	void DeathRattler()
+	{
+		creature.Deathrattle = true;
+		Instantiate(deathRattle, transform, false);
 	}
 
 }
